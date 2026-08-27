@@ -1,0 +1,28 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "source": {
+    "kind": "url",
+    "value": "https://mangadistrict.com/title/stupidemic-uncensored/",
+    "access_status": "unverified_from_worker_runtime",
+    "canonical_url": null
+  },
+  "series": {
+    "title": "Stupidemic",
+    "original_title": "멍청바이러스",
+    "original_language": "ko",
+    "mirror_page_language": null,
+    "mirror_page_language_confidence": "unverified",
+    "status": "completed",
+    "episode_count": 62,
+    "writer": "오아시수",
+    "artist": "갱꿀",
+    "evidence_status": "cross-checked against official/licensed listings"
+  },
+  "chapters": [],
+  "acquisition": {
+    "status": "needs_source_adapter",
+    "chapter_routes_verified": false,
+    "reader_dom_verified": false,
+    "image_delivery_verified": false
+  }
+}
