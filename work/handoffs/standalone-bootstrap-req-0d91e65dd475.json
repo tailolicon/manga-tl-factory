@@ -1,0 +1,23 @@
+{
+  "task_id": "standalone-bootstrap-req-0d91e65dd475",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "status": "partial",
+  "branch": "test/req-0d91e65dd475/bootstrap",
+  "completed": [
+    "series metadata cross-check",
+    "partial source manifest",
+    "source evidence record",
+    "acquire_source task proposal"
+  ],
+  "in_progress": null,
+  "remaining": [
+    "MangaDistrict canonical URL verification",
+    "source-native chapter enumeration",
+    "reader DOM/API discovery",
+    "page/image delivery verification",
+    "page language verification",
+    "populate source_manifest.chapters"
+  ],
+  "resume_from_commit": "213296e68d5475c7b27d608ea2aed94ee995a6ae",
+  "next_task_type": "acquire_source"
+}
