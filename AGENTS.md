@@ -25,3 +25,7 @@ Repository instructions override model priors for this project.
 - Begin draining before the runtime hard limit; do not rely on final-minute cleanup.
 - Submit uncertainty explicitly. Do not invent speaker identity, terminology or missing source text.
 - Large binary images belong in object storage, not normal Git history.
+
+## Standalone test exception
+
+Before Shiro/another coordinator is installed, a worker may run the explicit bootstrap-only standalone mode defined in `STANDALONE_TEST.md`. In that mode, derive the task envelope with `python -m manga_factory test-envelope` (or equivalently from `manga_factory/standalone.py`). Missing local Git is not a blocker when an authorized GitHub connector is available. This exception does not grant publish, canonical-context, or `main`-merge authority.
