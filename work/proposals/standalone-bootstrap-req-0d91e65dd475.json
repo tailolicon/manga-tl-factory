@@ -1,0 +1,25 @@
+{
+  "proposal_id": "proposal-acquire-source-req-0d91e65dd475",
+  "task_type": "acquire_source",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "scope": {
+    "source_url": "https://mangadistrict.com/title/stupidemic-uncensored/",
+    "goal": "Use an authorized MangaDistrict-capable browser/site adapter to verify the canonical title URL, enumerate source-native chapters, inspect reader/image-delivery mechanics, verify page language, and populate source_manifest.chapters only from verified source-native data.",
+    "required_checks": [
+      "canonical URL/redirect behavior",
+      "chapter IDs/order/URLs",
+      "reader DOM or API",
+      "page counts",
+      "page-image language",
+      "image hosts and permanence",
+      "session/cookie/JavaScript requirements",
+      "referer/origin or anti-hotlink behavior",
+      "signed URL behavior",
+      "image formats/dimensions/hashes"
+    ]
+  },
+  "depends_on": ["standalone-bootstrap-req-0d91e65dd475"],
+  "context_version": null,
+  "priority": 100,
+  "reason": "Bootstrap metadata is established, but MangaDistrict chapter/page acquisition could not be verified from the worker runtime."
+}
