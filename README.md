@@ -41,11 +41,14 @@ Requires Python 3.11+ and no third-party Python packages for the reference CLI/t
 ```bash
 python -m manga_factory submit "https://example.com/series/foo"
 python -m manga_factory list-requests
+python -m manga_factory test-envelope
 python -m manga_factory validate
 python -m unittest discover -s tests -v
 ```
 
 `submit` does not scrape arbitrary websites. It records a normalized intake request. A bootstrap worker with browser/web access resolves the site and writes a source manifest according to `contracts/source_manifest.schema.json`.
+
+Before a coordinator is installed, `STANDALONE_TEST.md` allows an explicit bootstrap-only test mode. It derives a deterministic test envelope from a pending intake request and permits an authorized GitHub connector to substitute for a local worktree.
 
 ## End-to-end workflow
 
