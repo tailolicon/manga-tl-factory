@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .context import compile_context
 from .intake import submit
+from .standalone import build_standalone_test_envelope
 from .validate import validate_repo
 
 
@@ -24,6 +25,9 @@ def main() -> int:
 
     sub.add_parser("list-requests", help="list intake requests")
     sub.add_parser("validate", help="validate repository structure and pipeline references")
+
+    p_test = sub.add_parser("test-envelope", help="derive a standalone bootstrap envelope for coordinator-less testing")
+    p_test.add_argument("--request-id", default=None)
 
     p_context = sub.add_parser("compile-context", help="compile a deterministic canonical context bundle")
     p_context.add_argument("project_id")
@@ -44,6 +48,14 @@ def main() -> int:
         for path in sorted((root / "requests").glob("req-*.json")):
             rows.append(json.loads(path.read_text(encoding="utf-8")))
         print(json.dumps(rows, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.command == "test-envelope":
+        try:
+            envelope = build_standalone_test_envelope(root, request_id=args.request_id)
+        except ValueError as exc:
+            raise SystemExit(str(exc))
+        print(json.dumps(envelope, ensure_ascii=False, indent=2))
         return 0
 
     if args.command == "validate":
