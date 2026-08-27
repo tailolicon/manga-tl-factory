@@ -1,0 +1,49 @@
+{
+  "task_id": "standalone-bootstrap-req-0d91e65dd475",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "fencing_token": 1,
+  "context_version": null,
+  "status": "partial",
+  "completed_units": [
+    "Verified current standalone task identity",
+    "Established series title and Korean original title",
+    "Established completed status and 62-episode count from licensed listings",
+    "Established writer and artist credits",
+    "Recorded acquisition uncertainties without inventing MangaDistrict chapter URLs",
+    "Produced a downstream acquire_source proposal"
+  ],
+  "artifacts": [
+    {"path": "projects/mangadistrict-com-title-stupidemic-uncensored/source_manifest.json", "kind": "source_manifest"},
+    {"path": "projects/mangadistrict-com-title-stupidemic-uncensored/bootstrap/source_evidence.json", "kind": "bootstrap_evidence"},
+    {"path": "work/proposals/standalone-bootstrap-req-0d91e65dd475.json", "kind": "task_proposal"}
+  ],
+  "warnings": [
+    "MangaDistrict itself was not accessible from the worker runtime.",
+    "Source-native chapter list and reader/image mechanics remain unverified.",
+    "The actual language rendered in MangaDistrict page images remains unverified."
+  ],
+  "task_proposals": [
+    {
+      "proposal_id": "proposal-acquire-source-req-0d91e65dd475",
+      "task_type": "acquire_source",
+      "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+      "scope": {
+        "source_url": "https://mangadistrict.com/title/stupidemic-uncensored/",
+        "goal": "Verify source-native chapters and reader/image acquisition using an authorized MangaDistrict-capable browser/site adapter."
+      },
+      "depends_on": ["standalone-bootstrap-req-0d91e65dd475"],
+      "context_version": null,
+      "priority": 100,
+      "reason": "Source metadata is established but source-native acquisition remains unresolved."
+    }
+  ],
+  "handoff": {
+    "resume_stage": "acquire_source",
+    "branch": "test/req-0d91e65dd475/bootstrap",
+    "remaining": [
+      "verify MangaDistrict chapter enumeration",
+      "verify reader/page-image delivery",
+      "populate source_manifest.chapters from verified source-native data"
+    ]
+  }
+}
