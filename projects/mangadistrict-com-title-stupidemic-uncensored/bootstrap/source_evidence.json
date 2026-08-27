@@ -1,0 +1,28 @@
+{
+  "task_id": "standalone-bootstrap-req-0d91e65dd475",
+  "verified": [
+    {
+      "claim": "English licensed title is Stupidemic and the series is completed at episode 62.",
+      "source": "https://toomics.com/en/webtoon/episode/toon/7532"
+    },
+    {
+      "claim": "Korean title is 멍청바이러스; total 62 episodes; writer 오아시수; artist 갱꿀.",
+      "source": "https://ridibooks.com/books/5601002429"
+    }
+  ],
+  "unresolved": [
+    "MangaDistrict canonical redirect/canonical-link behavior",
+    "MangaDistrict source-native chapter identifiers, order, and URLs",
+    "Actual language rendered in MangaDistrict page images",
+    "Reader DOM/API and exact page counts",
+    "Image hostnames and URL permanence",
+    "Cookie/session/JavaScript requirements",
+    "Referer/origin or anti-hotlink requirements",
+    "Signed URL behavior",
+    "Image formats, dimensions, and hashes"
+  ],
+  "guardrails": {
+    "invented_chapter_urls": false,
+    "mirror_chapter_urls_used_as_source": false
+  }
+}
