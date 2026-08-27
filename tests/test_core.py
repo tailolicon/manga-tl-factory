@@ -52,5 +52,22 @@ class FactoryTests(unittest.TestCase):
         self.assertEqual([p["index"] for p in manifest["pages"]], [1, 2])
 
 
+class StandaloneTests(unittest.TestCase):
+    def test_standalone_envelope_from_pending_request(self):
+        from manga_factory.standalone import build_standalone_test_envelope
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "requests").mkdir()
+            (root / "projects").mkdir()
+            import shutil
+            shutil.copytree(ROOT / "projects" / "_template", root / "projects" / "_template")
+            req = submit(root, "https://example.com/series/test")
+            env = build_standalone_test_envelope(root, request_id=req["request_id"])
+            self.assertEqual(env["execution_mode"], "standalone_test")
+            self.assertEqual(env["task_type"], "bootstrap")
+            self.assertEqual(env["fencing_token"], 1)
+            self.assertIn(req["project_id"], env["allowed_write_paths"][0])
+
+
 if __name__ == "__main__":
     unittest.main()
