@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WorkerResult",
+  "type": "object",
+  "required": ["task_id", "project_id", "fencing_token", "status", "completed_units", "artifacts", "task_proposals"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "project_id": {"type": "string"},
+    "fencing_token": {"type": "integer", "minimum": 1},
+    "context_version": {"type": ["string", "null"]},
+    "status": {"enum": ["completed", "partial", "split_requested", "failed"]},
+    "completed_units": {"type": "array", "items": {"type": "string"}},
+    "artifacts": {"type": "array", "items": {"type": "object"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "task_proposals": {"type": "array", "items": {"$ref": "task_proposal.schema.json"}},
+    "handoff": {"type": ["object", "null"]}
+  }
+}

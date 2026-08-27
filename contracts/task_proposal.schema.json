@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TaskProposal",
+  "type": "object",
+  "required": ["proposal_id", "task_type", "project_id", "scope"],
+  "properties": {
+    "proposal_id": {"type": "string"},
+    "task_type": {"type": "string"},
+    "project_id": {"type": "string"},
+    "scope": {"type": "object"},
+    "depends_on": {"type": "array", "items": {"type": "string"}},
+    "context_version": {"type": ["string", "null"]},
+    "priority": {"type": "integer"},
+    "reason": {"type": ["string", "null"]}
+  }
+}

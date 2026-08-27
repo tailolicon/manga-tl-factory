@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Handoff",
+  "type": "object",
+  "required": ["task_id", "completed", "remaining", "resume_ref"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "completed": {"type": "array", "items": {"type": "string"}},
+    "in_progress": {"type": ["string", "null"]},
+    "remaining": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "resume_ref": {"type": "string"}
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "pipeline_version": "1.0.0",
+  "stages": {
+    "bootstrap": {"requires": [], "role": "bootstrap-agent"},
+    "acquire_source": {"requires": ["bootstrap"], "role": "acquisition-agent"},
+    "vision_scan": {"requires": ["acquire_source"], "role": "vision-agent"},
+    "character_discovery": {"requires": ["vision_scan"], "role": "context-agent"},
+    "terminology_discovery": {"requires": ["vision_scan"], "role": "context-agent"},
+    "speech_discovery": {"requires": ["vision_scan"], "role": "context-agent"},
+    "story_discovery": {"requires": ["vision_scan"], "role": "context-agent"},
+    "context_review": {
+      "requires": ["character_discovery", "terminology_discovery", "speech_discovery", "story_discovery"],
+      "role": "context-reviewer"
+    },
+    "translate_chunk": {"requires": ["context_review", "vision_scan"], "role": "translator-agent"},
+    "translation_review": {"requires": ["translate_chunk"], "role": "translation-reviewer"},
+    "redraw": {"requires": ["vision_scan"], "role": "redraw-agent"},
+    "typeset": {"requires": ["translation_review", "redraw"], "role": "typesetter-agent"},
+    "vision_qa": {"requires": ["typeset"], "role": "vision-qa-agent"},
+    "final_qa": {"requires": ["vision_qa"], "role": "final-qa-agent"},
+    "publish": {"requires": ["final_qa"], "role": "publisher-agent"}
+  }
+}

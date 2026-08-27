@@ -1,0 +1,14 @@
+{
+  "bootstrap-agent": {"writes": ["projects/*/manifest.json", "work/proposals/*"], "canonical_context_write": false},
+  "acquisition-agent": {"writes": ["projects/*/source_manifest.json", "work/results/*"], "canonical_context_write": false},
+  "vision-agent": {"writes": ["projects/*/vision/*", "work/results/*"], "canonical_context_write": false},
+  "context-agent": {"writes": ["projects/*/context_candidates/*", "work/results/*"], "canonical_context_write": false},
+  "context-reviewer": {"writes": ["projects/*/context/*", "projects/*/context/version.json", "work/results/*"], "canonical_context_write": true},
+  "translator-agent": {"writes": ["projects/*/translations/*", "projects/*/context_candidates/*", "work/results/*", "work/handoffs/*"], "canonical_context_write": false},
+  "translation-reviewer": {"writes": ["projects/*/review/*", "projects/*/translations/*", "projects/*/context_candidates/*"], "canonical_context_write": false},
+  "redraw-agent": {"writes": ["work/results/*", "work/handoffs/*"], "canonical_context_write": false},
+  "typesetter-agent": {"writes": ["work/results/*", "work/handoffs/*"], "canonical_context_write": false},
+  "vision-qa-agent": {"writes": ["projects/*/review/*", "work/results/*"], "canonical_context_write": false},
+  "final-qa-agent": {"writes": ["projects/*/review/*", "work/results/*"], "canonical_context_write": false},
+  "publisher-agent": {"writes": ["projects/*/publication/*", "work/results/*"], "canonical_context_write": false}
+}

@@ -1,3 +1,128 @@
-# Manga TL Factory
+# manga-tl-factory
 
-Bootstrap commit. Full scaffold follows in the next commit.
+Agent-first manga/comic localization workflow. The repository defines **how work is done**; an external coordinator such as Shiro defines **how work is scheduled**.
+
+## Goals
+
+- One source URL or uploaded archive becomes a structured translation project.
+- Vision-first workers inspect original pages directly; OCR is optional supporting evidence.
+- Every translator consumes the same versioned canonical story context.
+- Workers never spawn workers. They return structured task proposals to the coordinator.
+- Short disposable worker slices survive hard tool/runtime limits through checkpoints, handoffs, leases and fencing tokens managed by the coordinator.
+- Final output is web-ready: publication manifests plus optimized page asset references.
+
+## Boundary
+
+### This repository owns
+
+- pipeline DAG and worker role definitions
+- project/source manifests
+- context candidates and canonical context representation
+- context compilation contracts
+- translations/reviews/publication metadata
+- worker result/task proposal schemas
+- QA gates and web publication manifests
+
+### External coordinator (Shiro) owns
+
+- queue and task database
+- atomic leasing and heartbeat
+- fencing tokens / stale-worker rejection
+- worker pool and concurrency
+- retries, cancellation and timeouts
+- branch/worktree/container lifecycle
+- model invocation
+- object-storage credentials
+
+## Quick start
+
+Requires Python 3.11+ and no third-party Python packages for the reference CLI/tests.
+
+```bash
+python -m manga_factory submit "https://example.com/series/foo"
+python -m manga_factory list-requests
+python -m manga_factory validate
+python -m unittest discover -s tests -v
+```
+
+`submit` does not scrape arbitrary websites. It records a normalized intake request. A bootstrap worker with browser/web access resolves the site and writes a source manifest according to `contracts/source_manifest.schema.json`.
+
+## End-to-end workflow
+
+```text
+URL / archive
+  -> bootstrap
+  -> acquire_source
+  -> vision_scan
+  -> character/terminology/speech/story discovery
+  -> context_review -> canonical context v1
+  -> context compiler
+  -> translation chunks
+  -> chapter translation review
+  -> redraw + typeset
+  -> vision QA
+  -> final QA
+  -> publisher
+  -> web publication manifest + CDN/object-storage assets
+```
+
+The pipeline is declared in `config/pipeline.json`, not hard-coded into Shiro.
+
+## Worker runtime contract
+
+Workers are expected to be short-lived. Default reference budget:
+
+- normal work budget: 15 minutes
+- begin draining: 18 minutes
+- hard safety boundary: 22 minutes
+- checkpoint after each completed page or other meaningful atomic unit
+
+A worker nearing its budget must checkpoint, push its WIP branch when Git is available, emit `handoff.json`, and release its lease. If it dies first, the external coordinator lets the lease expire and reassigns the task. See `WORKER_PROTOCOL.md`.
+
+## Context consistency
+
+Canonical context is versioned and evidence-backed. Translation workers cannot directly modify it. They may only propose candidates. Context reviewers/integrators promote accepted candidates.
+
+A translation task records the exact `context_version` used. If canonical context changes, the coordinator can schedule targeted consistency review rather than blindly retranslate everything.
+
+## Publication contract
+
+The production website should not read worker branches or intermediate files. A Publisher worker emits a manifest like:
+
+```json
+{
+  "series_id": "example-series",
+  "chapter_id": "42",
+  "version": 3,
+  "pages": [
+    {
+      "index": 1,
+      "url": "https://cdn.example.com/manga/example-series/42/001.a812cf42.webp",
+      "width": 1600,
+      "height": 2400,
+      "sha256": "..."
+    }
+  ]
+}
+```
+
+The website only needs its metadata API/database plus CDN page URLs.
+
+## Repository layout
+
+```text
+config/                 pipeline and quality configuration
+contracts/              machine-readable worker/coordinator contracts
+docs/                   design notes
+manga_factory/          reference CLI and deterministic helpers
+projects/<series>/       project-owned canonical data and text artifacts
+requests/                URL/archive intake records
+work/                    proposals/results/handoffs (normally ephemeral)
+tests/                   deterministic reference tests
+```
+
+Large images should live in S3/R2/MinIO or another object store. Git stores manifests, hashes, context, translations and history.
+
+## Copyright and source access
+
+Use the pipeline for source material you own or are authorized to download, translate, modify and publish. Source adapters must respect access controls and site terms; the repository deliberately does not implement bypasses for protected sources.

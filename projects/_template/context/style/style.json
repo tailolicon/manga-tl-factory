@@ -1,0 +1,8 @@
+{
+  "target_language": "vi",
+  "principles": [
+    "natural Vietnamese while preserving scene intent",
+    "character voice and established forms of address override generic phrasing",
+    "do not invent information that is not supported by source/context"
+  ]
+}

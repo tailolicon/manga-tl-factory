@@ -1,0 +1,9 @@
+{
+  "project_id": "replace-me",
+  "source": {"kind": "url", "value": "https://example.com/series"},
+  "source_language": "ja",
+  "target_language": "vi",
+  "status": "new",
+  "context_version": null,
+  "pipeline_version": "1.0.0"
+}

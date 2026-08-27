@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.DS_Store
+
+# Runtime binaries/images belong in object storage or local scratch.
+runtime/
+assets/source/
+assets/working/
+assets/master/
+assets/published/
+
+# Local coordinator state/secrets
+.env
+*.sqlite
+*.sqlite3

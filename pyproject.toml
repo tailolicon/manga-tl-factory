@@ -1,0 +1,8 @@
+[project]
+name = "manga-tl-factory"
+version = "0.1.0"
+description = "Agent-first, context-consistent manga localization workflow contracts and reference tooling"
+requires-python = ">=3.11"
+
+[project.scripts]
+manga-factory = "manga_factory.cli:main"

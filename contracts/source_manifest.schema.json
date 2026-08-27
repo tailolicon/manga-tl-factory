@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SourceManifest",
+  "type": "object",
+  "required": ["project_id", "source", "chapters"],
+  "properties": {
+    "project_id": {"type": "string"},
+    "source": {"type": "object"},
+    "series": {"type": "object"},
+    "chapters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chapter_id", "pages"],
+        "properties": {
+          "chapter_id": {"type": "string"},
+          "title": {"type": ["string", "null"]},
+          "pages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["index", "asset_ref"],
+              "properties": {
+                "index": {"type": "integer", "minimum": 1},
+                "asset_ref": {"type": "string"},
+                "sha256": {"type": ["string", "null"]}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

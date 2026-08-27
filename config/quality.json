@@ -1,0 +1,13 @@
+{
+  "speaker_confidence_review_below": 0.75,
+  "translation_confidence_review_below": 0.82,
+  "terminology_confidence_review_below": 0.90,
+  "visual_qa_retry_below": 0.88,
+  "require_final_qa_pass": true,
+  "publication": {
+    "preferred_format": "webp",
+    "max_long_edge_px": 2400,
+    "keep_master_lossless": true,
+    "content_hashed_filenames": true
+  }
+}

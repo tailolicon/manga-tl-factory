@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IntakeRequest",
+  "type": "object",
+  "required": ["request_id", "source", "target_language", "created_at"],
+  "properties": {
+    "request_id": {"type": "string"},
+    "source": {
+      "type": "object",
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": {"enum": ["url", "archive", "folder"]},
+        "value": {"type": "string"}
+      }
+    },
+    "source_language": {"type": ["string", "null"]},
+    "target_language": {"type": "string"},
+    "created_at": {"type": "string"}
+  }
+}
