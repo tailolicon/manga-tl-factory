@@ -69,3 +69,7 @@ Suggested branch naming:
 `task/<task-id>/<fencing-token>`
 
 Workers never merge their own result into main. Review/integration is a separate task/role.
+
+## Standalone bootstrap testing
+
+The production requirements above remain authoritative. For coordinator-less repository testing only, `STANDALONE_TEST.md` defines a narrow bootstrap exception with a deterministic envelope. A worker in that explicit mode must not block solely because no local worktree exists: an authorized GitHub connector may be used as the repository backend. If write access is unavailable, return an honest `partial` result rather than inventing commits or fencing authority.
