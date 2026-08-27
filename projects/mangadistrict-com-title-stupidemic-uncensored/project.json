@@ -1,0 +1,13 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "source": {
+    "kind": "url",
+    "value": "https://mangadistrict.com/title/stupidemic-uncensored/"
+  },
+  "source_language": null,
+  "target_language": "vi",
+  "status": "new",
+  "context_version": null,
+  "pipeline_version": "1.0.0",
+  "created_from_request": "req-0d91e65dd475"
+}
