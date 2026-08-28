@@ -9,6 +9,7 @@ on:
       - "scripts/build_site_index.py"
       - "projects/**/project.json"
       - "projects/**/publication/**"
+      - "work/test_lanes/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
