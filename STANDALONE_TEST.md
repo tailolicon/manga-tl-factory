@@ -30,6 +30,21 @@ Task artifacts remain on the task/test branch. The only direct-to-`main` excepti
 
 A lane may include `workflow.predeclared: true` and ordered `workflow.steps[]`. A worker runs only the current step. On success, it may advance only to a next step that was already present on `main` before claim, incrementing `generation` by exactly one and stopping the current session.
 
+## Lane completion is not pipeline completion
+
+`state: "completed"` on a standalone lane means only that the lane exhausted its predeclared test steps. It must never be interpreted as proof that the production chapter DAG reached `publish`.
+
+If a completed standalone lane stops before the terminal production stage, record a `pipeline_handoff` that states:
+
+- the test lane is complete;
+- the production pipeline is not complete;
+- which test stage completed;
+- the closest production equivalent when one exists;
+- the next production stage and remaining production stages;
+- whether an external coordinator is required to materialize downstream tasks.
+
+Workers must not turn that handoff into an unpredeclared child task themselves. The production coordinator owns dependency checks and downstream scheduling.
+
 ## Page translation smoke
 
 `page_translation_smoke` is a deliberately narrow test-only task. It exists to prove that one selected page can be fetched, visually inspected, translated to Vietnamese, and persisted as a `contracts/translation_page.schema.json` artifact before the production context/translation DAG is fully exercised.
@@ -54,6 +69,8 @@ Rules:
 - Use rolling checkpoints during the work window so unexpected loss is bounded, then persist all outstanding completed pages during drain.
 - On partial completion, hand off `resume_from = first_uncompleted_page`; the next worker claims the same chapter and continues.
 - Do not claim another chapter in the same session.
+
+A completed `translation_chunk_test` with `context_version: "smoke:no-canonical-context"` remains a smoke-test translation result. It is not equivalent to production `context_review + translate_chunk + translation_review`, and it cannot by itself satisfy downstream production gates.
 
 ## Runtime budget
 
