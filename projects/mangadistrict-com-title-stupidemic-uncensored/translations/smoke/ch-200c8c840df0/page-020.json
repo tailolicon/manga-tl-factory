@@ -1,0 +1,10 @@
+{
+  "project_id":"mangadistrict-com-title-stupidemic-uncensored","chapter_id":"ch-200c8c840df0","page_index":20,"context_version":"smoke:no-canonical-context","blocks":[
+    {"block_id":"p020-b001","source_text":"YES, SIR!!!","translation":"VÂNG Ạ!!!","translation_confidence":0.99},
+    {"block_id":"p020-b002","source_text":"I CAN DO IT!!!","translation":"CHÁU LÀM ĐƯỢC!!!","translation_confidence":0.99},
+    {"block_id":"p020-b003","source_text":"I'LL NEVER GAMBLE EVER AGAIN!","translation":"CHÁU SẼ KHÔNG BAO GIỜ CỜ BẠC NỮA!","translation_confidence":0.99},
+    {"block_id":"p020-b004","source_text":"I'LL JUST END MY LIFE IF I WALK INTO A GAMBLING HOUSE EVER AGAIN!","translation":"Nếu cháu còn bước vào sòng bạc lần nữa thì cháu tự kết liễu đời mình luôn!","translation_confidence":0.98,"notes":"Source self-harm statement translated without expansion."},
+    {"block_id":"p020-b005","source_text":"ALRIGHT.","translation":"Được.","translation_confidence":0.99},
+    {"block_id":"p020-b006","source_text":"SHOW ME WHO YOU ARE.","translation":"Cho chú thấy cháu là người thế nào đi.","translation_confidence":0.96}
+  ]
+}

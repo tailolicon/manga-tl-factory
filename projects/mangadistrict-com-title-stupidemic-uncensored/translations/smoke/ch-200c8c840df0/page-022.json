@@ -1,0 +1,10 @@
+{
+  "project_id":"mangadistrict-com-title-stupidemic-uncensored","chapter_id":"ch-200c8c840df0","page_index":22,"context_version":"smoke:no-canonical-context","blocks":[
+    {"block_id":"p022-b001","source_text":"HUH?","translation":"Hả?","translation_confidence":0.99},
+    {"block_id":"p022-b002","source_text":"WIN!","translation":"THẮNG!","translation_confidence":0.99,"notes":"Game UI result text."},
+    {"block_id":"p022-b003","source_text":"CONGRATULATIONS","translation":"CHÚC MỪNG","translation_confidence":0.99,"notes":"Game UI text."},
+    {"block_id":"p022-b004","source_text":"YESSS","translation":"ĐƯỢC RỒI!","translation_confidence":0.97},
+    {"block_id":"p022-b005","source_text":"DAMN RIGHT!!! I WON!!!","translation":"ĐÚNG RỒI!!! MÌNH THẮNG RỒI!!!","translation_confidence":0.99},
+    {"block_id":"p022-b006","source_text":"THIS IS CRAZY. I GOT IT RIGHT THREE TIMES IN A ROW. SO AM I GETTING TWO TIMES THE AMOUNT IF I GET IT RIGHT ONE MORE TIME?","translation":"Điên thật. Mình đoán đúng ba lần liên tiếp rồi. Vậy nếu đúng thêm lần nữa thì tiền sẽ lại nhân đôi à?","translation_confidence":0.98}
+  ]
+}

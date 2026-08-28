@@ -1,0 +1,12 @@
+{
+  "project_id":"mangadistrict-com-title-stupidemic-uncensored","chapter_id":"ch-200c8c840df0","page_index":19,"context_version":"smoke:no-canonical-context","blocks":[
+    {"block_id":"p019-b001","source_text":"I'M SERIOUS! THEY'RE WAITING OUTSIDE!","translation":"Cháu nói thật! Bọn chúng đang chờ ở ngoài!","translation_confidence":0.98},
+    {"block_id":"p019-b002","source_text":"I JUST NEED TEN, NO, TWENTY THOUSAND...!","translation":"Cháu chỉ cần mười... không, hai mươi nghìn thôi...!","translation_confidence":0.97,"notes":"Currency is not stated in this bubble."},
+    {"block_id":"p019-b003","source_text":"DAEHO, ARE YOU SURE ABOUT THIS?","translation":"Daeho, cháu chắc chứ?","translation_confidence":0.96},
+    {"block_id":"p019-b004","source_text":"YES!!!","translation":"VÂNG!!!","translation_confidence":0.99},
+    {"block_id":"p019-b005","source_text":"IF YOU LEND ME THE MONEY, I'LL BE SURE TO PAY YOU BACK...","translation":"Nếu chú cho cháu vay, cháu nhất định sẽ trả...","translation_confidence":0.97},
+    {"block_id":"p019-b006","source_text":"NO, NOT THAT. ARE YOU SURE... YOU CAN QUIT GAMBLING?","translation":"Không, không phải chuyện đó. Cháu chắc... mình bỏ cờ bạc được chứ?","translation_confidence":0.98},
+    {"block_id":"p019-b007","source_text":"IF YOU QUIT GAMBLING FOR A YEAR AND PROMISE ME THAT YOU WON'T GET INTO TROUBLE EVER AGAIN...","translation":"Nếu cháu bỏ cờ bạc một năm và hứa từ nay không gây chuyện nữa...","translation_confidence":0.98},
+    {"block_id":"p019-b008","source_text":"I'LL PAY OFF YOUR DEBTS IN A YEAR. HOW'S THAT? DO YOU THINK YOU CAN DO IT?","translation":"Trong một năm đó chú sẽ trả hết nợ cho cháu. Thế nào? Cháu làm được không?","translation_confidence":0.96,"notes":"Temporal nuance translated conservatively."}
+  ]
+}

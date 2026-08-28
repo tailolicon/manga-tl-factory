@@ -1,0 +1,14 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 17,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {"block_id":"p017-b001","speaker_id":null,"source_text":"SHE MUST THINK I'M A PUSHOVER BECAUSE I TOLERATE HER.","translation":"Chắc cô ta nghĩ mình dễ bắt nạt vì mình cứ nhịn cô ta.","speaker_confidence":null,"translation_confidence":0.98,"notes":"Internal narration."},
+    {"block_id":"p017-b002","speaker_id":null,"source_text":"HAA... I'M JUST GOING TO HAVE TO ENDURE IT. ALL MY DEBTS WILL BE PAID OFF IF I JUST LAST A YEAR HERE.","translation":"Ha... mình chỉ còn cách chịu đựng thôi. Chỉ cần trụ ở đây một năm là mọi khoản nợ sẽ được trả hết.","speaker_confidence":null,"translation_confidence":0.98,"notes":"Internal narration."},
+    {"block_id":"p017-b003","speaker_id":null,"source_text":"I ONLY HAVE 11 MONTHS TO GO...","translation":"Chỉ còn 11 tháng nữa...","speaker_confidence":null,"translation_confidence":0.99,"notes":"Internal narration."},
+    {"block_id":"p017-b004","speaker_id":null,"source_text":"CLANG","translation":"Keng!","speaker_confidence":null,"translation_confidence":0.96,"notes":"Metal impact sound effect."},
+    {"block_id":"p017-b005","speaker_id":null,"source_text":"FUCK!!! IT'S ONLY BEEN A MONTH?!","translation":"Địt mẹ!!! Mới có một tháng thôi á?!","speaker_confidence":null,"translation_confidence":0.98,"notes":"Internal outburst; vulgar register preserved."},
+    {"block_id":"p017-b006","speaker_id":null,"source_text":"DAMN THAT STINGY OLD MAN...","translation":"Lão già keo kiệt chết tiệt...","speaker_confidence":null,"translation_confidence":0.98,"notes":"Internal narration."}
+  ]
+}

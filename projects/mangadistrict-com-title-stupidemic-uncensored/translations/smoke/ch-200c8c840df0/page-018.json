@@ -1,0 +1,9 @@
+{
+  "project_id":"mangadistrict-com-title-stupidemic-uncensored","chapter_id":"ch-200c8c840df0","page_index":18,"context_version":"smoke:no-canonical-context","blocks":[
+    {"block_id":"p018-b001","source_text":"HE SAID HE'S GOING TO PAY THEM OFF, SO WHY CAN'T HE JUST DO IT ALL AT ONCE?","translation":"Ông ấy đã bảo sẽ trả hết mà, sao không trả luôn một lần đi chứ?","translation_confidence":0.97,"notes":"Internal narration."},
+    {"block_id":"p018-b002","source_text":"WHAT WAS IT? LIVE LIKE A HUMAN BEING FOR JUST A YEAR?","translation":"Ông ấy nói gì nhỉ? Chỉ cần sống cho ra con người trong một năm?","translation_confidence":0.97,"notes":"Internal narration."},
+    {"block_id":"p018-b003","source_text":"UNCLE, PLEASE... HELP YOUR NEPHEW OUT.","translation":"Chú ơi, xin chú... cứu thằng cháu này với.","translation_confidence":0.95,"notes":"Flashback dialogue; Vietnamese kinship term is provisional without canonical context."},
+    {"block_id":"p018-b004","source_text":"I'LL BE KILLED IF I LEAVE LIKE THIS...","translation":"Nếu cứ đi ra thế này thì cháu sẽ bị giết mất...","translation_confidence":0.98},
+    {"block_id":"p018-b005","source_text":"THE PEOPLE OUTSIDE ARE GOING TO PUT ME IN A VAN AND TAKE ME SOMEWHERE.","translation":"Bọn ở ngoài đang chờ nhét cháu lên xe rồi lôi đi đâu đó.","translation_confidence":0.98}
+  ]
+}

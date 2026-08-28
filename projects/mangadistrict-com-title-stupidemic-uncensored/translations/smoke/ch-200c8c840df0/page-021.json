@@ -1,0 +1,8 @@
+{
+  "project_id":"mangadistrict-com-title-stupidemic-uncensored","chapter_id":"ch-200c8c840df0","page_index":21,"context_version":"smoke:no-canonical-context","blocks":[
+    {"block_id":"p021-b001","source_text":"DON'T BE LIKE YOUR FATHER.","translation":"Đừng giống cha cháu.","translation_confidence":0.98},
+    {"block_id":"p021-b002","source_text":"I CAN'T BELIEVE HE COMPARED ME TO MY FATHER... DAMMIT.","translation":"Không thể tin ông ấy lại đem mình so với cha... chết tiệt.","translation_confidence":0.98},
+    {"block_id":"p021-b003","source_text":"THAT BASTARD MADE US GO BANKRUPT BECAUSE HE WAS BETTING ON HORSES, AND THEN HUNG HIMSELF.","translation":"Lão khốn đó cá ngựa làm cả nhà phá sản, rồi còn treo cổ tự tử.","translation_confidence":0.98,"notes":"Source suicide reference translated without expansion."},
+    {"block_id":"p021-b004","source_text":"GLANCE","translation":"Liếc","translation_confidence":0.96,"notes":"Visual glance effect."}
+  ]
+}
