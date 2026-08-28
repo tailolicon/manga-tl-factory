@@ -53,7 +53,7 @@ class FactoryTests(unittest.TestCase):
 
 
 class ChapterPipelineTests(unittest.TestCase):
-    def _write_lane(self, root, phase="translate", resume_page=1):
+    def _write_lane(self, root, phase="translate", resume_page=1, last_result=None):
         lane_dir = root / "work" / "chapter_lanes"
         lane_dir.mkdir(parents=True)
         (root / "projects" / "project-x").mkdir(parents=True)
@@ -79,7 +79,7 @@ class ChapterPipelineTests(unittest.TestCase):
             "progress": {"translated_pages": 0, "rendered_pages": 0, "qa_pages": 0, "published": False},
             "next_task": {"task_type": "localize_chapter", "goal": "finish chapter", "scope": {"page_start": 1, "page_end": 41}},
             "claim": None,
-            "last_result": None,
+            "last_result": last_result,
         }
         (lane_dir / "x-ch1.json").write_text(json.dumps(lane), encoding="utf-8")
 
@@ -87,7 +87,8 @@ class ChapterPipelineTests(unittest.TestCase):
         from manga_factory.standalone import build_chapter_envelope
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            self._write_lane(root, phase="redraw_typeset", resume_page=7)
+            previous = {"status": "partial", "commit": "deadbeefcafefeed", "branch": "chapter/x-ch1/g2"}
+            self._write_lane(root, phase="redraw_typeset", resume_page=7, last_result=previous)
             env = build_chapter_envelope(root)
             self.assertEqual(env["execution_mode"], "chapter_pipeline")
             self.assertEqual(env["task_type"], "localize_chapter")
@@ -95,18 +96,37 @@ class ChapterPipelineTests(unittest.TestCase):
             self.assertEqual(env["resume_page"], 7)
             self.assertEqual(env["fencing_token"], 3)
             self.assertEqual(env["task_branch"], "chapter/x-ch1/g3")
+            self.assertEqual(env["checkpoint_base_commit"], "deadbeefcafefeed")
             self.assertEqual(env["runtime_budget_minutes"], 25)
             self.assertEqual(env["drain_after_minutes"], 21)
             self.assertIn("projects/project-x/chapters/ch-1/rendered/**", env["allowed_write_paths"])
             self.assertIn("projects/project-x/publication/ch-1/**", env["allowed_write_paths"])
-            self.assertTrue(env["chapter_constraints"]["worker_may_advance_phase"])
-            self.assertTrue(env["chapter_constraints"]["worker_may_redraw_and_typeset"])
-            self.assertTrue(env["chapter_constraints"]["worker_may_publish_after_qa"])
-            self.assertEqual(env["chapter_constraints"]["binary_persistence_strategy"], "github_create_blob_base64_then_tree_commit")
-            self.assertTrue(env["chapter_constraints"]["binary_base64_is_transport_only"])
-            self.assertTrue(env["chapter_constraints"]["rendered_progress_requires_remote_commit"])
-            self.assertEqual(env["chapter_constraints"]["preferred_render_format"], "webp")
-            self.assertEqual(env["chapter_constraints"]["target_render_bytes_per_page"], 1048576)
+            c = env["chapter_constraints"]
+            self.assertTrue(c["generalist_worker"])
+            self.assertFalse(c["phase_boundaries_are_handoffs"])
+            self.assertTrue(c["worker_may_advance_phase"])
+            self.assertTrue(c["worker_may_translate"])
+            self.assertTrue(c["worker_may_correct_translation"])
+            self.assertTrue(c["worker_may_redraw_and_typeset"])
+            self.assertTrue(c["worker_may_qa"])
+            self.assertTrue(c["worker_may_fix_qa_issues"])
+            self.assertTrue(c["worker_may_publish_after_qa"])
+            self.assertFalse(c["soft_page_target_is_stop_condition"])
+            self.assertEqual(c["remote_checkpoint_strategy"], "adaptive_batched")
+            self.assertEqual(c["default_checkpoint_pages"], 6)
+            self.assertEqual(c["min_checkpoint_pages"], 4)
+            self.assertEqual(c["max_checkpoint_pages"], 10)
+            self.assertEqual(c["max_uncommitted_minutes"], 7)
+            self.assertEqual(c["force_flush_from_minute"], 18)
+            self.assertTrue(c["parallel_blob_creation_when_supported"])
+            self.assertTrue(c["one_tree_commit_ref_update_per_batch"])
+            self.assertFalse(c["main_lane_updates_per_page"])
+            self.assertTrue(c["inherit_previous_checkpoint_commit"])
+            self.assertEqual(c["binary_persistence_strategy"], "github_create_blob_base64_then_tree_commit")
+            self.assertTrue(c["binary_base64_is_transport_only"])
+            self.assertTrue(c["rendered_progress_requires_remote_commit"])
+            self.assertEqual(c["preferred_render_format"], "webp")
+            self.assertEqual(c["target_render_bytes_per_page"], 1048576)
 
 
 if __name__ == "__main__":
