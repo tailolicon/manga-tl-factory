@@ -1,0 +1,80 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 12,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p012-b001",
+      "speaker_id": null,
+      "source_text": "I TOLD YOU TO FEED THE DOG. WHY ARE YOU HANGING AROUND HERE LIKE IT'S YOUR TIME TO EAT?",
+      "translation": "Tôi bảo anh đi cho chó ăn. Sao anh còn lảng vảng ở đây như đến giờ mình được cho ăn vậy?",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.97,
+      "notes": "Visible female speaker; insult compares him to the dog."
+    },
+    {
+      "block_id": "p012-b002",
+      "speaker_id": null,
+      "source_text": "ONE OF THE PRODUCTS GOT MESSED UP 'CAUSE YOU WEREN'T DOING YOUR WORK!",
+      "translation": "Có một sản phẩm bị lỗi vì anh không chịu làm việc đấy!",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p012-b003",
+      "speaker_id": null,
+      "source_text": "I THOUGHT SHE'D BE NAIVE 'CAUSE SHE WAS A PRETTY FACTORY GIRL.",
+      "translation": "Tôi cứ tưởng cô ta sẽ ngây thơ vì là một cô gái nhà máy xinh đẹp.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.95,
+      "notes": "Internal narration; phrasing reflects the narrator's own stereotype."
+    },
+    {
+      "block_id": "p012-b004",
+      "speaker_id": null,
+      "source_text": "HOW ARE YOU ANY BETTER THAN A DOG?",
+      "translation": "Anh thì hơn chó ở chỗ nào?",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p012-b005",
+      "speaker_id": null,
+      "source_text": "DID I NOT TELL YOU TO SUPERVISE THE PRODUCTION LINE? HOW MANY TIMES DO I HAVE TO REPEAT MYSELF?",
+      "translation": "Tôi chẳng đã bảo anh giám sát dây chuyền sản xuất sao? Tôi phải nhắc lại bao nhiêu lần nữa đây?",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p012-b006",
+      "speaker_id": null,
+      "source_text": "SHE'S A WICKED BITCH WHO'S BEEN BITCHING AT ME FOR A MONTH STRAIGHT.",
+      "translation": "Cô ta đúng là con mụ độc mồm đã càm ràm tôi suốt cả tháng trời.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.96,
+      "notes": "Internal narration; insulting register preserved."
+    },
+    {
+      "block_id": "p012-b007",
+      "speaker_id": null,
+      "source_text": "ALL SHE DOES IS SURF THE INTERNET ALL DAY LONG.",
+      "translation": "Cả ngày cô ta chỉ có lướt mạng.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.99,
+      "notes": "Internal narration."
+    },
+    {
+      "block_id": "p012-b008",
+      "speaker_id": null,
+      "source_text": "I'M THE ONE WHO'S BEEN DOING HER WORK TOO...",
+      "translation": "Đến việc của cô ta cũng toàn là tôi làm hộ...",
+      "speaker_confidence": null,
+      "translation_confidence": 0.98,
+      "notes": "Internal narration."
+    }
+  ]
+}
