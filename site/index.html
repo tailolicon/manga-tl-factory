@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Manga TL Library</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b13;
+      --surface: rgba(19, 25, 43, 0.78);
+      --surface-2: rgba(31, 41, 68, 0.82);
+      --border: rgba(255,255,255,.09);
+      --text: #f7f8ff;
+      --muted: #aab2cc;
+      --accent: #9b8cff;
+      --accent-2: #54d7ff;
+      --danger: #ff6b8b;
+      --shadow: 0 18px 50px rgba(0,0,0,.28);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(155,140,255,.16), transparent 34rem),
+        radial-gradient(circle at 95% 12%, rgba(84,215,255,.10), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+    }
+    button, input { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    .shell { width: min(1200px, calc(100% - 28px)); margin: 0 auto; }
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(20px);
+      background: linear-gradient(to bottom, rgba(8,11,19,.92), rgba(8,11,19,.68));
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner { min-height: 68px; display: flex; align-items: center; gap: 14px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.03em; cursor: pointer; }
+    .brand-mark { width: 34px; height: 34px; border-radius: 12px; display:grid; place-items:center; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 8px 24px rgba(132,133,255,.3); }
+    .brand small { display:block; color:var(--muted); font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
+    .spacer { flex: 1; }
+    .search { width: min(420px, 52vw); border: 1px solid var(--border); background: rgba(255,255,255,.055); color:var(--text); border-radius: 14px; padding: 11px 14px; outline: none; }
+    .search:focus { border-color: rgba(155,140,255,.7); box-shadow: 0 0 0 3px rgba(155,140,255,.12); }
+    main { padding: 34px 0 64px; }
+    .hero { padding: 18px 0 30px; }
+    .hero h1 { margin:0; font-size:clamp(28px,5vw,52px); line-height:1; letter-spacing:-.055em; }
+    .hero p { margin:14px 0 0; color:var(--muted); max-width:760px; line-height:1.7; }
+    .status { display:inline-flex; align-items:center; gap:8px; margin-top:18px; padding:8px 11px; border-radius:999px; color:#d8dcf0; background:rgba(255,255,255,.055); border:1px solid var(--border); font-size:13px; }
+    .dot { width:8px; height:8px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 0 16px var(--accent); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:18px; }
+    .card { overflow:hidden; border:1px solid var(--border); background:var(--surface); border-radius:20px; box-shadow:var(--shadow); transition:.2s ease; cursor:pointer; }
+    .card:hover { transform:translateY(-4px); border-color:rgba(155,140,255,.38); }
+    .cover { aspect-ratio: 3 / 4.25; width:100%; object-fit:cover; display:block; background:linear-gradient(135deg,#171d30,#111526); }
+    .cover-placeholder { aspect-ratio:3/4.25; display:grid; place-items:center; color:var(--muted); background:linear-gradient(135deg,rgba(155,140,255,.14),rgba(84,215,255,.06)); font-size:48px; }
+    .card-body { padding:14px; }
+    .card h2 { margin:0; font-size:16px; line-height:1.35; letter-spacing:-.02em; }
+    .meta { color:var(--muted); font-size:12px; margin-top:7px; }
+    .empty { padding:48px 22px; text-align:center; border:1px dashed rgba(255,255,255,.16); border-radius:22px; color:var(--muted); background:rgba(255,255,255,.025); }
+    .series-head { display:grid; grid-template-columns:minmax(120px,210px) 1fr; gap:24px; align-items:end; margin-bottom:28px; }
+    .series-head .cover, .series-head .cover-placeholder { border-radius:18px; box-shadow:var(--shadow); }
+    .series-head h1 { margin:0; font-size:clamp(28px,5vw,48px); letter-spacing:-.05em; }
+    .crumb { color:var(--muted); font-size:13px; margin-bottom:12px; cursor:pointer; }
+    .chapter-list { display:grid; gap:10px; }
+    .chapter { display:flex; align-items:center; gap:14px; padding:15px 16px; border-radius:15px; background:var(--surface); border:1px solid var(--border); cursor:pointer; }
+    .chapter:hover { background:var(--surface-2); border-color:rgba(155,140,255,.35); }
+    .chapter .num { min-width:38px; color:var(--accent-2); font-weight:800; }
+    .chapter .title { flex:1; }
+    .chapter .pages { color:var(--muted); font-size:12px; }
+    .reader-shell { width:min(980px,100%); margin:0 auto; }
+    .reader-title { text-align:center; padding:8px 12px 22px; }
+    .reader-title h1 { margin:8px 0 0; font-size:clamp(24px,4vw,38px); letter-spacing:-.04em; }
+    .reader-pages { display:grid; gap:8px; }
+    .reader-page { width:100%; height:auto; display:block; background:#0d111c; border-radius:8px; box-shadow:0 10px 40px rgba(0,0,0,.2); }
+    .reader-nav { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:28px 0 10px; }
+    .btn { border:1px solid var(--border); background:rgba(255,255,255,.07); color:var(--text); border-radius:12px; padding:10px 14px; cursor:pointer; }
+    .btn:hover { border-color:rgba(155,140,255,.5); }
+    .btn.primary { background:linear-gradient(135deg,rgba(155,140,255,.25),rgba(84,215,255,.16)); }
+    .hidden { display:none !important; }
+    .error { color:#ffd3dd; border-color:rgba(255,107,139,.3); }
+    footer { padding:24px 0 50px; color:var(--muted); text-align:center; font-size:12px; }
+    @media (max-width:680px) {
+      .shell { width:min(100% - 18px,1200px); }
+      .topbar-inner { min-height:62px; }
+      .brand span:last-child { display:none; }
+      .search { width:65vw; }
+      .series-head { grid-template-columns:100px 1fr; gap:16px; align-items:center; }
+      .grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+      .card { border-radius:15px; }
+      .card-body { padding:11px; }
+      main { padding-top:20px; }
+      .reader-pages { gap:3px; }
+      .reader-page { border-radius:3px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <div class="brand" id="homeButton" role="button" tabindex="0">
+        <div class="brand-mark">読</div>
+        <span>Manga TL Library<small>Vietnamese reader</small></span>
+      </div>
+      <div class="spacer"></div>
+      <input id="search" class="search" type="search" autocomplete="off" placeholder="Tìm truyện..." aria-label="Tìm truyện" />
+    </div>
+  </header>
+
+  <main class="shell">
+    <section id="homeView">
+      <div class="hero">
+        <h1>Thư viện truyện đã dịch</h1>
+        <p>Trang đọc tĩnh được tạo trực tiếp từ publication manifest của Manga TL Factory. Khi pipeline xuất bản chapter mới, thư viện sẽ được cập nhật trong lần deploy kế tiếp.</p>
+        <div class="status"><span class="dot"></span><span id="libraryStatus">Đang tải thư viện…</span></div>
+      </div>
+      <div id="libraryGrid" class="grid"></div>
+    </section>
+
+    <section id="seriesView" class="hidden"></section>
+    <section id="readerView" class="hidden"></section>
+  </main>
+
+  <footer class="shell">Manga TL Factory · Static GitHub Pages reader</footer>
+
+  <script>
+    const state = { library: null };
+    const $ = (id) => document.getElementById(id);
+    const homeView = $('homeView');
+    const seriesView = $('seriesView');
+    const readerView = $('readerView');
+    const grid = $('libraryGrid');
+    const search = $('search');
+
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    }
+    function route(seriesId, chapterId) {
+      const url = new URL(location.href);
+      if (seriesId) url.searchParams.set('series', seriesId); else url.searchParams.delete('series');
+      if (chapterId) url.searchParams.set('chapter', chapterId); else url.searchParams.delete('chapter');
+      history.pushState({}, '', url);
+      renderRoute();
+      scrollTo({top:0, behavior:'instant'});
+    }
+    function coverMarkup(series, extraClass='') {
+      if (series.cover_url) return `<img class="cover ${extraClass}" src="${esc(series.cover_url)}" alt="${esc(series.title)}" loading="lazy" referrerpolicy="no-referrer" />`;
+      return `<div class="cover-placeholder ${extraClass}">読</div>`;
+    }
+    function renderLibrary(filter='') {
+      const items = (state.library?.series || []).filter(s => s.title.toLowerCase().includes(filter.trim().toLowerCase()));
+      $('libraryStatus').textContent = `${state.library?.series?.length || 0} truyện · ${state.library?.chapter_count || 0} chapter`;
+      if (!items.length) {
+        grid.innerHTML = `<div class="empty" style="grid-column:1/-1">${filter ? 'Không tìm thấy truyện phù hợp.' : 'Chưa có chapter nào được publish. Khi pipeline tạo publication manifest đầu tiên, truyện sẽ tự xuất hiện ở đây.'}</div>`;
+        return;
+      }
+      grid.innerHTML = items.map(series => `
+        <article class="card" data-series="${esc(series.id)}">
+          ${coverMarkup(series)}
+          <div class="card-body">
+            <h2>${esc(series.title)}</h2>
+            <div class="meta">${series.chapters.length} chapter · ${esc(series.target_language || 'vi')}</div>
+          </div>
+        </article>`).join('');
+      grid.querySelectorAll('[data-series]').forEach(el => el.addEventListener('click', () => route(el.dataset.series)));
+    }
+    function renderSeries(series) {
+      const chapters = series.chapters || [];
+      seriesView.innerHTML = `
+        <div class="crumb" id="seriesBack">← Thư viện</div>
+        <div class="series-head">
+          ${coverMarkup(series)}
+          <div>
+            <div class="meta">${chapters.length} chapter · ${esc(series.target_language || 'vi')}</div>
+            <h1>${esc(series.title)}</h1>
+          </div>
+        </div>
+        <div class="chapter-list">
+          ${chapters.map((chapter, i) => `
+            <div class="chapter" data-chapter="${esc(chapter.id)}">
+              <span class="num">${String(i + 1).padStart(2,'0')}</span>
+              <span class="title">${esc(chapter.title || `Chapter ${chapter.id}`)}</span>
+              <span class="pages">${chapter.pages.length} trang</span>
+            </div>`).join('') || '<div class="empty">Chưa có chapter đã publish.</div>'}
+        </div>`;
+      $('seriesBack').onclick = () => route();
+      seriesView.querySelectorAll('[data-chapter]').forEach(el => el.addEventListener('click', () => route(series.id, el.dataset.chapter)));
+    }
+    function renderReader(series, chapter) {
+      const index = series.chapters.findIndex(c => c.id === chapter.id);
+      const prev = index > 0 ? series.chapters[index - 1] : null;
+      const next = index >= 0 && index < series.chapters.length - 1 ? series.chapters[index + 1] : null;
+      readerView.innerHTML = `
+        <div class="reader-shell">
+          <div class="reader-title">
+            <div class="crumb" id="readerBack">← ${esc(series.title)}</div>
+            <div class="meta">${chapter.pages.length} trang</div>
+            <h1>${esc(chapter.title || `Chapter ${chapter.id}`)}</h1>
+          </div>
+          <div class="reader-pages">
+            ${chapter.pages.map(page => `<img class="reader-page" src="${esc(page.url)}" alt="Trang ${page.index}" loading="lazy" decoding="async" referrerpolicy="no-referrer" />`).join('')}
+          </div>
+          <div class="reader-nav">
+            ${prev ? `<button class="btn" id="prevChapter">← ${esc(prev.title || `Chapter ${prev.id}`)}</button>` : ''}
+            <button class="btn primary" id="chapterList">Danh sách chapter</button>
+            ${next ? `<button class="btn" id="nextChapter">${esc(next.title || `Chapter ${next.id}`)} →</button>` : ''}
+          </div>
+        </div>`;
+      $('readerBack').onclick = () => route(series.id);
+      $('chapterList').onclick = () => route(series.id);
+      if (prev) $('prevChapter').onclick = () => route(series.id, prev.id);
+      if (next) $('nextChapter').onclick = () => route(series.id, next.id);
+    }
+    function renderRoute() {
+      if (!state.library) return;
+      const params = new URLSearchParams(location.search);
+      const seriesId = params.get('series');
+      const chapterId = params.get('chapter');
+      homeView.classList.toggle('hidden', !!seriesId);
+      seriesView.classList.add('hidden');
+      readerView.classList.add('hidden');
+      search.classList.toggle('hidden', !!seriesId);
+      if (!seriesId) { renderLibrary(search.value); return; }
+      const series = state.library.series.find(s => s.id === seriesId);
+      if (!series) { route(); return; }
+      if (!chapterId) { seriesView.classList.remove('hidden'); renderSeries(series); return; }
+      const chapter = series.chapters.find(c => c.id === chapterId);
+      if (!chapter) { route(series.id); return; }
+      readerView.classList.remove('hidden');
+      renderReader(series, chapter);
+    }
+    async function boot() {
+      try {
+        const res = await fetch('./data/library.json', {cache:'no-store'});
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        state.library = await res.json();
+        renderRoute();
+      } catch (err) {
+        $('libraryStatus').textContent = 'Không tải được library.json';
+        grid.innerHTML = `<div class="empty error" style="grid-column:1/-1">Không thể tải dữ liệu thư viện: ${esc(err.message)}</div>`;
+      }
+    }
+    search.addEventListener('input', () => renderLibrary(search.value));
+    $('homeButton').addEventListener('click', () => route());
+    $('homeButton').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') route(); });
+    addEventListener('popstate', renderRoute);
+    boot();
+  </script>
+</body>
+</html>
