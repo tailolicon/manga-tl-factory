@@ -36,6 +36,14 @@ Agent-first manga/comic localization workflow. The repository defines **how work
 
 ## Quick start
 
+Fresh ChatGPT worker activation command:
+
+```text
+Run tailolicon/manga-tl-factory/WORKER_START.md from main.
+```
+
+The worker must treat that repository file as the complete stateless session entrypoint and follow its 25-minute drain/checkpoint budget.
+
 Requires Python 3.11+ and no third-party Python packages for the reference CLI/tests.
 
 ```bash
