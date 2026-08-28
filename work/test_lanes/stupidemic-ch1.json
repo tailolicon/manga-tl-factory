@@ -28,11 +28,16 @@
     "validation_path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/canonical_acquisition_validation.json"
   },
   "relay": {
+    "status": "ready",
     "request_path": "work/relay_requests/stupidemic-ch1.json",
     "request_commit": "d2f09f22f24fd9e2c88cf77fe811f510cd5c72d2",
     "run_id": 33198730435,
+    "artifact_id": 9696850714,
     "artifact_name": "chapter-relay-stupidemic-ch1-ch-200c8c840df0",
+    "artifact_digest": "sha256:0682ce294d5ba541483c3c67d4cb5894edf6390e00277f5a79695fbf014e420d",
+    "artifact_size_bytes": 13565843,
     "retention_days": 2,
+    "expires_at": "2026-08-30T18:19:09Z",
     "page_count": 41
   },
   "workflow": {
@@ -74,7 +79,7 @@
   "generation": 3,
   "next_task": {
     "task_type": "translation_chunk_test",
-    "goal": "Use the ephemeral whole-chapter relay artifact and translate sequential Chapter 1 pages to Vietnamese for as long as the 25-minute worker budget safely permits; checkpoint every completed page and resume from the first unfinished page.",
+    "goal": "Use the pinned whole-chapter relay artifact and translate sequential Chapter 1 pages to Vietnamese for as long as the 25-minute worker budget safely permits; checkpoint every completed page and resume from the first unfinished page.",
     "scope": {
       "page_start": 1,
       "page_end": 41,
