@@ -27,6 +27,14 @@
     "validated_commit": "b964baa5ee74b5ca516335675fefd1511b95589f",
     "validation_path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/canonical_acquisition_validation.json"
   },
+  "relay": {
+    "request_path": "work/relay_requests/stupidemic-ch1.json",
+    "request_commit": "d2f09f22f24fd9e2c88cf77fe811f510cd5c72d2",
+    "run_id": 33198730435,
+    "artifact_name": "chapter-relay-stupidemic-ch1-ch-200c8c840df0",
+    "retention_days": 2,
+    "page_count": 41
+  },
   "workflow": {
     "predeclared": true,
     "steps": [
@@ -40,22 +48,38 @@
       {
         "ordinal": 2,
         "task_type": "page_translation_smoke",
-        "status": "partial",
+        "status": "superseded",
         "generation": 2,
         "scope": {
           "page_index": 1
         },
-        "result_task_id": "standalone-stupidemic-ch1-g2-page_translation_smoke"
+        "result_task_id": "standalone-stupidemic-ch1-g2-page_translation_smoke",
+        "reason": "single-page granularity wasted the 25-minute worker budget and direct worker DNS could not reach the image host"
+      },
+      {
+        "ordinal": 3,
+        "task_type": "translation_chunk_test",
+        "status": "ready",
+        "generation": 3,
+        "scope": {
+          "page_start": 1,
+          "page_end": 41,
+          "resume_from": 1,
+          "soft_target_pages": 10
+        }
       }
     ]
   },
-  "state": "partial",
-  "generation": 2,
+  "state": "ready",
+  "generation": 3,
   "next_task": {
-    "task_type": "page_translation_smoke",
-    "goal": "Fetch Chapter 1 page 1 from the existing source handoff and produce one durable Vietnamese translation_page smoke artifact.",
+    "task_type": "translation_chunk_test",
+    "goal": "Use the ephemeral whole-chapter relay artifact and translate sequential Chapter 1 pages to Vietnamese for as long as the 25-minute worker budget safely permits; checkpoint every completed page and resume from the first unfinished page.",
     "scope": {
-      "page_index": 1
+      "page_start": 1,
+      "page_end": 41,
+      "resume_from": 1,
+      "soft_target_pages": 10
     }
   },
   "claim": null,
