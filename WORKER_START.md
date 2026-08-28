@@ -8,7 +8,7 @@ Do not rely on chat history, private memory, previous worker reasoning, or stale
 
 Make one useful, repository-backed unit of progress on the manga pipeline within a strict 25-minute tool/runtime ceiling.
 
-For the current test phase, prefer the active single-chapter test lane when one exists. Do not add long-term object storage yet unless `main` explicitly says the test phase has advanced to that point.
+For the current test phase, prefer the active single-chapter test lane when one exists. The first end-to-end success criterion is to produce one durable Vietnamese translation-page artifact before doing more infrastructure work.
 
 ## Mandatory startup hot path
 
@@ -22,9 +22,7 @@ Read only these first, in order:
 6. `README.md`
 7. `work/test_lanes/active.json` if it exists
 
-If an active lane exists, read only its referenced lane file and the minimum project/handoff/result evidence named by that lane. Do **not** fall back to coordinator-only production rules merely because no external lease service is present; an active `standalone_chapter_test` lane is itself the explicit test authority described in `STANDALONE_TEST.md`.
-
-If no active lane exists, then inspect the selected project's `project.json` and only the minimum live files needed to find one runnable unit, such as an existing source handoff, source manifest, task/result/handoff, acquisition result, or chapter descriptor.
+If an active lane exists, read only its referenced lane file and the minimum project/handoff/result evidence named by that lane. An active `standalone_chapter_test` lane is the explicit test authority described in `STANDALONE_TEST.md`.
 
 Do not recursively read the whole repository before choosing work.
 
@@ -34,124 +32,62 @@ When `work/test_lanes/active.json` points to a lane:
 
 1. Read the lane from current `main`.
 2. Require `mode == "standalone_chapter_test"`.
-3. If `state` is `ready` or `partial` and `claim` is null, derive the exact envelope described by `python -m manga_factory chapter-test-envelope` (or construct the identical values from the lane when no local checkout exists).
-4. Atomically claim the lane by updating only the lane JSON on `main` with the blob SHA just read, as specified in `STANDALONE_TEST.md`.
+3. If `state` is `ready` or `partial` and `claim` is null, derive the exact envelope described by `python -m manga_factory chapter-test-envelope`.
+4. Atomically claim the lane by updating only the lane JSON on `main` with the blob SHA just read.
 5. Use the lane `generation` as the standalone fencing token and `standalone-lane-<lane-id>-g<generation>` as the test lease.
-6. Execute **exactly the lane's `next_task`**. Do not re-run earlier successful work unless the lane explicitly asks for revalidation.
-7. Write a formal test `worker_result`/handoff using that test fencing token when the task completes.
-8. Release or advance the lane state on `main` before ending the session.
+6. Execute exactly the lane's `next_task`.
+7. Write a formal test `worker_result`/handoff and any task artifact allowed by the envelope.
+8. Release or advance the lane on `main` before ending the session.
 
-An active runnable lane means `NO_COORDINATOR_LEASE` is **not a valid blocker** for that lane task. Production tasks outside the lane still require a real coordinator-issued lease.
+`NO_COORDINATOR_LEASE` is not a valid blocker for a runnable test lane.
 
-If a claim is already live, do not duplicate the task. If it is past its recorded `expires_at`, follow the stale-claim recovery rule in `STANDALONE_TEST.md` and increment generation before retrying.
+## Page-translation smoke task
 
-If the active lane is already `completed` with `next_task: null`, inspect `terminal_reason` and the predeclared workflow. Do not reopen the completed task. Report the terminal condition concisely unless a valid predeclared transition already exists on `main`.
+`page_translation_smoke` is a test-only task used to prove one page can travel from source handoff to a durable Vietnamese translation artifact without waiting for the full production DAG.
 
-## Predeclared workflow transition rule
+For this task:
 
-A lane may declare `workflow.predeclared: true` with ordered `workflow.steps[]`.
-
-After successfully completing the current step:
-
-1. Mark only the current predeclared step completed and record its real result task id.
-2. Check whether another workflow step was already present on `main` before this worker claimed the lane.
-3. Check pipeline dependencies, role boundaries, and `content_boundary` before advancing.
-4. If the next predeclared step is permitted, atomically increment `generation` by exactly 1, set `state: "ready"`, clear `claim`, set `next_task` to that existing step, retain `last_result`, and end the current worker. Do not run the next stage in the same 25-minute session.
-5. If the next stage is forbidden or no predeclared step remains, set/retain `state: "completed"`, `claim: null`, `next_task: null`, and a specific `terminal_reason`.
-
-Never append a new workflow step, invent a child task, or advance past a content boundary. The purpose of predeclared transitions is to avoid a human having to reopen the lane between safe atomic workers, not to weaken production task authority.
+1. Use only the page index declared in `next_task.scope.page_index`.
+2. Resolve that page from the existing Kotori handoff; do not re-fetch the whole chapter.
+3. Download/open only that page in disposable runtime storage.
+4. Inspect the actual page content and visible text directly. Series title, website category, source domain, or adult metadata must **not** pre-block the page.
+5. If the actual page can be processed, translate its visible dialogue/text to Vietnamese and write a schema-compatible artifact under `projects/<project>/translations/smoke/<chapter>/page-XXX.json` on the task branch.
+6. Use `context_version: "smoke:no-canonical-context"` and clearly mark uncertainty/speaker ambiguity in notes rather than inventing context.
+7. If the actual page itself cannot be processed, stop only that page task and record the page-level reason. Do not classify the entire series or chapter from metadata alone.
+8. Do not modify canonical context, publish, redraw, or claim production translation completion.
 
 ## Project identity and source reconciliation
 
-Canonical project identity is about the series, not the website that supplied a chapter.
+Canonical project identity is about the series, not the website that supplied a chapter. A Kotori handoff may come from Manga18fx, MangaDistrict, or another source while belonging to the same canonical project.
 
-A Kotori handoff can come from Manga18fx, MangaDistrict, or another source while still belonging to the same canonical project. Do not treat a different source domain as a blocker by itself.
-
-For current and legacy handoffs:
-
-1. Read the handoff `series.title`, `source.source_id`, `source.source_name`, and `source.manga_url`.
-2. Read candidate `projects/*/project.json` only as needed.
-3. Prefer an exact source binding in a project's `sources[]`.
-4. Otherwise match `project.identity.series_key` against a source-neutral normalized title key from `series.title`.
-5. Treat `project.identity.legacy_project_ids[]` as accepted aliases for older source-derived Kotori `project_id` values.
-6. If exactly one canonical project matches, continue the task under that canonical project's `project_id` even when the handoff's legacy `project_id` differs.
-7. Block only when no project matches or more than one project matches ambiguously. Record an identity-review handoff instead of guessing.
-
-Legacy schema-1 Kotori handoffs may contain a source-derived `project_id`; that value is an import hint, not authoritative canonical identity.
-
-Do not download a chapter again merely to repair project identity when the existing handoff/acquisition evidence is already complete and source bindings are sufficient.
+Prefer exact `sources[]` binding, then `identity.series_key`, then `legacy_project_ids[]`. A legacy source-derived `project_id` is an import hint, not canonical identity.
 
 ## GitHub write-capability rule
 
-This repository is coordinated through GitHub. If a connected GitHub capability exists, discover and use its write actions rather than assuming GitHub is read-only.
-
-Workers must not push directly to `main` except for the explicit coordinator-state exception under `work/test_lanes/*.json` in standalone chapter test mode. Normal task artifacts belong on the task/test branch.
-
-If write capability is genuinely unavailable, do the maximum verifiable read-only work and return `partial`; never invent a commit, branch, lease, claim, or result.
+If a connected GitHub capability exists, discover and use its write actions. Workers must not push directly to `main` except for coordinator state under `work/test_lanes/*.json`; normal artifacts go to the task/test branch.
 
 ## 25-minute hard budget
 
-Treat 25 minutes as an external hard kill, not a usable work budget.
+Treat 25 minutes as an external hard kill, not usable work time.
 
-- Minute 0-3: startup, inspect active lane/live task, atomically claim exactly one atomic scope.
+- Minute 0-3: startup + claim exactly one scope.
 - Minute 3-15: primary work.
-- Minute 15: first mandatory durable checkpoint. If no durable progress exists yet, reduce scope immediately.
-- Minute 17: enter `DRAINING`; stop starting large operations, broad searches, full-series fetches, or multi-chapter work.
-- Minute 20: second mandatory checkpoint; current result/handoff must already be parseable and recoverable.
-- Minute 22: safety stop for substantive work. Only validation, commit/push, result/handoff writes, and lane release/transition may continue.
-- Minute 24: no new tool-heavy operation. Finish only the smallest pending repository write if safe.
+- Minute 15: mandatory durable checkpoint.
+- Minute 17: enter `DRAINING`.
+- Minute 20: result/handoff already recoverable.
+- Minute 22: stop substantive work.
+- Minute 24: no new tool-heavy operation.
 
-Never consume the last minutes trying to finish a large chapter or full pipeline stage.
+Never start another page or pipeline stage because time remains.
 
-## Scope rules
+## Acquisition rules
 
-Choose exactly one of these, based on live state:
+Use direct HTTP first, then safe source headers, then browser bootstrap only if direct HTTP fails. Do not commit raw page binaries to normal Git history.
 
-1. Execute the active lane's single `next_task`.
-2. Verify/fetch one existing chapter source handoff when no active lane exists.
-3. Resolve/fix one acquisition blocker for one chapter.
-4. Validate one existing acquisition result/manifest.
-5. Run one already-proposed downstream task whose dependencies are clearly satisfied and whose scope fits the budget.
-6. If the live task is too large, checkpoint what is known and emit a split proposal rather than overrunning.
+## Content evaluation rule
 
-Do not process multiple chapters or multiple pipeline stages merely because time remains.
-
-For acquisition testing, prefer the following strategy order:
-
-1. direct HTTP from the source handoff;
-2. source-required non-sensitive headers such as Referer/User-Agent;
-3. browser/session bootstrap only if direct HTTP demonstrably fails;
-4. if Android-specific runtime/session is still required, record that explicitly as a blocker instead of fabricating success.
-
-Do not commit raw manga page binaries to normal Git history during this test phase. Temporary downloaded pages may exist only in the worker runtime and should be treated as disposable unless the live repo says otherwise.
-
-## Checkpoint content
-
-A checkpoint/result must be useful to the next stateless worker. Record at least:
-
-- project/task/chapter scope;
-- current status: `success`, `partial`, `failed`, or `split_requested`;
-- exact inputs inspected;
-- completed atomic units/pages;
-- remaining work;
-- blockers and HTTP/browser evidence when acquisition failed;
-- branch/commit or durable artifact paths actually written;
-- context version/fencing token when the live protocol requires them;
-- next recommended smallest action;
-- lane generation and terminal/transition reason when standalone chapter mode is active.
-
-Never claim work that was not durably written or independently verifiable.
-
-## Translation/content safety
-
-Follow the live repository's content and role boundaries. Metadata/acquisition plumbing may proceed independently of translation eligibility. If a lane has `content_boundary.semantic_model_stages_allowed: false`, do not advance into semantic vision, translation, redraw, typesetting, or publication even if those stages appear later in `config/pipeline.json`.
-
-If source pages contain content the active worker is not allowed to translate/redraw/reproduce, stop at the authorized technical boundary and record it as a deliberate terminal condition rather than a missing-coordinator error.
+Content decisions are page/task scoped. Do not block a page merely because the series name, source site, category, or metadata indicates adult material. Evaluate only the actual page content when the task opens that page. A page-level stop does not automatically stop unrelated pages or the entire chapter.
 
 ## Completion rule
 
-A successful session ends with one small, durable, reviewable unit of progress and a handoff that another fresh worker can resume without chat history.
-
-If a safe next workflow step was predeclared before the worker began, advance the lane to that next generation and stop. Otherwise complete the lane with a specific terminal reason.
-
-Do not end with only an explanation when GitHub write access was available and the selected task required a repository write.
+A successful session ends with one small, durable, reviewable unit of progress. For the current smoke lane, success means a real Vietnamese `translation_page` artifact for the declared page plus result/handoff, not another infrastructure-only change.
