@@ -1,0 +1,117 @@
+name: Chapter relay
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "work/relay_requests/*.json"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  relay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Locate relay request
+        id: request
+        run: |
+          set -euo pipefail
+          request=$(git show --format= --name-only "$GITHUB_SHA" -- 'work/relay_requests/*.json' | sed '/^[[:space:]]*$/d' | head -n 1)
+          if [[ -z "$request" || ! -f "$request" ]]; then
+            echo "No relay request found in triggering commit" >&2
+            exit 1
+          fi
+          echo "path=$request" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch requested chapter
+        id: relay
+        env:
+          REQUEST_PATH: ${{ steps.request.outputs.path }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          from manga_factory.acquisition import fetch_source
+
+          request_path = Path(os.environ["REQUEST_PATH"])
+          request = json.loads(request_path.read_text(encoding="utf-8"))
+          handoff = Path(request["handoff_path"])
+          lane_id = request["lane_id"]
+          chapter_id = request["chapter_id"]
+
+          source = json.loads(handoff.read_text(encoding="utf-8"))
+          chapters = [c for c in source.get("chapters", []) if c.get("id") == chapter_id]
+          if len(chapters) != 1:
+              raise SystemExit(f"chapter {chapter_id!r} not found uniquely in {handoff}")
+
+          filtered = dict(source)
+          filtered["chapters"] = chapters
+          temp_handoff = Path(os.environ["RUNNER_TEMP"]) / "relay_handoff.json"
+          temp_handoff.write_text(json.dumps(filtered, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          output_root = Path(os.environ["RUNNER_TEMP"]) / "chapter-relay"
+          result_path = Path(os.environ["RUNNER_TEMP"]) / "relay_fetch_result.json"
+          result = fetch_source(
+              temp_handoff,
+              result_path=result_path,
+              output_root=output_root,
+              concurrency=6,
+              retries=2,
+              keep_temp=True,
+          )
+          if result.get("status") != "success":
+              raise SystemExit(f"chapter relay acquisition failed: {result.get('reason')}")
+
+          retained = Path(result["retained_temp_dir"])
+          chapter_dir = retained / chapter_id
+          images = sorted(p for p in chapter_dir.iterdir() if p.is_file())
+          if len(images) != len(chapters[0].get("pages", [])):
+              raise SystemExit(f"expected {len(chapters[0].get('pages', []))} images, found {len(images)}")
+
+          manifest = {
+              "schema": 1,
+              "lane_id": lane_id,
+              "chapter_id": chapter_id,
+              "source_handoff": request["handoff_path"],
+              "source_handoff_blob_sha": request.get("handoff_blob_sha"),
+              "page_count": len(images),
+              "fetch_result": result,
+              "files": [p.name for p in images],
+          }
+          (retained / "relay_manifest.json").write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+
+          github_output = Path(os.environ["GITHUB_OUTPUT"])
+          with github_output.open("a", encoding="utf-8") as stream:
+              stream.write(f"relay_dir={retained}\n")
+              stream.write(f"artifact_name=chapter-relay-{lane_id}-{chapter_id}\n")
+          PY
+
+      - name: Upload chapter relay
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ steps.relay.outputs.artifact_name }}
+          path: ${{ steps.relay.outputs.relay_dir }}
+          if-no-files-found: error
+          retention-days: 2
+          compression-level: 6
