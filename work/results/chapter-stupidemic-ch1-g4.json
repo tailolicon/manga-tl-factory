@@ -1,0 +1,53 @@
+{
+  "task_id": "chapter-stupidemic-ch1-g4",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "fencing_token": 4,
+  "context_version": "smoke:no-canonical-context",
+  "status": "partial",
+  "completed_units": [
+    "locally-rendered-and-visual-checked-page-001-ephemeral",
+    "locally-rendered-and-visual-checked-page-002-ephemeral",
+    "locally-rendered-and-visual-checked-page-003-ephemeral"
+  ],
+  "artifacts": [
+    {
+      "kind": "ephemeral_render_validation",
+      "page_index": 1,
+      "intended_path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-001.webp",
+      "sha256": "6dca57b2b7a1d16344e78182772a40d2618f7fdeb4b49891c3304859c8a64857",
+      "bytes": 269054,
+      "durable": false
+    },
+    {
+      "kind": "ephemeral_render_validation",
+      "page_index": 2,
+      "intended_path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-002.webp",
+      "sha256": "1275a20e222e7a43d473ed590c0ffd0521a82f287a748d44b4c128a8498bf40f",
+      "bytes": 128260,
+      "durable": false
+    },
+    {
+      "kind": "ephemeral_render_validation",
+      "page_index": 3,
+      "intended_path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-003.webp",
+      "sha256": "4a8d396a5a022e473cfc6666bc40f93cf2d49f0998f2babd23fac76fbbc495d2",
+      "bytes": 157152,
+      "durable": false
+    }
+  ],
+  "warnings": [
+    "Pages 1-3 were rendered from the pinned chapter relay and visually checked against the accepted translations, but the resulting binary image files could not be persisted to GitHub from this worker runtime.",
+    "The connected GitHub actions available in this session provide UTF-8 file writes and inline blob creation, but no action accepts a local binary file path; the container also cannot resolve GitHub hosts for git/curl upload.",
+    "Because no durable rendered asset exists remotely, progress.rendered_pages is intentionally left at 0 and resume_page remains 1. No false checkpoint is claimed."
+  ],
+  "task_proposals": [],
+  "handoff": {
+    "status": "partial",
+    "lease_id": "chapter-lane-stupidemic-ch1-g4",
+    "branch": "chapter/stupidemic-ch1/g4",
+    "phase": "redraw_typeset",
+    "resume_page": 1,
+    "handoff_path": "work/handoffs/chapter-stupidemic-ch1-g4.json",
+    "blocker_code": "BINARY_ARTIFACT_PERSISTENCE_UNAVAILABLE"
+  }
+}
