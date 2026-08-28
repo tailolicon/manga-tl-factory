@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "lane_id": "stupidemic-ch1",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "handoff_path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json",
+  "handoff_blob_sha": "a026706bfc7ae80ad8f73f1f0856ced83a50d64f",
+  "purpose": "ephemeral whole-chapter relay for 25-minute translation workers"
+}
