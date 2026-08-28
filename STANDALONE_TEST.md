@@ -65,6 +65,27 @@ The narrow direct-to-`main` exception applies only to `work/test_lanes/*.json` c
 
 A claim older than its `expires_at` is stale. A later worker may atomically clear it and increment `generation` before deriving a replacement envelope. Never reuse a stale generation.
 
+## Predeclared workflow transitions
+
+A chapter lane may include a `workflow` object with `predeclared: true` and an ordered `steps[]` list. This is the only coordinator-less mechanism that may authorize more than one atomic stage without a human or external coordinator updating `main` between workers.
+
+Rules:
+
+1. Every workflow step must be declared on `main` before the worker that would run it starts.
+2. A worker may run only the current `next_task`; it may not append, invent, reorder, or broaden workflow steps.
+3. When a step completes successfully and another predeclared step exists, the completing worker may atomically advance the lane on `main` by:
+   - marking the current workflow step `completed` and recording its real result task id;
+   - incrementing `generation` by exactly 1;
+   - setting `state: "ready"`;
+   - setting `claim: null`;
+   - setting `next_task` to the already-predeclared next step;
+   - retaining `last_result` for the completed generation.
+4. The next worker must derive a new lease/fencing token from the incremented generation and claim normally.
+5. A worker must stop instead of advancing when `content_boundary`, role rules, dependency checks, or the lane definition forbid the next stage.
+6. A terminal lane must set `next_task: null` and should set `terminal_reason` so a later worker can distinguish a deliberate stop from a missing coordinator.
+
+This transition mechanism is test orchestration only. It does not change `config/pipeline.json`, create production tasks, or grant authority outside the single lane.
+
 ## Chapter-lane completion
 
 For the current lane task, the worker may write a formal `worker_result` and `handoff` using the test fencing token because the lane itself is the authority that issued it.
@@ -74,10 +95,10 @@ On successful completion:
 1. Validate the result/handoff.
 2. Commit/push the task artifacts to the envelope's test branch when possible.
 3. Atomically update the lane on `main` with the same blob-SHA discipline:
-   - `state: "completed"` when the lane has no predeclared next task;
+   - advance to the next already-predeclared workflow step if the rules above allow it; otherwise set `state: "completed"`;
    - `claim: null`;
    - `last_result` containing the real branch, commit, result path, handoff path, task id and fencing token.
-4. Do not invent a child task. A later task requires either a predeclared lane transition on `main` or a real coordinator.
+4. Do not invent a child task. A later task requires either a predeclared workflow transition already present on `main` or a real coordinator.
 
 For partial progress, set lane `state: "partial"`, clear the claim, preserve `generation`, and record the durable checkpoint in `last_result`. The next worker resumes the same generation only if the previous claim was cleanly released; stale claims require a generation increment.
 
@@ -108,5 +129,7 @@ The worker must never claim it committed or pushed unless the write actually suc
 ## Content and publication boundaries
 
 Standalone authority does not override content-safety or role boundaries. It does not grant permission to translate/redraw restricted content, publish, or modify canonical context directly.
+
+A lane may set `content_boundary.semantic_model_stages_allowed: false` and a `stop_after_task`. When present, a worker must not advance into semantic vision, translation, redraw, typesetting, or publication stages for that lane. The terminal stop is deliberate and should be recorded in `terminal_reason`; it is not a coordinator failure.
 
 Large/raw page binaries must not be committed to normal Git history during this test phase.
