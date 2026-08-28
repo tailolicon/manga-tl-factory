@@ -40,15 +40,16 @@
       {
         "ordinal": 2,
         "task_type": "page_translation_smoke",
-        "status": "claimed",
+        "status": "partial",
         "generation": 2,
         "scope": {
           "page_index": 1
-        }
+        },
+        "result_task_id": "standalone-stupidemic-ch1-g2-page_translation_smoke"
       }
     ]
   },
-  "state": "claimed",
+  "state": "partial",
   "generation": 2,
   "next_task": {
     "task_type": "page_translation_smoke",
@@ -57,25 +58,18 @@
       "page_index": 1
     }
   },
-  "claim": {
+  "claim": null,
+  "terminal_reason": null,
+  "last_result": {
+    "status": "partial",
     "task_id": "standalone-stupidemic-ch1-g2-page_translation_smoke",
     "task_type": "page_translation_smoke",
     "lease_id": "standalone-lane-stupidemic-ch1-g2",
     "fencing_token": 2,
     "branch": "test/stupidemic-ch1/page_translation_smoke/g2",
-    "claimed_at": "2026-08-29T01:05:46+07:00"
-  },
-  "terminal_reason": null,
-  "last_result": {
-    "status": "completed",
-    "task_id": "standalone-stupidemic-ch1-g1-acquire_source",
-    "task_type": "acquire_source",
-    "lease_id": "standalone-lane-stupidemic-ch1-g1",
-    "fencing_token": 1,
-    "branch": "test/stupidemic-ch1/acquire_source/g1",
-    "commit": "7451ba71a06c33f17710d3a80c4ffd4c1e2bb132",
-    "result_path": "work/results/standalone-stupidemic-ch1-g1-acquire_source.json",
-    "handoff_path": "work/handoffs/standalone-stupidemic-ch1-g1-acquire_source.json",
-    "completed_at": "2026-08-29T00:44:36+07:00"
+    "commit": "4d086ab63adc1441064b8a8a36a163474202f546",
+    "result_path": "work/results/standalone-stupidemic-ch1-g2-page_translation_smoke.json",
+    "handoff_path": "work/handoffs/standalone-stupidemic-ch1-g2-page_translation_smoke.json",
+    "completed_at": "2026-08-29T01:10:43+07:00"
   }
 }
