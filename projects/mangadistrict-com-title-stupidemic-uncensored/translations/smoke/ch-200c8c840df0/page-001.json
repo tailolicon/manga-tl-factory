@@ -1,0 +1,35 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 1,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p001-b001",
+      "speaker_id": null,
+      "source_text": "ON THE CHEAPEST AND MOST SECLUDED LAND IN THIS COUNTRY...",
+      "translation": "Trên mảnh đất rẻ nhất và hẻo lánh nhất đất nước này...",
+      "speaker_confidence": null,
+      "translation_confidence": 0.99,
+      "notes": "Narration box; speaker identity not established in smoke context."
+    },
+    {
+      "block_id": "p001-b002",
+      "speaker_id": null,
+      "source_text": "A FACTORY WAS BUILT.",
+      "translation": "Một nhà máy đã được xây dựng.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.99,
+      "notes": "Narration box."
+    },
+    {
+      "block_id": "p001-b003",
+      "speaker_id": null,
+      "source_text": "THIS IS THE PRODUCTION MANAGEMENT OF BEST WOOD CORPORATION, A FUCKED UP... I MEAN, A SMALL COMPANY...",
+      "translation": "Đây là bộ phận quản lý sản xuất của Tập đoàn Best Wood, một công ty chết tiệt... à nhầm, một công ty nhỏ...",
+      "speaker_confidence": null,
+      "translation_confidence": 0.96,
+      "notes": "Narration box. Preserves the self-correcting joke; no canonical terminology context is available."
+    }
+  ]
+}
