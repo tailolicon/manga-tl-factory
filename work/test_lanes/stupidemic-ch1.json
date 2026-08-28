@@ -36,25 +36,29 @@
         "status": "completed",
         "generation": 1,
         "result_task_id": "standalone-stupidemic-ch1-g1-acquire_source"
+      },
+      {
+        "ordinal": 2,
+        "task_type": "page_translation_smoke",
+        "status": "ready",
+        "generation": 2,
+        "scope": {
+          "page_index": 1
+        }
       }
     ]
   },
-  "content_boundary": {
-    "classification_source": "series/source metadata only",
-    "classification": "explicit_adult_source",
-    "semantic_model_stages_allowed": false,
-    "stop_after_task": "acquire_source",
-    "code": "SEMANTIC_MODEL_CONTENT_BOUNDARY",
-    "detail": "This standalone ChatGPT lane may validate acquisition plumbing and metadata, but it does not authorize semantic vision, translation, redraw, typesetting, or publication of explicit sexual source pages."
+  "state": "ready",
+  "generation": 2,
+  "next_task": {
+    "task_type": "page_translation_smoke",
+    "goal": "Fetch and inspect only Chapter 1 page 1, then produce one durable Vietnamese translation_page smoke artifact if the actual page content is processable. Do not block from series/source adult metadata alone.",
+    "scope": {
+      "page_index": 1
+    }
   },
-  "state": "completed",
-  "generation": 1,
-  "next_task": null,
   "claim": null,
-  "terminal_reason": {
-    "code": "SEMANTIC_MODEL_CONTENT_BOUNDARY",
-    "detail": "Acquisition test completed successfully. No downstream semantic model task is predeclared for this explicit-adult source lane. This is a deliberate terminal state, not a missing-coordinator blocker."
-  },
+  "terminal_reason": null,
   "last_result": {
     "status": "completed",
     "task_id": "standalone-stupidemic-ch1-g1-acquire_source",
