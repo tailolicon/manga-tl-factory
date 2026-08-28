@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "lane_id": "stupidemic-ch1",
+  "mode": "standalone_chapter_test",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "series_key": "stupidemic-uncensored",
+  "chapter": {
+    "id": "ch-200c8c840df0",
+    "name": "Chapter 1"
+  },
+  "source_handoff": {
+    "path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json",
+    "blob_sha": "a026706bfc7ae80ad8f73f1f0856ced83a50d64f"
+  },
+  "acquisition_evidence": {
+    "workflow_run_id": 33192023708,
+    "workflow_conclusion": "success",
+    "artifact_id": 9694156152,
+    "artifact_digest": "sha256:845e91241cf60363027a53ef814fcc225f76f852a1efad841949506581aeb37e",
+    "fetch_result_sha256": "e3e3e780bc8b727ec793fd8c64ca887128ad717dccb2cad6cd6b24d42911d3e1",
+    "page_count": 41,
+    "downloaded": 41,
+    "failed": 0,
+    "fetch_mode": "direct_http",
+    "retries": 0,
+    "validated_on_branch": "wip/stupidemic-ch1-acquisition-reconciled",
+    "validated_commit": "b964baa5ee74b5ca516335675fefd1511b95589f",
+    "validation_path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/canonical_acquisition_validation.json"
+  },
+  "state": "ready",
+  "generation": 1,
+  "next_task": {
+    "task_type": "acquire_source",
+    "goal": "Accept and materialize the already-validated Chapter 1 acquisition as a formal standalone test result and handoff without re-downloading the 41 pages."
+  },
+  "claim": null,
+  "last_result": null
+}
