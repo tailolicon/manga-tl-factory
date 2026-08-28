@@ -7,7 +7,7 @@ from pathlib import Path
 from .acquisition import fetch_source
 from .context import compile_context
 from .intake import submit
-from .standalone import build_standalone_chapter_test_envelope, build_standalone_test_envelope
+from .standalone import build_chapter_envelope, build_standalone_test_envelope
 from .validate import validate_repo
 
 
@@ -27,14 +27,14 @@ def main() -> int:
     sub.add_parser("list-requests", help="list intake requests")
     sub.add_parser("validate", help="validate repository structure and pipeline references")
 
-    p_test = sub.add_parser("test-envelope", help="derive a standalone bootstrap envelope for coordinator-less testing")
+    p_test = sub.add_parser("test-envelope", help="derive a coordinator-less bootstrap envelope")
     p_test.add_argument("--request-id", default=None)
 
-    p_chapter_test = sub.add_parser(
-        "chapter-test-envelope",
-        help="derive the active coordinator-less single-chapter test envelope",
-    )
-    p_chapter_test.add_argument("--lane-id", default=None)
+    p_chapter = sub.add_parser("chapter-envelope", help="derive the active production chapter envelope")
+    p_chapter.add_argument("--lane-id", default=None)
+
+    p_legacy = sub.add_parser("chapter-test-envelope", help=argparse.SUPPRESS)
+    p_legacy.add_argument("--lane-id", default=None)
 
     p_fetch = sub.add_parser("fetch-source", help="download and verify a Kotori source handoff in disposable storage")
     p_fetch.add_argument("handoff", type=Path)
@@ -61,9 +61,7 @@ def main() -> int:
         return 0
 
     if args.command == "list-requests":
-        rows = []
-        for path in sorted((root / "requests").glob("req-*.json")):
-            rows.append(json.loads(path.read_text(encoding="utf-8")))
+        rows = [json.loads(path.read_text(encoding="utf-8")) for path in sorted((root / "requests").glob("req-*.json"))]
         print(json.dumps(rows, ensure_ascii=False, indent=2))
         return 0
 
@@ -75,9 +73,9 @@ def main() -> int:
         print(json.dumps(envelope, ensure_ascii=False, indent=2))
         return 0
 
-    if args.command == "chapter-test-envelope":
+    if args.command in {"chapter-envelope", "chapter-test-envelope"}:
         try:
-            envelope = build_standalone_chapter_test_envelope(root, lane_id=args.lane_id)
+            envelope = build_chapter_envelope(root, lane_id=args.lane_id)
         except ValueError as exc:
             raise SystemExit(str(exc))
         print(json.dumps(envelope, ensure_ascii=False, indent=2))

@@ -9,7 +9,8 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS = ROOT / "projects"
-TEST_LANES = ROOT / "work" / "test_lanes"
+CHAPTER_LANES = ROOT / "work" / "chapter_lanes"
+LEGACY_TEST_LANES = ROOT / "work" / "test_lanes"
 OUT = ROOT / "site" / "data" / "library.json"
 RAW_BASE = "https://raw.githubusercontent.com/tailolicon/manga-tl-factory/main/"
 COVER_DIR = ROOT / "site" / "assets" / "covers"
@@ -53,7 +54,6 @@ def materialize_cover(value: str, project_id: str, project_path: Path) -> str:
     parsed = urlparse(value)
     if parsed.scheme not in {"http", "https"}:
         return normalize_url(value, project_path)
-
     suffix = Path(parsed.path).suffix.lower()
     if suffix not in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
         suffix = ".jpg"
@@ -61,21 +61,13 @@ def materialize_cover(value: str, project_id: str, project_path: Path) -> str:
     target = COVER_DIR / f"{safe_id}{suffix}"
     try:
         referer = f"{parsed.scheme}://{parsed.netloc}/"
-        request = Request(
-            value,
-            headers={
-                "User-Agent": "Mozilla/5.0 (compatible; MangaTLFactory/1.0)",
-                "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
-                "Referer": referer,
-            },
-        )
+        request = Request(value, headers={"User-Agent": "Mozilla/5.0 (compatible; MangaTLFactory/1.0)", "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8", "Referer": referer})
         with urlopen(request, timeout=15) as response:
             data = response.read(8 * 1024 * 1024 + 1)
             if not data or len(data) > 8 * 1024 * 1024:
                 raise ValueError("cover is empty or larger than 8 MiB")
-            content_type = (response.headers.get("Content-Type") or "").lower()
-            if "image/" not in content_type:
-                raise ValueError(f"cover is not an image: {content_type}")
+            if "image/" not in (response.headers.get("Content-Type") or "").lower():
+                raise ValueError("cover response is not an image")
         COVER_DIR.mkdir(parents=True, exist_ok=True)
         target.write_bytes(data)
         return f"assets/covers/{target.name}"
@@ -105,47 +97,63 @@ def discover_manifests(publication_dir: Path) -> list[Path]:
 
 def translated_chapters(project_id: str) -> dict[str, dict]:
     rows: dict[str, dict] = {}
-    if not TEST_LANES.exists():
-        return rows
 
-    for lane_path in TEST_LANES.glob("*.json"):
-        if lane_path.name == "active.json":
+    # Legacy lanes are read first only as migration fallback. Production chapter lanes override them.
+    for lane_dir in (LEGACY_TEST_LANES, CHAPTER_LANES):
+        if not lane_dir.exists():
             continue
-        try:
-            lane = load_json(lane_path)
-        except (OSError, json.JSONDecodeError):
-            continue
-        if lane.get("project_id") != project_id:
-            continue
+        for lane_path in lane_dir.glob("*.json"):
+            if lane_path.name == "active.json":
+                continue
+            try:
+                lane = load_json(lane_path)
+            except (OSError, json.JSONDecodeError):
+                continue
+            if lane.get("project_id") != project_id:
+                continue
+            chapter = lane.get("chapter") or {}
+            chapter_id = str(chapter.get("id") or "")
+            if not chapter_id:
+                continue
 
-        completed_step = None
-        workflow = lane.get("workflow") or {}
-        for step in workflow.get("steps") or []:
-            if step.get("task_type") in {"translation_chunk_test", "translate_chunk"} and step.get("status") == "completed":
-                completed_step = step
-        if completed_step is None:
-            continue
+            if lane.get("mode") == "chapter_pipeline":
+                progress = lane.get("progress") or {}
+                translated = int(progress.get("translated_pages") or 0)
+                if translated <= 0:
+                    continue
+                page_count = int(lane.get("page_count") or translated)
+                rows[chapter_id] = {
+                    "id": chapter_id,
+                    "title": chapter.get("name") or f"Chapter {chapter_id}",
+                    "status": "published" if progress.get("published") else "translated",
+                    "phase": lane.get("phase"),
+                    "page_count": page_count,
+                    "reader_available": bool(progress.get("published")),
+                    "pages": [],
+                    "lane_path": lane_path.relative_to(ROOT).as_posix(),
+                }
+                continue
 
-        scope = completed_step.get("scope") or {}
-        start = int(scope.get("page_start") or 1)
-        end = int(scope.get("page_end") or 0)
-        page_count = end - start + 1 if end >= start else int((lane.get("acquisition_evidence") or {}).get("page_count") or 0)
-        chapter = lane.get("chapter") or {}
-        chapter_id = str(chapter.get("id") or "")
-        if not chapter_id:
-            continue
-
-        last_result = lane.get("last_result") or {}
-        rows[chapter_id] = {
-            "id": chapter_id,
-            "title": chapter.get("name") or f"Chapter {chapter_id}",
-            "status": "translated",
-            "page_count": page_count,
-            "reader_available": False,
-            "pages": [],
-            "source_commit": last_result.get("commit"),
-            "lane_path": lane_path.relative_to(ROOT).as_posix(),
-        }
+            completed_step = None
+            for step in (lane.get("workflow") or {}).get("steps") or []:
+                if step.get("task_type") in {"translation_chunk_test", "translate_chunk"} and step.get("status") == "completed":
+                    completed_step = step
+            if completed_step is None:
+                continue
+            scope = completed_step.get("scope") or {}
+            start = int(scope.get("page_start") or 1)
+            end = int(scope.get("page_end") or 0)
+            page_count = end - start + 1 if end >= start else int((lane.get("acquisition_evidence") or {}).get("page_count") or 0)
+            rows[chapter_id] = {
+                "id": chapter_id,
+                "title": chapter.get("name") or f"Chapter {chapter_id}",
+                "status": "translated",
+                "phase": "legacy_translation",
+                "page_count": page_count,
+                "reader_available": False,
+                "pages": [],
+                "lane_path": lane_path.relative_to(ROOT).as_posix(),
+            }
     return rows
 
 
@@ -175,16 +183,8 @@ def build_library() -> dict:
     series_rows: list[dict] = []
     translated_count = 0
     published_count = 0
-
     if not PROJECTS.exists():
-        return {
-            "schema": 2,
-            "generated_at": None,
-            "chapter_count": 0,
-            "translated_chapter_count": 0,
-            "published_chapter_count": 0,
-            "series": [],
-        }
+        return {"schema": 2, "generated_at": None, "chapter_count": 0, "translated_chapter_count": 0, "published_chapter_count": 0, "series": []}
 
     for project_dir in sorted(PROJECTS.iterdir(), key=lambda p: p.name.casefold()):
         if not project_dir.is_dir() or project_dir.name.startswith("_"):
@@ -199,7 +199,6 @@ def build_library() -> dict:
 
         project_id = str(project.get("project_id") or project_dir.name)
         chapters = translated_chapters(project_id)
-
         for manifest_path in discover_manifests(project_dir / "publication"):
             manifest = load_json(manifest_path)
             pages = []
@@ -207,80 +206,38 @@ def build_library() -> dict:
                 url = normalize_url(str(page.get("url") or ""), manifest_path)
                 if not url:
                     continue
-                pages.append({
-                    "index": int(page.get("index", len(pages) + 1)),
-                    "url": url,
-                    "width": int(page.get("width", 0) or 0),
-                    "height": int(page.get("height", 0) or 0),
-                    "sha256": str(page.get("sha256") or ""),
-                })
+                pages.append({"index": int(page.get("index", len(pages) + 1)), "url": url, "width": int(page.get("width", 0) or 0), "height": int(page.get("height", 0) or 0), "sha256": str(page.get("sha256") or "")})
             if not pages:
                 continue
             chapter_id = str(manifest["chapter_id"])
             previous = chapters.get(chapter_id) or {}
-            chapters[chapter_id] = {
-                "id": chapter_id,
-                "title": manifest.get("title") or previous.get("title") or f"Chapter {chapter_id}",
-                "status": "published",
-                "page_count": len(pages),
-                "reader_available": True,
-                "version": int(manifest.get("version", 1)),
-                "pages": pages,
-                "manifest_path": manifest_path.relative_to(ROOT).as_posix(),
-                "source_commit": previous.get("source_commit"),
-            }
+            chapters[chapter_id] = {"id": chapter_id, "title": manifest.get("title") or previous.get("title") or f"Chapter {chapter_id}", "status": "published", "phase": "done", "page_count": len(pages), "reader_available": True, "version": int(manifest.get("version", 1)), "pages": pages, "manifest_path": manifest_path.relative_to(ROOT).as_posix()}
 
         chapter_rows = list(chapters.values())
         if not chapter_rows:
             continue
         chapter_rows.sort(key=lambda row: natural_key(str(row["id"])))
-
-        translated_here = sum(1 for row in chapter_rows if row.get("status") in {"translated", "published"})
+        translated_here = len(chapter_rows)
         published_here = sum(1 for row in chapter_rows if row.get("status") == "published")
         translated_count += translated_here
         published_count += published_here
-
         identity = project.get("identity") or {}
         meta = project_metadata(project, project_path, project_id)
         if not meta["cover_url"]:
             first_published = next((c for c in chapter_rows if c.get("pages")), None)
             if first_published:
                 meta["cover_url"] = first_published["pages"][0]["url"]
-
-        series_rows.append({
-            "id": project_id,
-            "series_key": identity.get("series_key"),
-            "title": project_title(project, project_dir.name),
-            "source_language": project.get("source_language"),
-            "target_language": project.get("target_language") or "vi",
-            "status": project.get("status"),
-            "sources": project.get("sources") or ([project["source"]] if project.get("source") else []),
-            "translated_chapters": translated_here,
-            "published_chapters": published_here,
-            "chapters": chapter_rows,
-            **meta,
-        })
+        series_rows.append({"id": project_id, "series_key": identity.get("series_key"), "title": project_title(project, project_dir.name), "source_language": project.get("source_language"), "target_language": project.get("target_language") or "vi", "status": project.get("status"), "sources": project.get("sources") or ([project["source"]] if project.get("source") else []), "translated_chapters": translated_here, "published_chapters": published_here, "chapters": chapter_rows, **meta})
 
     series_rows.sort(key=lambda row: row["title"].casefold())
-    return {
-        "schema": 2,
-        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "chapter_count": translated_count,
-        "translated_chapter_count": translated_count,
-        "published_chapter_count": published_count,
-        "series": series_rows,
-    }
+    return {"schema": 2, "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"), "chapter_count": translated_count, "translated_chapter_count": translated_count, "published_chapter_count": published_count, "series": series_rows}
 
 
 def main() -> None:
     payload = build_library()
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(
-        f"site index: {len(payload['series'])} series / "
-        f"{payload['translated_chapter_count']} translated / "
-        f"{payload['published_chapter_count']} published"
-    )
+    print(f"site index: {len(payload['series'])} series / {payload['translated_chapter_count']} translated / {payload['published_chapter_count']} published")
 
 
 if __name__ == "__main__":

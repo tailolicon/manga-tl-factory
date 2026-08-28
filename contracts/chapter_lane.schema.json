@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ChapterProductionLane",
+  "type": "object",
+  "required": ["schema", "lane_id", "mode", "project_id", "chapter", "state", "generation", "phase", "resume_page", "progress", "next_task"],
+  "properties": {
+    "schema": {"const": 1},
+    "lane_id": {"type": "string", "minLength": 1},
+    "mode": {"const": "chapter_pipeline"},
+    "project_id": {"type": "string", "minLength": 1},
+    "series_key": {"type": ["string", "null"]},
+    "chapter": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1}
+      }
+    },
+    "source_handoff": {"type": ["object", "null"]},
+    "acquisition_evidence": {"type": "object"},
+    "relay": {"type": ["object", "null"]},
+    "state": {"enum": ["ready", "claimed", "partial", "completed", "blocked"]},
+    "generation": {"type": "integer", "minimum": 1},
+    "phase": {"enum": ["translate", "redraw_typeset", "qa", "publish", "done"]},
+    "resume_page": {"type": "integer", "minimum": 1},
+    "page_count": {"type": "integer", "minimum": 1},
+    "progress": {
+      "type": "object",
+      "required": ["translated_pages", "rendered_pages", "qa_pages", "published"],
+      "properties": {
+        "translated_pages": {"type": "integer", "minimum": 0},
+        "rendered_pages": {"type": "integer", "minimum": 0},
+        "qa_pages": {"type": "integer", "minimum": 0},
+        "published": {"type": "boolean"}
+      }
+    },
+    "accepted_inputs": {"type": "object"},
+    "next_task": {
+      "type": ["object", "null"],
+      "properties": {
+        "task_type": {"const": "localize_chapter"},
+        "goal": {"type": "string"},
+        "scope": {"type": "object"}
+      }
+    },
+    "claim": {"type": ["object", "null"]},
+    "last_result": {"type": ["object", "null"]},
+    "terminal_reason": {"type": ["object", "null"]}
+  }
+}

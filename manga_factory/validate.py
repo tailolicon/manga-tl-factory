@@ -5,11 +5,11 @@ from pathlib import Path
 
 REQUIRED_FILES = [
     "AGENTS.md", "WORKER_PROTOCOL.md", "CONTEXT_PROTOCOL.md", "TASK_PROTOCOL.md",
-    "STANDALONE_TEST.md", "WORKER_START.md",
+    "CHAPTER_PIPELINE.md", "WORKER_START.md",
     "config/pipeline.json", "config/quality.json", "config/roles.json",
     "contracts/intake_request.schema.json", "contracts/task_proposal.schema.json",
     "contracts/worker_result.schema.json", "contracts/publication_manifest.schema.json",
-    "contracts/source_handoff.schema.json", "contracts/test_lane.schema.json",
+    "contracts/source_handoff.schema.json", "contracts/chapter_lane.schema.json",
 ]
 
 
@@ -31,15 +31,19 @@ def validate_repo(root: Path) -> list[str]:
                 if dep not in stages:
                     errors.append(f"pipeline stage {name!r} references unknown dependency {dep!r}")
 
-    active_pointer = root / "work" / "test_lanes" / "active.json"
+    active_pointer = root / "work" / "chapter_lanes" / "active.json"
     if active_pointer.exists():
         try:
             pointer = json.loads(active_pointer.read_text(encoding="utf-8"))
             lane_rel = pointer.get("lane_path")
             if not isinstance(lane_rel, str) or not lane_rel:
-                errors.append("active test lane pointer is missing lane_path")
+                errors.append("active chapter lane pointer is missing lane_path")
             elif not (root / lane_rel).exists():
-                errors.append(f"active test lane does not exist: {lane_rel}")
+                errors.append(f"active chapter lane does not exist: {lane_rel}")
+            else:
+                lane = json.loads((root / lane_rel).read_text(encoding="utf-8"))
+                if lane.get("mode") != "chapter_pipeline":
+                    errors.append(f"active chapter lane has wrong mode: {lane.get('mode')!r}")
         except Exception as exc:
             errors.append(f"invalid json {active_pointer.relative_to(root)}: {exc}")
     return errors

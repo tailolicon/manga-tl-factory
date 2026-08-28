@@ -11,14 +11,14 @@ PROTOCOL_READ_PATHS = [
     "WORKER_PROTOCOL.md",
     "TASK_PROTOCOL.md",
     "CONTEXT_PROTOCOL.md",
-    "STANDALONE_TEST.md",
+    "CHAPTER_PIPELINE.md",
     "WORKER_START.md",
     "config/pipeline.json",
     "contracts/source_manifest.schema.json",
     "contracts/task_proposal.schema.json",
     "contracts/worker_result.schema.json",
     "contracts/translation_page.schema.json",
-    "contracts/test_lane.schema.json",
+    "contracts/chapter_lane.schema.json",
 ]
 
 
@@ -39,172 +39,151 @@ def build_standalone_test_envelope(root: Path, request_id: str | None = None) ->
             raise ValueError(f"pending bootstrap request not found: {request_id}")
     elif len(pending) != 1:
         raise ValueError(
-            f"standalone test mode requires exactly one pending_bootstrap request; found {len(pending)}. "
+            f"standalone bootstrap requires exactly one pending_bootstrap request; found {len(pending)}. "
             "Pass --request-id explicitly."
         )
 
     request = pending[0]
     rid = request["request_id"]
     project_id = request["project_id"]
-    task_id = f"standalone-bootstrap-{rid}"
-    branch = f"test/{rid}/bootstrap"
-
     return {
-        "execution_mode": "standalone_test",
-        "task_id": task_id,
+        "execution_mode": "standalone_bootstrap",
+        "task_id": f"standalone-bootstrap-{rid}",
         "task_type": "bootstrap",
         "project_id": project_id,
         "request_id": rid,
-        "lease_id": f"standalone-test-{rid}",
+        "lease_id": f"standalone-bootstrap-{rid}",
         "fencing_token": 1,
-        "context_version": None,
         "runtime_budget_minutes": 15,
         "drain_after_minutes": 18,
         "safety_stop_minutes": 22,
         "base_ref": "main",
-        "task_branch": branch,
+        "task_branch": f"bootstrap/{rid}",
         "source": request["source"],
         "target_language": request.get("target_language", "vi"),
         "input_artifacts": [
             {"kind": "intake_request", "path": f"requests/{rid}.json"},
             {"kind": "project", "path": f"projects/{project_id}/project.json"},
         ],
-        "allowed_read_paths": PROTOCOL_READ_PATHS
-        + [
-            f"requests/{rid}.json",
-            f"projects/{project_id}/**",
-        ],
+        "allowed_read_paths": PROTOCOL_READ_PATHS + [f"requests/{rid}.json", f"projects/{project_id}/**"],
         "allowed_write_paths": [
             f"projects/{project_id}/source_manifest.json",
             f"projects/{project_id}/bootstrap/**",
-            f"work/proposals/{task_id}.json",
-            f"work/results/{task_id}.json",
-            f"work/handoffs/{task_id}.json",
+            f"work/proposals/standalone-bootstrap-{rid}.json",
+            f"work/results/standalone-bootstrap-{rid}.json",
+            f"work/handoffs/standalone-bootstrap-{rid}.json",
         ],
-        "standalone_constraints": {
-            "bootstrap_only": True,
-            "may_not_publish": True,
-            "may_not_modify_canonical_context": True,
-            "may_use_github_connector_without_local_worktree": True,
-            "missing_local_git_is_not_a_blocker": True,
-        },
     }
 
 
-def _active_lane_path(root: Path) -> Path:
-    pointer_path = root / "work" / "test_lanes" / "active.json"
+def _active_chapter_lane_path(root: Path) -> Path:
+    pointer_path = root / "work" / "chapter_lanes" / "active.json"
     if not pointer_path.exists():
-        raise ValueError("no active standalone chapter test lane")
+        raise ValueError("no active production chapter lane")
     pointer = read_json(pointer_path)
     lane_path = pointer.get("lane_path")
     if not isinstance(lane_path, str) or not lane_path.strip():
-        raise ValueError("active test lane pointer is missing lane_path")
+        raise ValueError("active chapter lane pointer is missing lane_path")
     return root / lane_path
 
 
-def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = None) -> dict[str, Any]:
-    if lane_id is None:
-        lane_path = _active_lane_path(root)
-    else:
-        lane_path = root / "work" / "test_lanes" / f"{lane_id}.json"
+def build_chapter_envelope(root: Path, lane_id: str | None = None) -> dict[str, Any]:
+    lane_path = _active_chapter_lane_path(root) if lane_id is None else root / "work" / "chapter_lanes" / f"{lane_id}.json"
     if not lane_path.exists():
-        raise ValueError(f"standalone chapter test lane not found: {lane_path.relative_to(root)}")
+        raise ValueError(f"chapter lane not found: {lane_path.relative_to(root)}")
 
     lane = read_json(lane_path)
-    if lane.get("mode") != "standalone_chapter_test":
-        raise ValueError("test lane mode must be standalone_chapter_test")
+    if lane.get("mode") != "chapter_pipeline":
+        raise ValueError("chapter lane mode must be chapter_pipeline")
     actual_lane_id = lane.get("lane_id")
     if not isinstance(actual_lane_id, str) or not actual_lane_id:
-        raise ValueError("test lane is missing lane_id")
+        raise ValueError("chapter lane is missing lane_id")
     if lane_id is not None and actual_lane_id != lane_id:
         raise ValueError(f"lane id mismatch: expected {lane_id}, found {actual_lane_id}")
     if lane.get("state") not in {"ready", "partial"}:
-        terminal = lane.get("terminal_reason")
-        suffix = f"; terminal_reason={terminal!r}" if terminal else ""
-        raise ValueError(f"test lane is not runnable: state={lane.get('state')!r}{suffix}")
+        raise ValueError(f"chapter lane is not runnable: state={lane.get('state')!r}")
     if lane.get("claim") is not None:
-        raise ValueError("test lane already has an active claim")
+        raise ValueError("chapter lane already has an active claim")
 
     project_id = lane.get("project_id")
-    if not isinstance(project_id, str) or not project_id:
-        raise ValueError("test lane is missing project_id")
     chapter = lane.get("chapter")
-    if not isinstance(chapter, dict) or not chapter.get("id"):
-        raise ValueError("test lane is missing chapter identity")
-    handoff = lane.get("source_handoff")
-    if not isinstance(handoff, dict) or not handoff.get("path"):
-        raise ValueError("test lane is missing source_handoff.path")
     next_task = lane.get("next_task")
-    if not isinstance(next_task, dict) or not next_task.get("task_type"):
-        raise ValueError("test lane has no runnable next_task")
     generation = lane.get("generation")
+    if not isinstance(project_id, str) or not project_id:
+        raise ValueError("chapter lane is missing project_id")
+    if not isinstance(chapter, dict) or not chapter.get("id"):
+        raise ValueError("chapter lane is missing chapter identity")
+    if not isinstance(next_task, dict) or next_task.get("task_type") != "localize_chapter":
+        raise ValueError("chapter lane has no runnable localize_chapter task")
     if not isinstance(generation, int) or isinstance(generation, bool) or generation < 1:
-        raise ValueError("test lane generation must be a positive integer")
+        raise ValueError("chapter lane generation must be a positive integer")
 
-    task_type = str(next_task["task_type"])
-    task_id = f"standalone-{actual_lane_id}-g{generation}-{task_type}"
-    lease_id = f"standalone-lane-{actual_lane_id}-g{generation}"
-    branch = f"test/{actual_lane_id}/{task_type}/g{generation}"
-    lane_rel = str(lane_path.relative_to(root)).replace("\\", "/")
-
-    allowed_write_paths = [
-        f"work/results/{task_id}.json",
-        f"work/handoffs/{task_id}.json",
-    ]
-    if task_type in {"page_translation_smoke", "translation_chunk_test"}:
-        allowed_write_paths.append(f"projects/{project_id}/translations/smoke/**")
+    chapter_id = str(chapter["id"])
+    task_id = f"chapter-{actual_lane_id}-g{generation}"
+    lease_id = f"chapter-lane-{actual_lane_id}-g{generation}"
+    lane_rel = lane_path.relative_to(root).as_posix()
+    handoff = lane.get("source_handoff") or {}
 
     return {
-        "execution_mode": "standalone_chapter_test",
+        "execution_mode": "chapter_pipeline",
         "task_id": task_id,
-        "task_type": task_type,
+        "task_type": "localize_chapter",
         "goal": next_task.get("goal"),
         "scope": next_task.get("scope"),
         "project_id": project_id,
         "series_key": lane.get("series_key"),
         "chapter": chapter,
+        "phase": lane.get("phase"),
+        "resume_page": lane.get("resume_page", 1),
+        "page_count": lane.get("page_count"),
+        "progress": lane.get("progress") or {},
+        "accepted_inputs": lane.get("accepted_inputs") or {},
         "lease_id": lease_id,
         "fencing_token": generation,
-        "context_version": None,
         "runtime_budget_minutes": 25,
         "drain_after_minutes": 21,
         "checkpoint_by_minutes": 23,
         "safety_stop_minutes": 24,
         "base_ref": "main",
-        "task_branch": branch,
+        "task_branch": f"chapter/{actual_lane_id}/g{generation}",
         "lane_path": lane_rel,
         "source_handoff": handoff,
         "acquisition_evidence": lane.get("acquisition_evidence", {}),
         "relay": lane.get("relay"),
-        "workflow": lane.get("workflow"),
         "input_artifacts": [
-            {"kind": "test_lane", "path": lane_rel},
+            {"kind": "chapter_lane", "path": lane_rel},
             {"kind": "project", "path": f"projects/{project_id}/project.json"},
-            {"kind": "source_handoff", "path": handoff["path"], "blob_sha": handoff.get("blob_sha")},
+            *([{"kind": "source_handoff", "path": handoff.get("path"), "blob_sha": handoff.get("blob_sha")}] if handoff.get("path") else []),
         ],
-        "allowed_read_paths": PROTOCOL_READ_PATHS
-        + [
+        "allowed_read_paths": PROTOCOL_READ_PATHS + [
             lane_rel,
             f"projects/{project_id}/**",
-            str(handoff["path"]),
+            str(handoff.get("path") or ""),
             "work/imports/**/canonical_acquisition_validation.json",
             "work/relay_requests/*.json",
         ],
-        "allowed_write_paths": allowed_write_paths,
+        "allowed_write_paths": [
+            f"projects/{project_id}/chapters/{chapter_id}/translation/**",
+            f"projects/{project_id}/chapters/{chapter_id}/rendered/**",
+            f"projects/{project_id}/publication/{chapter_id}/**",
+            f"work/results/{task_id}.json",
+            f"work/handoffs/{task_id}.json",
+        ],
         "coordination_write_path": lane_rel,
-        "standalone_constraints": {
+        "chapter_constraints": {
             "single_chapter_only": True,
-            "may_not_publish": True,
-            "may_not_modify_canonical_context": True,
-            "may_use_github_connector_without_local_worktree": True,
-            "missing_local_git_is_not_a_blocker": True,
-            "test_lease_only": True,
-            "lane_state_on_main_is_coordinator_state": True,
-            "raw_images_must_not_be_committed_to_git": True,
-            "translation_atomic_unit": "page",
-            "translation_remote_checkpoint_strategy": "batched",
-            "translation_chunk_is_time_budgeted": True,
-            "translation_soft_target_is_stop_condition": False,
-            "worker_owns_single_chapter_until_drain": True,
+            "worker_may_advance_phase": True,
+            "worker_may_redraw_and_typeset": True,
+            "worker_may_qa": True,
+            "worker_may_publish_after_qa": True,
+            "raw_source_images_must_not_be_committed": True,
+            "final_localized_images_may_be_committed": True,
+            "page_is_atomic_boundary": True,
+            "remote_checkpoint_strategy": "batched",
         },
     }
+
+
+# Compatibility alias for old callers. Active production work must use chapter-envelope.
+def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = None) -> dict[str, Any]:
+    return build_chapter_envelope(root, lane_id=lane_id)
