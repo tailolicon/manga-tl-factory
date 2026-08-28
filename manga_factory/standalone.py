@@ -199,7 +199,5 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
             "test_lease_only": True,
             "lane_state_on_main_is_coordinator_state": True,
             "raw_images_must_not_be_committed_to_git": True,
-            "series_or_site_adult_metadata_must_not_preblock_pages": True,
-            "actual_page_content_is_evaluated_only_when_opened": True,
         },
     }
