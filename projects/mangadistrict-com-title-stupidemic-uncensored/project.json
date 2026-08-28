@@ -1,9 +1,30 @@
 {
   "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "identity": {
+    "series_key": "stupidemic-uncensored",
+    "canonical_title": "Stupidemic (Uncensored)",
+    "legacy_project_ids": [
+      "mangadistrict-com-title-stupidemic-uncensored",
+      "manga18fx-com-manga-stupidemic-uncensored"
+    ]
+  },
   "source": {
     "kind": "url",
     "value": "https://mangadistrict.com/title/stupidemic-uncensored/"
   },
+  "sources": [
+    {
+      "provider": "MangaDistrict",
+      "kind": "url",
+      "value": "https://mangadistrict.com/title/stupidemic-uncensored/"
+    },
+    {
+      "provider": "Manga18fx",
+      "source_id": 3157287889751723714,
+      "kind": "url",
+      "value": "https://manga18fx.com/manga/stupidemic-uncensored"
+    }
+  ],
   "source_language": null,
   "target_language": "vi",
   "status": "new",
