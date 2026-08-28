@@ -80,7 +80,7 @@
   "generation": 3,
   "next_task": {
     "task_type": "translation_chunk_test",
-    "goal": "Use the pinned whole-chapter relay artifact and translate sequential Chapter 1 pages to Vietnamese for as long as the 25-minute worker budget safely permits; checkpoint every completed page and resume from the first unfinished page.",
+    "goal": "Own Chapter 1 for this worker session. Reuse the pinned whole-chapter relay, resume at page 17, and translate sequentially until the chapter finishes or the minute-21 drain window begins. soft_target_pages is telemetry only and must never stop useful work. Batch remote checkpoints when practical, then persist all completed pages, result, handoff, and the first-uncompleted resume point before releasing the claim.",
     "scope": {
       "page_start": 1,
       "page_end": 41,
