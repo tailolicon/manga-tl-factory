@@ -8,7 +8,7 @@ Do not rely on chat history, private memory, previous worker reasoning, or stale
 
 Make one useful, repository-backed unit of progress on the manga pipeline within a strict 25-minute tool/runtime ceiling.
 
-For the current test phase, prefer existing source-handoff/acquisition work for an already-known chapter before inventing broader infrastructure. Do not add long-term object storage yet unless `main` explicitly says the test phase has advanced to that point.
+For the current test phase, prefer the active single-chapter test lane when one exists. Do not add long-term object storage yet unless `main` explicitly says the test phase has advanced to that point.
 
 ## Mandatory startup hot path
 
@@ -17,13 +17,33 @@ Read only these first, in order:
 1. `AGENTS.md`
 2. `WORKER_PROTOCOL.md`
 3. `TASK_PROTOCOL.md`
-4. `config/pipeline.json`
-5. `README.md`
-6. the selected project's `project.json`
+4. `STANDALONE_TEST.md`
+5. `config/pipeline.json`
+6. `README.md`
+7. `work/test_lanes/active.json` if it exists
 
-Then inspect only the minimum live files needed to find one runnable unit, such as an existing source handoff, source manifest, task/result/handoff, acquisition result, or chapter descriptor.
+If an active lane exists, read only its referenced lane file and the minimum project/handoff/result evidence named by that lane. Do **not** fall back to coordinator-only production rules merely because no external lease service is present; an active `standalone_chapter_test` lane is itself the explicit test authority described in `STANDALONE_TEST.md`.
+
+If no active lane exists, then inspect the selected project's `project.json` and only the minimum live files needed to find one runnable unit, such as an existing source handoff, source manifest, task/result/handoff, acquisition result, or chapter descriptor.
 
 Do not recursively read the whole repository before choosing work.
+
+## Active chapter-lane rule
+
+When `work/test_lanes/active.json` points to a runnable lane:
+
+1. Read the lane from current `main`.
+2. Require `mode == "standalone_chapter_test"`.
+3. If `state` is `ready` or `partial` and `claim` is null, derive the exact envelope described by `python -m manga_factory chapter-test-envelope` (or construct the identical values from the lane when no local checkout exists).
+4. Atomically claim the lane by updating only the lane JSON on `main` with the blob SHA just read, as specified in `STANDALONE_TEST.md`.
+5. Use the lane `generation` as the standalone fencing token and `standalone-lane-<lane-id>-g<generation>` as the test lease.
+6. Execute **exactly the lane's `next_task`**. Do not re-run earlier successful work unless the lane explicitly asks for revalidation.
+7. Write a formal test `worker_result`/handoff using that test fencing token when the task completes.
+8. Release/complete the lane state on `main` before ending the session.
+
+An active lane means `NO_COORDINATOR_LEASE` is **not a valid blocker** for that lane task. Production tasks outside the lane still require a real coordinator-issued lease.
+
+If a claim is already live, do not duplicate the task. If it is past its recorded `expires_at`, follow the stale-claim recovery rule in `STANDALONE_TEST.md` and increment generation before retrying.
 
 ## Project identity and source reconciliation
 
@@ -49,7 +69,7 @@ Do not download a chapter again merely to repair project identity when the exist
 
 This repository is coordinated through GitHub. If a connected GitHub capability exists, discover and use its write actions rather than assuming GitHub is read-only.
 
-Workers must not push directly to `main` unless the live repository protocol explicitly grants a coordinator-less exception for that exact task class. Prefer a task/WIP branch and durable handoff/result artifacts.
+Workers must not push directly to `main` except for the explicit coordinator-state exception under `work/test_lanes/*.json` in standalone chapter test mode. Normal task artifacts belong on the task/test branch.
 
 If write capability is genuinely unavailable, do the maximum verifiable read-only work and return `partial`; never invent a commit, branch, lease, claim, or result.
 
@@ -57,19 +77,21 @@ If write capability is genuinely unavailable, do the maximum verifiable read-onl
 
 Treat 25 minutes as an external hard kill, not a usable work budget.
 
-- Minute 0-3: startup, locate live project/task/chapter, choose exactly one atomic scope.
+- Minute 0-3: startup, inspect active lane/live task, atomically claim exactly one atomic scope.
 - Minute 3-15: primary work.
 - Minute 15: first mandatory durable checkpoint. If no durable progress exists yet, reduce scope immediately.
 - Minute 17: enter `DRAINING`; stop starting large operations, broad searches, full-series fetches, or multi-chapter work.
 - Minute 20: second mandatory checkpoint; current result/handoff must already be parseable and recoverable.
-- Minute 22: safety stop for substantive work. Only validation, commit/push, result/handoff writes, and concise final reporting may continue.
+- Minute 22: safety stop for substantive work. Only validation, commit/push, result/handoff writes, and lane release/completion may continue.
 - Minute 24: no new tool-heavy operation. Finish only the smallest pending repository write if safe.
 
 Never consume the last minutes trying to finish a large chapter or full pipeline stage.
 
 ## Scope rules
 
-Choose exactly one of these, based on live state:
+If an active test lane exists, its `next_task` overrides the generic choices below.
+
+Otherwise choose exactly one of these, based on live state:
 
 1. Verify/fetch one existing chapter source handoff.
 2. Resolve/fix one acquisition blocker for one chapter.
@@ -112,4 +134,4 @@ Follow the live repository's content and role boundaries. Metadata/acquisition p
 
 A successful session ends with one small, durable, reviewable unit of progress and a handoff that another fresh worker can resume without chat history.
 
-Do not end with only an explanation when GitHub write access was available and the selected task required a repository write.
+Do not end with only an explanation when GitHub write access was available and the selected task required a repository write. In an active standalone chapter lane, do not end while leaving a live claim behind unless the tool runtime was interrupted unexpectedly.
