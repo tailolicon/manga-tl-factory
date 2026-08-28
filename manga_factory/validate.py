@@ -8,6 +8,7 @@ REQUIRED_FILES = [
     "config/pipeline.json", "config/quality.json", "config/roles.json",
     "contracts/intake_request.schema.json", "contracts/task_proposal.schema.json",
     "contracts/worker_result.schema.json", "contracts/publication_manifest.schema.json",
+    "contracts/source_handoff.schema.json",
 ]
 
 

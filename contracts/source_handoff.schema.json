@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KotoriSourceHandoff",
+  "type": "object",
+  "required": ["schema", "provider", "project_id", "source", "chapters"],
+  "properties": {
+    "schema": {"const": 1},
+    "provider": {"const": "kotori"},
+    "created_at": {"type": "string"},
+    "project_id": {"type": "string", "minLength": 1},
+    "source": {
+      "type": "object",
+      "required": ["source_id", "source_name", "manga_url"],
+      "properties": {
+        "source_id": {"type": "integer"},
+        "source_name": {"type": "string"},
+        "manga_url": {"type": "string", "format": "uri"}
+      }
+    },
+    "series": {"type": "object"},
+    "chapters": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "source_url", "pages_resolved", "pages"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "source_url": {"type": "string", "format": "uri"},
+          "pages_resolved": {"const": true},
+          "pages": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["index", "url", "headers"],
+              "properties": {
+                "index": {"type": "integer", "minimum": 1},
+                "url": {"type": "string", "format": "uri"},
+                "headers": {
+                  "type": "object",
+                  "propertyNames": {
+                    "enum": ["Accept", "Origin", "Referer", "User-Agent"]
+                  },
+                  "additionalProperties": {"type": "string"}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
