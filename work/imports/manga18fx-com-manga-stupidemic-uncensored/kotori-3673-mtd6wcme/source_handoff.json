@@ -1,0 +1,397 @@
+{
+  "schema": 1,
+  "provider": "kotori",
+  "created_at": "2026-08-28T16:52:25.656754Z",
+  "project_id": "manga18fx-com-manga-stupidemic-uncensored",
+  "source": {
+    "source_id": 3157287889751723714,
+    "source_name": "Manga18fx",
+    "manga_url": "https:\/\/manga18fx.com\/manga\/stupidemic-uncensored"
+  },
+  "series": {
+    "title": "Stupidemic (Uncensored)",
+    "author": "Oasisoo, PuddingStar",
+    "artist": "Chuhooni, Gangkul, Sosweet",
+    "thumbnail_url": "https:\/\/manga18fx.com\/webtoon\/stupidemic-uncensoredm.jpg"
+  },
+  "chapters": [
+    {
+      "id": "ch-200c8c840df0",
+      "name": "Chapter 1",
+      "source_url": "https:\/\/manga18fx.com\/manga\/stupidemic-uncensored\/chapter-1?style=list",
+      "chapter_number": 1,
+      "pages_resolved": true,
+      "pages": [
+        {
+          "index": 1,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/1-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 2,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/2-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 3,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/3-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 4,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/4-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 5,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/5-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 6,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/6-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 7,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/7-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 8,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/8-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 9,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/9-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 10,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/10-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 11,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/11-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 12,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/12-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 13,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/13-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 14,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/14-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 15,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/15-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 16,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/16-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 17,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/17-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 18,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/18-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 19,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/19-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 20,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/20-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 21,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/21-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 22,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/22-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 23,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/23-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 24,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/24-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 25,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/25-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 26,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/26-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 27,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/27-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 28,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/28-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 29,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/29-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 30,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/30-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 31,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/31-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 32,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/32-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 33,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/33-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 34,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/34-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 35,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/35-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 36,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/36-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 37,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/37-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 38,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/38-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 39,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/39-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 40,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/40-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        },
+        {
+          "index": 41,
+          "url": "https:\/\/img02.manga18fx.com\/chapters\/4972\/1\/41-91130.jpg",
+          "headers": {
+            "User-Agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/141.0.0.0 Mobile Safari\/537.36",
+            "Referer": "https:\/\/manga18fx.com\/",
+            "Accept": "image\/avif,image\/webp,image\/apng,image\/*,*\/*;q=0.8"
+          }
+        }
+      ]
+    }
+  ]
+}
