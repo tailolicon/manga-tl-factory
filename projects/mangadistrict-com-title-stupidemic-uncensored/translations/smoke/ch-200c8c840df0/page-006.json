@@ -1,0 +1,98 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 6,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p006-b001",
+      "speaker_id": null,
+      "source_text": "I'LL GIVE YOU MY DAY'S PAY! LET ME FUCK YOU IN RETURN!",
+      "translation": "Tôi sẽ đưa cô cả ngày lương! Đổi lại cho tôi làm tình với cô!",
+      "speaker_confidence": null,
+      "translation_confidence": 0.97,
+      "notes": "Quoted speech inside a story being retold; speaker identity not established."
+    },
+    {
+      "block_id": "p006-b002",
+      "speaker_id": null,
+      "source_text": "THEN HE GRABBED HER BIG TITTIES!",
+      "translation": "Rồi ông ta chộp lấy cặp vú bự của bà ấy!",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.97,
+      "notes": "Crude register preserved from source."
+    },
+    {
+      "block_id": "p006-b003",
+      "speaker_id": null,
+      "source_text": "WAVE",
+      "translation": "Ngoắc ngoắc",
+      "speaker_confidence": null,
+      "translation_confidence": 0.72,
+      "notes": "Motion sound/effect while reenacting the grabbing gesture; exact localization is uncertain."
+    },
+    {
+      "block_id": "p006-b004",
+      "speaker_id": null,
+      "source_text": "WHAT THE FUCK?! HAHAHAHAHA! NOW, THAT'S WHAT I CALL A MAN! HAHA!",
+      "translation": "Cái đéo gì vậy?! Hahahahaha! Thế mới gọi là đàn ông chứ! Haha!",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.97,
+      "notes": "Strong profanity preserved."
+    },
+    {
+      "block_id": "p006-b005",
+      "speaker_id": null,
+      "source_text": "BOSS LADY STARTED SCREAMING HER LUNGS OUT AND CALLED THE POLICE.",
+      "translation": "Bà chủ hét đến khản cả giọng rồi gọi cảnh sát.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p006-b006",
+      "speaker_id": null,
+      "source_text": "IT WAS A HUGE COMMOTION.",
+      "translation": "Lúc đó náo loạn cả lên.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p006-b007",
+      "speaker_id": null,
+      "source_text": "VRR VRR",
+      "translation": "Rè rè",
+      "speaker_confidence": null,
+      "translation_confidence": 0.88,
+      "notes": "Phone vibration sound effect."
+    },
+    {
+      "block_id": "p006-b008",
+      "speaker_id": null,
+      "source_text": "SO DID THE OLD MAN GET ARRESTED?",
+      "translation": "Thế ông già đó có bị bắt không?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p006-b009",
+      "speaker_id": null,
+      "source_text": "OH, SHE DIDN'T SUE HIM BECAUSE THE BIG BOSS SAID SHE SHOULD LET HIM OFF THE HOOK.",
+      "translation": "À, bà ấy không kiện vì sếp lớn bảo nên bỏ qua cho ông ta.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p006-b010",
+      "speaker_id": null,
+      "source_text": "BUT HE DID GET FIRED. BUT THE NEXT DAY, HIS WIFE CAME, LOOKED RIGHT AT BOSS LADY, AND SAID...",
+      "translation": "Nhưng ông ta vẫn bị đuổi việc. Thế mà hôm sau, vợ ông ta tới, nhìn thẳng vào bà chủ rồi nói...",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    }
+  ]
+}
