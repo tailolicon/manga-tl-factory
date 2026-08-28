@@ -64,7 +64,7 @@
       {
         "ordinal": 3,
         "task_type": "translation_chunk_test",
-        "status": "ready",
+        "status": "claimed",
         "generation": 3,
         "scope": {
           "page_start": 1,
@@ -75,7 +75,7 @@
       }
     ]
   },
-  "state": "ready",
+  "state": "claimed",
   "generation": 3,
   "next_task": {
     "task_type": "translation_chunk_test",
@@ -87,7 +87,14 @@
       "soft_target_pages": 10
     }
   },
-  "claim": null,
+  "claim": {
+    "task_id": "standalone-stupidemic-ch1-g3-translation_chunk_test",
+    "task_type": "translation_chunk_test",
+    "lease_id": "standalone-lane-stupidemic-ch1-g3",
+    "fencing_token": 3,
+    "branch": "test/stupidemic-ch1/translation_chunk_test/g3",
+    "claimed_at": "2026-08-29T01:22:38+07:00"
+  },
   "terminal_reason": null,
   "last_result": {
     "status": "partial",
