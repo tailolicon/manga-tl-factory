@@ -7,7 +7,16 @@
     "schema": {"const": 1},
     "provider": {"const": "kotori"},
     "created_at": {"type": "string"},
-    "project_id": {"type": "string", "minLength": 1},
+    "project_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Source-neutral series/import hint for new handoffs. Legacy schema-1 handoffs may contain a source-derived slug; workers must reconcile it against canonical project identity/source bindings instead of treating a mismatch as a blocker."
+    },
+    "source_key": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional source-specific key. This identifies the provider/location, not the canonical series."
+    },
     "source": {
       "type": "object",
       "required": ["source_id", "source_name", "manga_url"],
