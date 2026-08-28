@@ -151,7 +151,7 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
         f"work/results/{task_id}.json",
         f"work/handoffs/{task_id}.json",
     ]
-    if task_type == "page_translation_smoke":
+    if task_type in {"page_translation_smoke", "translation_chunk_test"}:
         allowed_write_paths.append(f"projects/{project_id}/translations/smoke/**")
 
     return {
@@ -175,6 +175,7 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
         "lane_path": lane_rel,
         "source_handoff": handoff,
         "acquisition_evidence": lane.get("acquisition_evidence", {}),
+        "relay": lane.get("relay"),
         "workflow": lane.get("workflow"),
         "input_artifacts": [
             {"kind": "test_lane", "path": lane_rel},
@@ -187,6 +188,7 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
             f"projects/{project_id}/**",
             str(handoff["path"]),
             "work/imports/**/canonical_acquisition_validation.json",
+            "work/relay_requests/*.json",
         ],
         "allowed_write_paths": allowed_write_paths,
         "coordination_write_path": lane_rel,
@@ -199,5 +201,7 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
             "test_lease_only": True,
             "lane_state_on_main_is_coordinator_state": True,
             "raw_images_must_not_be_committed_to_git": True,
+            "translation_checkpoint_unit": "page",
+            "translation_chunk_is_time_budgeted": True,
         },
     }
