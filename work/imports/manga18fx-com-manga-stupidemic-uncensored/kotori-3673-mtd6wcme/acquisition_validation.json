@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "kind": "coordinator_less_wip_acquisition_validation",
+  "status": "success",
+  "scope": {
+    "selected_project_path": "projects/mangadistrict-com-title-stupidemic-uncensored/project.json",
+    "selected_project_id": "mangadistrict-com-title-stupidemic-uncensored",
+    "handoff_project_id": "manga18fx-com-manga-stupidemic-uncensored",
+    "chapter_id": "ch-200c8c840df0",
+    "chapter_name": "Chapter 1"
+  },
+  "inputs_inspected": [
+    "WORKER_START.md@main",
+    "AGENTS.md@main",
+    "WORKER_PROTOCOL.md@main",
+    "TASK_PROTOCOL.md@main",
+    "config/pipeline.json@main",
+    "README.md@main",
+    "projects/mangadistrict-com-title-stupidemic-uncensored/project.json@main",
+    "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json@main",
+    "GitHub Actions run 33192023708",
+    "artifact 9694156152 / fetch-results-33192023708",
+    "artifact fetch_result.json sha256:e3e3e780bc8b727ec793fd8c64ca887128ad717dccb2cad6cd6b24d42911d3e1"
+  ],
+  "validation": {
+    "workflow_conclusion": "success",
+    "repository_tests_and_validate_passed": true,
+    "page_count": 41,
+    "downloaded": 41,
+    "failed": 0,
+    "fetch_mode": "direct_http",
+    "browser_bootstrap_required": false,
+    "retries": 0,
+    "total_bytes": 14046775,
+    "elapsed_ms": 779,
+    "concurrency": 6,
+    "checks": {
+      "indices_contiguous_1_through_41": true,
+      "all_pages_success": true,
+      "all_http_status_200": true,
+      "all_mime_image_jpeg": true,
+      "all_nonzero_bytes": true,
+      "total_bytes_matches_page_sum": true,
+      "all_dimensions_positive": true,
+      "all_sha256_fields_valid": true,
+      "all_page_errors_null": true,
+      "warnings_empty": true
+    },
+    "observed_dimensions": {
+      "widths": [720],
+      "heights": [3999, 5000]
+    }
+  },
+  "completed_atomic_units": [
+    "Validated the existing Chapter 1 acquisition result artifact without re-downloading source pages.",
+    "Confirmed all 41 pages were fetched by direct HTTP with no retry or browser/session bootstrap.",
+    "Confirmed page response, MIME, byte-count, dimensions and SHA-256 metadata are structurally valid."
+  ],
+  "blockers": [
+    {
+      "code": "PROJECT_IDENTITY_MISMATCH",
+      "detail": "The only non-template canonical project on main is mangadistrict-com-title-stupidemic-uncensored, while the Kotori source handoff and fetch result use manga18fx-com-manga-stupidemic-uncensored. Do not attach this acquisition result to the canonical project or start downstream project work until the source/project identity is reconciled."
+    },
+    {
+      "code": "NO_COORDINATOR_LEASE",
+      "detail": "This WIP validation session has no coordinator-issued lease/fencing token, so it does not submit a formal contracts/worker_result.schema.json result, claim a production task, create child tasks, publish, or merge to main."
+    }
+  ],
+  "remaining_work": [
+    "Reconcile whether Manga18fx is an alternate source for the existing Mangadistrict project or whether a separate canonical project should exist.",
+    "After project identity is resolved, preserve or rerun the same Chapter 1 acquisition under the correct project identity and only then advance to a dependency-valid downstream stage."
+  ],
+  "next_recommended_smallest_action": "Resolve the project/source identity mismatch for Chapter 1; do not re-fetch images unless the corrected identity requires a new handoff.",
+  "submission": {
+    "formal_worker_result_submitted": false,
+    "lease_id": null,
+    "fencing_token": null,
+    "task_proposals_created": false,
+    "main_modified": false
+  }
+}
