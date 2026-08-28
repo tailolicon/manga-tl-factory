@@ -25,36 +25,44 @@ The coordinator, not the worker, owns durable production task state.
 
 ## Runtime budget
 
-Reference defaults:
+A worker must use the runtime budget carried by its live task envelope rather than assuming an old fixed 15-minute payload window.
 
-- nominal work: <= 15 minutes
-- start drain: 18 minutes in production; active standalone chapter lanes use minute 17
-- safety stop: 22 minutes
+For the current 25-minute standalone chapter lane:
 
-The surrounding runtime may have a higher hard limit. The worker must not consume that entire limit.
+- continuous chapter work through about minute 21;
+- drain begins at minute 21;
+- result/handoff should be remotely recoverable by minute 23;
+- substantive safety stop at minute 24.
+
+Other production task types may use different coordinator-provided budgets. The worker must leave enough time for validation, persistence, result submission, and lease release, but should not reserve large idle margins that materially reduce useful work.
 
 ## Checkpoint policy
 
-Checkpoint after each meaningful atomic unit:
+The atomic correctness boundary and the remote persistence cadence are separate concepts.
 
-- translation: each completed page or stable scene block
-- context discovery: each evidence-backed candidate set
-- redraw: mask/cleanup/typeset stages or each completed page
-- QA: each completed page batch
+Atomic units include:
 
-Checkpoint output must be valid and parseable even if incomplete.
+- translation: each completed page or stable scene block;
+- context discovery: each evidence-backed candidate set;
+- redraw: mask/cleanup/typeset stages or each completed page;
+- QA: each completed page batch.
+
+For translation, a completed page must never be represented as half-finished. However, workers should batch several complete page artifacts into one remote Git checkpoint when practical instead of forcing one commit/tool round-trip per page. Make rolling remote checkpoints often enough that an unexpected worker death loses only a small suffix, then force a final checkpoint during drain.
+
+Checkpoint output must be valid and parseable even if the overall task is incomplete.
 
 ## Drain policy
 
 When entering `DRAINING`:
 
-1. Stop starting large new operations.
+1. Stop starting large new operations or a fresh chapter/page that cannot safely finish.
 2. Finish only the smallest safe atomic unit already in progress.
-3. Validate current artifacts.
-4. Commit/push WIP on the task branch if Git is available.
-5. Write a structured handoff.
-6. Submit result/progress with the active fencing token.
-7. Release the lease or standalone lane claim if still alive.
+3. Persist every completed but not-yet-remote page/artifact.
+4. Validate the contiguous completed range and current artifacts.
+5. Commit/push WIP on the task branch if Git is available.
+6. Write a structured handoff whose resume point is the first uncompleted atomic unit.
+7. Submit result/progress with the active fencing token.
+8. Release the lease or standalone lane claim if still alive.
 
 Unexpected death is handled by lease expiry. Cleanup is an optimization, never the safety mechanism.
 

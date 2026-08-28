@@ -1,6 +1,6 @@
 # Standalone Test Mode
 
-Standalone test mode exists so a ChatGPT worker can exercise the repository before an external coordinator such as Shiro is available. Production behavior remains unchanged.
+Standalone test mode exists so a ChatGPT worker can exercise the repository before an external coordinator such as Shiro is available. Production behavior remains unchanged unless the production coordinator adopts the same chapter-owned scheduling policy.
 
 ## Two standalone modes
 
@@ -17,6 +17,8 @@ python -m manga_factory chapter-test-envelope
 ```
 
 The lane file on `main` is durable test coordinator state. Its `generation` is the test fencing token and the deterministic lease is `standalone-lane-<lane-id>-g<generation>`.
+
+A chapter lane is the ownership unit for a worker session. A worker resumes at the lane's first unfinished page and keeps working on that same chapter until the chapter finishes or the session enters drain. Do not voluntarily stop because a soft page-count target was reached.
 
 ## Atomic claim
 
@@ -41,15 +43,29 @@ Rules:
 - Use `context_version: "smoke:no-canonical-context"`; record ambiguity instead of inventing speaker/context facts.
 - This artifact proves plumbing only. It does not modify canonical context, satisfy production `context_review`, publish, redraw, or claim the chapter fully translated.
 
+## Chapter translation chunk test
+
+`translation_chunk_test` is chapter-owned and resumable. Its `page_start`/`page_end` describe the allowed chapter range and `resume_from` is the first unfinished page. `soft_target_pages` is telemetry only.
+
+- Translate sequentially from `resume_from`.
+- Continue until the chapter finishes or minute 21 drain begins.
+- Each page is an atomic correctness boundary.
+- Remote persistence may batch multiple complete page artifacts into one Git checkpoint/tree update when practical.
+- Use rolling checkpoints during the work window so unexpected loss is bounded, then persist all outstanding completed pages during drain.
+- On partial completion, hand off `resume_from = first_uncompleted_page`; the next worker claims the same chapter and continues.
+- Do not claim another chapter in the same session.
+
 ## Runtime budget
 
 The tool ceiling is 25 minutes:
 
-- primary work target <=15 minutes;
-- drain at minute 17;
-- durable checkpoint/result by minute 20;
-- substantive safety stop at minute 22;
-- no new tool-heavy work at minute 24.
+- minute 0-3: startup/claim/relay acquisition;
+- minute 3-21: continuous useful work on the claimed chapter;
+- minute 21: enter drain;
+- by minute 23: translation artifacts, result, and handoff should be remotely recoverable;
+- minute 24: substantive safety stop; no new tool-heavy work.
+
+This budget intentionally uses most of the available session for chapter work instead of reserving the old minute-17-to-25 idle margin.
 
 ## Storage boundary
 

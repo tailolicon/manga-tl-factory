@@ -118,6 +118,10 @@ class StandaloneTests(unittest.TestCase):
             self.assertEqual(env["fencing_token"], 3)
             self.assertEqual(env["task_branch"], "test/x-ch1/acquire_source/g3")
             self.assertEqual(env["coordination_write_path"], "work/test_lanes/x-ch1.json")
+            self.assertEqual(env["runtime_budget_minutes"], 25)
+            self.assertEqual(env["drain_after_minutes"], 21)
+            self.assertEqual(env["checkpoint_by_minutes"], 23)
+            self.assertEqual(env["safety_stop_minutes"], 24)
 
     def test_translation_chunk_allows_multi_page_artifacts_and_relay(self):
         from manga_factory.standalone import build_standalone_chapter_test_envelope
@@ -131,7 +135,10 @@ class StandaloneTests(unittest.TestCase):
             self.assertEqual(env["relay"], relay)
             self.assertIn("projects/project-x/translations/smoke/**", env["allowed_write_paths"])
             self.assertTrue(env["standalone_constraints"]["translation_chunk_is_time_budgeted"])
-            self.assertEqual(env["standalone_constraints"]["translation_checkpoint_unit"], "page")
+            self.assertEqual(env["standalone_constraints"]["translation_atomic_unit"], "page")
+            self.assertEqual(env["standalone_constraints"]["translation_remote_checkpoint_strategy"], "batched")
+            self.assertFalse(env["standalone_constraints"]["translation_soft_target_is_stop_condition"])
+            self.assertTrue(env["standalone_constraints"]["worker_owns_single_chapter_until_drain"])
 
 
 if __name__ == "__main__":

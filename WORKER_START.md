@@ -6,7 +6,9 @@ Do not rely on chat history, private memory, previous worker reasoning, or stale
 
 ## Objective
 
-Make one useful, repository-backed unit of progress within the strict 25-minute tool/runtime ceiling. Optimize for useful work per session, not one-page task granularity.
+Make one useful, repository-backed unit of progress within the strict 25-minute tool/runtime ceiling. Optimize for useful work per session, not one-page task granularity and not an arbitrary page-count target.
+
+For chapter translation, the worker owns the currently claimed chapter lane for the duration of the session. Keep translating that same chapter until it completes or the session reaches the drain window. A later worker resumes the unfinished suffix from the first uncompleted page.
 
 For the current test phase, prefer the active `standalone_chapter_test` lane. The first success target is durable Vietnamese translation artifacts for as many assigned pages as can be completed safely before draining.
 
@@ -32,33 +34,34 @@ For a runnable lane (`state` is `ready` or `partial`, `claim` is null):
 1. Derive `python -m manga_factory chapter-test-envelope` semantics.
 2. Atomically claim the lane on `main` using the blob SHA just read.
 3. Use lane `generation` as fencing token and `standalone-lane-<lane-id>-g<generation>` as lease.
-4. Execute exactly `next_task`.
-5. Checkpoint after every completed page.
+4. Execute exactly `next_task` for that chapter; do not voluntarily split it just to hit a page-count target.
+5. Treat each completed page as the atomic translation boundary, but batch remote persistence when practical instead of spending one GitHub commit/tool round-trip per page.
 6. Release/complete/advance the lane on `main` before ending.
 
 `NO_COORDINATOR_LEASE` is not a blocker for an active standalone test lane.
 
-## Time-budgeted translation chunk
+## Chapter-owned time-budgeted translation
 
-`translation_chunk_test` is the current high-throughput test task.
+`translation_chunk_test` is the current high-throughput test task. Despite the historical name, it is a resumable chapter task, not a fixed-size chunk target.
 
 Its scope contains:
 
-- `page_start`: first page belonging to this work unit;
-- `page_end`: last page allowed for this work unit;
+- `page_start`: first page belonging to the chapter work unit;
+- `page_end`: last page allowed for this chapter work unit;
 - `resume_from`: first not-yet-completed page;
-- `soft_target_pages`: planning hint only, not a hard cap.
+- `soft_target_pages`: telemetry/planning hint only, never a completion or stop condition.
 
 Rules:
 
 1. Start at `resume_from` and process pages sequentially through at most `page_end`.
-2. Do **not** stop after one page merely because one page completed successfully.
-3. Continue while useful work can safely finish before the drain threshold.
-4. Persist one translation artifact per completed page under `projects/<project>/translations/smoke/<chapter>/page-XXX.json` on the task branch.
-5. After every page, that page is a durable checkpoint. Never redo completed pages unless explicitly requested.
-6. If all pages through `page_end` finish early, complete the task. Do not start another pipeline stage.
-7. If time runs out first, return `partial` and set the lane's next `resume_from` to the first uncompleted page. The next worker resumes there.
-8. Use `context_version: "smoke:no-canonical-context"` for this temporary test path and record uncertainty instead of inventing speaker/context facts.
+2. Keep working on the same chapter while there is enough time to finish another page safely before the drain threshold.
+3. Never stop because `soft_target_pages` was reached or exceeded.
+4. Produce one translation artifact per completed page under `projects/<project>/translations/smoke/<chapter>/page-XXX.json` on the task branch.
+5. A page becomes resumable only after its complete artifact exists in worker state. Remote GitHub persistence may group several completed page artifacts into one checkpoint commit/tree update when the available tool supports batching.
+6. Prefer a rolling remote checkpoint after a meaningful batch or before a risky/long operation; do not pay one remote commit round-trip after every page unless batching is unavailable.
+7. If all pages through `page_end` finish, complete the chapter task. Do not claim another chapter or start another pipeline stage in the same worker session.
+8. If time runs out first, return `partial` and set the lane's next `resume_from` to the first uncompleted page. The next worker claims the same chapter lane and resumes there.
+9. Use `context_version: "smoke:no-canonical-context"` for this temporary test path and record uncertainty instead of inventing speaker/context facts.
 
 ## Chapter relay artifact
 
@@ -76,17 +79,17 @@ Relay procedure:
 
 ## 25-minute hard budget
 
-Treat 25 minutes as an external kill.
+Treat 25 minutes as an external kill. Optimize the useful translation window rather than reserving eight minutes by default.
 
 - Minute 0-3: startup, claim, obtain/reuse chapter relay artifact.
-- Minute 3-17: translate continuously, page by page.
-- Minute 15: ensure durable progress already exists.
-- Minute 17: enter `DRAINING`; finish only the current page if safe.
-- Minute 20: result/handoff/lane checkpoint must already be recoverable.
-- Minute 22: no substantive translation work.
-- Minute 24: no new tool-heavy operation.
+- Minute 3-21: translate continuously on the claimed chapter, page by page.
+- During work: make rolling remote checkpoints after meaningful batches when practical; a page-count soft target is never a reason to stop.
+- Minute 21: enter `DRAINING`; do not start a new page unless it is clearly tiny and safe.
+- Minute 21-23: finish only the current atomic page if safe, persist all completed page artifacts, validate contiguous progress, and write result/handoff.
+- Minute 23: the result/handoff and resumable checkpoint should already be recoverable remotely.
+- Minute 24: no substantive work and no new tool-heavy operation; only minimal claim release/final bookkeeping if still required.
 
-The expected useful payload is multiple pages per session. `soft_target_pages` defaults around 10, but actual output is determined by page density and remaining time.
+If chapter completion happens before minute 21, complete and hand off early rather than claiming another chapter. Otherwise, use the available work window up to the drain threshold. `soft_target_pages` is informational only.
 
 ## Project identity
 
@@ -96,6 +99,8 @@ Canonical identity is series-based, not source-domain-based. Prefer exact `sourc
 
 Use authorized GitHub write capability when available. Only test-lane coordinator state under `work/test_lanes/*.json` may be written directly to `main`; normal task artifacts belong on the task/test branch.
 
+When multiple completed page artifacts can be persisted in one Git tree/commit, prefer that over one commit per page. Correctness and recoverability still take priority over batching.
+
 ## Completion
 
-A good session maximizes correctly completed assigned pages while leaving a clean page-boundary checkpoint. Infrastructure changes are not the task unless the active lane explicitly assigns infrastructure work.
+A good session maximizes correctly completed pages in the claimed chapter while leaving a clean page-boundary checkpoint. Infrastructure changes are not the task unless the active lane explicitly assigns infrastructure work.
