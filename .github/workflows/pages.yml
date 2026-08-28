@@ -7,6 +7,13 @@ on:
     paths:
       - "site/**"
       - "scripts/build_site_index.py"
+      - "manga_factory/**"
+      - "tests/**"
+      - "config/**"
+      - "contracts/**"
+      - "CHAPTER_PIPELINE.md"
+      - "WORKER_START.md"
+      - "WORKER_PROTOCOL.md"
       - "projects/**/project.json"
       - "projects/**/publication/**"
       - "work/chapter_lanes/**"
@@ -24,7 +31,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: Build & deploy reader
+    name: Validate, build & deploy reader
     runs-on: ubuntu-24.04
     environment:
       name: github-pages
@@ -33,6 +40,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Validate repository
+        run: python -m manga_factory validate
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
 
       - name: Build library index
         run: python scripts/build_site_index.py
