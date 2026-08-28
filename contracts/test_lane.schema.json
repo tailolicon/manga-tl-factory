@@ -80,6 +80,22 @@
         "detail": {"type": "string"}
       }
     },
+    "pipeline_handoff": {
+      "type": ["object", "null"],
+      "properties": {
+        "test_lane_complete": {"type": "boolean"},
+        "pipeline_complete": {"type": "boolean"},
+        "completed_test_stage": {"type": "string"},
+        "production_equivalent": {"type": ["string", "null"]},
+        "next_production_stage": {"type": ["string", "null"]},
+        "remaining_production_stages": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "coordinator_required": {"type": "boolean"},
+        "reason": {"type": "string"}
+      }
+    },
     "last_result": {"type": ["object", "null"]}
   }
 }
