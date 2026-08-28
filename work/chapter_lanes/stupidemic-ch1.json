@@ -9,7 +9,7 @@
   "source_handoff": {"path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json", "blob_sha": "a026706bfc7ae80ad8f73f1f0856ced83a50d64f"},
   "acquisition_evidence": {"workflow_run_id":33192023708,"workflow_conclusion":"success","artifact_id":9694156152,"artifact_digest":"sha256:845e91241cf60363027a53ef814fcc225f76f852a1efad841949506581aeb37e","fetch_result_sha256":"e3e3e780bc8b727ec793fd8c64ca887128ad717dccb2cad6cd6b24d42911d3e1","page_count":41,"downloaded":41,"failed":0,"fetch_mode":"direct_http","retries":0,"validated_on_branch":"wip/stupidemic-ch1-acquisition-reconciled","validated_commit":"b964baa5ee74b5ca516335675fefd1511b95589f","validation_path":"work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/canonical_acquisition_validation.json"},
   "relay": {"status":"ready","request_path":"work/relay_requests/stupidemic-ch1.json","request_commit":"d2f09f22f24fd9e2c88cf77fe811f510cd5c72d2","run_id":33198730435,"artifact_id":9696850714,"artifact_name":"chapter-relay-stupidemic-ch1-ch-200c8c840df0","artifact_digest":"sha256:0682ce294d5ba541483c3c67d4cb5894edf6390e00277f5a79695fbf014e420d","artifact_size_bytes":13565843,"retention_days":2,"expires_at":"2026-08-30T18:19:09Z","page_count":41},
-  "state": "partial",
+  "state": "claimed",
   "generation": 5,
   "phase": "redraw_typeset",
   "resume_page": 1,
@@ -28,7 +28,14 @@
     "goal": "Finish Chapter 1 for publication. Resume redraw/typeset at page 1 using the accepted 41-page translation input and pinned whole-chapter relay. For every rendered page, persist the binary through GitHub create_blob with base64, then tree/commit/update the task branch before advancing rendered_pages. Continue into QA and publish whenever time permits.",
     "scope": {"page_start": 1, "page_end": 41}
   },
-  "claim": null,
+  "claim": {
+    "task_id": "chapter-stupidemic-ch1-g5",
+    "task_type": "localize_chapter",
+    "lease_id": "chapter-lane-stupidemic-ch1-g5",
+    "fencing_token": 5,
+    "branch": "chapter/stupidemic-ch1/g5",
+    "claimed_at": "2026-08-29T02:26:00+07:00"
+  },
   "last_result": {
     "status": "partial",
     "task_id": "chapter-stupidemic-ch1-g4",
