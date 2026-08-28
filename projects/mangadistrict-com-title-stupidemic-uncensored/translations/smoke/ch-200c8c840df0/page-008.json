@@ -1,0 +1,89 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 8,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p008-b001",
+      "speaker_id": null,
+      "source_text": "VIRUS, BRO.",
+      "translation": "...virus nhé, ông anh.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.95,
+      "notes": "Continuation of the page-7 bubble 'DON'T TELL ME YOU HAVE THE'."
+    },
+    {
+      "block_id": "p008-b002",
+      "speaker_id": null,
+      "source_text": "CID PATIENTS HAVE A HARD TIME UNDERSTANDING-",
+      "translation": "Bệnh nhân CID gặp khó khăn trong việc hiểu—",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.97,
+      "notes": "Interrupted sentence; dash preserved."
+    },
+    {
+      "block_id": "p008-b003",
+      "speaker_id": null,
+      "source_text": "FUCK YOU. HAHAHA.",
+      "translation": "Địt mẹ cậu. Hahaha.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.96,
+      "notes": "Strong profanity preserved."
+    },
+    {
+      "block_id": "p008-b004",
+      "speaker_id": null,
+      "source_text": "I'LL NEVER GET A VIRUS LIKE THAT.",
+      "translation": "Tôi đời nào mắc thứ virus như thế.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p008-b005",
+      "speaker_id": null,
+      "source_text": "BUT... THE WAY THESE PEOPLE THINK IS...",
+      "translation": "Nhưng... cách những người này suy nghĩ là...",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p008-b006",
+      "speaker_id": null,
+      "source_text": "FOOD!!! POOP!!! TITS!!!",
+      "translation": "ĐỒ ĂN!!! CỨT!!! VÚ!!!",
+      "speaker_confidence": null,
+      "translation_confidence": 0.97,
+      "notes": "Large emphasized thought/example text."
+    },
+    {
+      "block_id": "p008-b007",
+      "speaker_id": null,
+      "source_text": "GRUNT",
+      "translation": "Hừ",
+      "speaker_confidence": null,
+      "translation_confidence": 0.9,
+      "notes": "Visible vocal sound effect."
+    },
+    {
+      "block_id": "p008-b008",
+      "speaker_id": null,
+      "source_text": "THEY BELIEVE YOU EVEN IF YOU TELL THEM THE WORLD IS COMING TO AN END TOMORROW.",
+      "translation": "Dù có bảo ngày mai tận thế, họ cũng sẽ tin cậu.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p008-b009",
+      "speaker_id": null,
+      "source_text": "SOUNDS FUCKING SIMPLE. DO YOU THINK WE'LL GET FIRED IF WE GET CID?",
+      "translation": "Nghe đơn giản vãi. Cậu nghĩ nếu mắc CID thì bọn mình có bị đuổi việc không?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.97,
+      "notes": "CID preserved verbatim."
+    }
+  ]
+}
