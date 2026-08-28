@@ -40,7 +40,7 @@
       {
         "ordinal": 2,
         "task_type": "page_translation_smoke",
-        "status": "ready",
+        "status": "claimed",
         "generation": 2,
         "scope": {
           "page_index": 1
@@ -48,7 +48,7 @@
       }
     ]
   },
-  "state": "ready",
+  "state": "claimed",
   "generation": 2,
   "next_task": {
     "task_type": "page_translation_smoke",
@@ -57,7 +57,14 @@
       "page_index": 1
     }
   },
-  "claim": null,
+  "claim": {
+    "task_id": "standalone-stupidemic-ch1-g2-page_translation_smoke",
+    "task_type": "page_translation_smoke",
+    "lease_id": "standalone-lane-stupidemic-ch1-g2",
+    "fencing_token": 2,
+    "branch": "test/stupidemic-ch1/page_translation_smoke/g2",
+    "claimed_at": "2026-08-29T01:05:46+07:00"
+  },
   "terminal_reason": null,
   "last_result": {
     "status": "completed",
