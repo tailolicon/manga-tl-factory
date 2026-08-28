@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StandaloneChapterTestLane",
+  "type": "object",
+  "required": [
+    "schema",
+    "lane_id",
+    "mode",
+    "project_id",
+    "chapter",
+    "source_handoff",
+    "state",
+    "generation",
+    "next_task"
+  ],
+  "properties": {
+    "schema": {"const": 1},
+    "lane_id": {"type": "string", "minLength": 1},
+    "mode": {"const": "standalone_chapter_test"},
+    "project_id": {"type": "string", "minLength": 1},
+    "series_key": {"type": ["string", "null"]},
+    "chapter": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1}
+      }
+    },
+    "source_handoff": {
+      "type": "object",
+      "required": ["path", "blob_sha"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "blob_sha": {"type": "string", "minLength": 7}
+      }
+    },
+    "acquisition_evidence": {"type": "object"},
+    "state": {
+      "enum": ["ready", "claimed", "partial", "completed", "blocked"]
+    },
+    "generation": {"type": "integer", "minimum": 1},
+    "next_task": {
+      "type": ["object", "null"],
+      "properties": {
+        "task_type": {"type": "string"},
+        "goal": {"type": "string"}
+      }
+    },
+    "claim": {"type": ["object", "null"]},
+    "last_result": {"type": ["object", "null"]}
+  }
+}
