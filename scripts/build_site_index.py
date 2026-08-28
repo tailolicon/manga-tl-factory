@@ -5,12 +5,14 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
+from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 PROJECTS = ROOT / "projects"
 TEST_LANES = ROOT / "work" / "test_lanes"
 OUT = ROOT / "site" / "data" / "library.json"
 RAW_BASE = "https://raw.githubusercontent.com/tailolicon/manga-tl-factory/main/"
+COVER_DIR = ROOT / "site" / "assets" / "covers"
 
 
 def load_json(path: Path) -> dict:
@@ -42,6 +44,44 @@ def normalize_url(value: str, base_path: Path) -> str:
     else:
         repo_path = (base_path.parent / value).resolve().relative_to(ROOT.resolve()).as_posix()
     return RAW_BASE + repo_path
+
+
+def materialize_cover(value: str, project_id: str, project_path: Path) -> str:
+    value = value.strip()
+    if not value:
+        return ""
+    parsed = urlparse(value)
+    if parsed.scheme not in {"http", "https"}:
+        return normalize_url(value, project_path)
+
+    suffix = Path(parsed.path).suffix.lower()
+    if suffix not in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
+        suffix = ".jpg"
+    safe_id = re.sub(r"[^a-zA-Z0-9._-]+", "-", project_id).strip("-") or "cover"
+    target = COVER_DIR / f"{safe_id}{suffix}"
+    try:
+        referer = f"{parsed.scheme}://{parsed.netloc}/"
+        request = Request(
+            value,
+            headers={
+                "User-Agent": "Mozilla/5.0 (compatible; MangaTLFactory/1.0)",
+                "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+                "Referer": referer,
+            },
+        )
+        with urlopen(request, timeout=15) as response:
+            data = response.read(8 * 1024 * 1024 + 1)
+            if not data or len(data) > 8 * 1024 * 1024:
+                raise ValueError("cover is empty or larger than 8 MiB")
+            content_type = (response.headers.get("Content-Type") or "").lower()
+            if "image/" not in content_type:
+                raise ValueError(f"cover is not an image: {content_type}")
+        COVER_DIR.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(data)
+        return f"assets/covers/{target.name}"
+    except Exception as exc:
+        print(f"warning: could not cache cover for {project_id}: {exc}")
+        return value
 
 
 def project_title(project: dict, project_id: str) -> str:
@@ -109,7 +149,7 @@ def translated_chapters(project_id: str) -> dict[str, dict]:
     return rows
 
 
-def project_metadata(project: dict, project_path: Path) -> dict:
+def project_metadata(project: dict, project_path: Path, project_id: str) -> dict:
     identity = project.get("identity") or {}
     metadata = project.get("metadata") or {}
     cover = metadata.get("cover_url") or project.get("cover_url") or identity.get("cover_url") or ""
@@ -126,7 +166,7 @@ def project_metadata(project: dict, project_path: Path) -> dict:
         "genres": metadata.get("genres") or [],
         "content_rating": metadata.get("content_rating"),
         "synopsis": metadata.get("synopsis") or metadata.get("description"),
-        "cover_url": normalize_url(str(cover), project_path) if cover else "",
+        "cover_url": materialize_cover(str(cover), project_id, project_path) if cover else "",
         "metadata_sources": metadata.get("sources") or [],
     }
 
@@ -201,7 +241,7 @@ def build_library() -> dict:
         published_count += published_here
 
         identity = project.get("identity") or {}
-        meta = project_metadata(project, project_path)
+        meta = project_metadata(project, project_path, project_id)
         if not meta["cover_url"]:
             first_published = next((c for c in chapter_rows if c.get("pages")), None)
             if first_published:
