@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "kind": "coordinator_less_wip_acquisition_validation",
+  "status": "success",
+  "canonical_project": {
+    "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+    "project_path": "projects/mangadistrict-com-title-stupidemic-uncensored/project.json",
+    "series_key": "stupidemic-uncensored",
+    "canonical_title": "Stupidemic (Uncensored)"
+  },
+  "source_handoff": {
+    "path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json",
+    "blob_sha": "a026706bfc7ae80ad8f73f1f0856ced83a50d64f",
+    "legacy_project_id": "manga18fx-com-manga-stupidemic-uncensored",
+    "series_title": "Stupidemic (Uncensored)",
+    "source_id": 3157287889751723714,
+    "source_name": "Manga18fx",
+    "manga_url": "https://manga18fx.com/manga/stupidemic-uncensored",
+    "chapter_id": "ch-200c8c840df0",
+    "chapter_name": "Chapter 1"
+  },
+  "identity_reconciliation": {
+    "matched_exact_source_binding": true,
+    "matched_source_id": true,
+    "matched_source_url": true,
+    "matched_series_key": true,
+    "legacy_project_id_accepted": true,
+    "ambiguous": false,
+    "decision": "Treat the schema-1 Manga18fx handoff as belonging to canonical project mangadistrict-com-title-stupidemic-uncensored. The legacy handoff project_id is an import hint only; no source re-download is required to repair identity."
+  },
+  "acquisition_evidence": {
+    "workflow_run_id": 33192023708,
+    "workflow_conclusion": "success",
+    "artifact_id": 9694156152,
+    "artifact_name": "fetch-results-33192023708",
+    "artifact_digest": "sha256:845e91241cf60363027a53ef814fcc225f76f852a1efad841949506581aeb37e",
+    "fetch_result_sha256": "e3e3e780bc8b727ec793fd8c64ca887128ad717dccb2cad6cd6b24d42911d3e1",
+    "fetch_result_status": "success",
+    "page_count": 41,
+    "downloaded": 41,
+    "failed": 0,
+    "fetch_mode": "direct_http",
+    "browser_bootstrap_required": false,
+    "retries": 0,
+    "total_bytes": 14046775,
+    "elapsed_ms": 779,
+    "concurrency": 6,
+    "warnings": []
+  },
+  "validation_checks": {
+    "indices_contiguous_1_through_41": true,
+    "all_pages_success": true,
+    "all_http_status_200": true,
+    "all_mime_image_jpeg": true,
+    "all_nonzero_bytes": true,
+    "total_bytes_matches_page_sum": true,
+    "all_dimensions_positive": true,
+    "all_sha256_fields_valid": true,
+    "all_page_errors_null": true,
+    "all_pages_direct_http": true,
+    "all_page_retry_counts_zero": true,
+    "downloaded_matches_page_count": true,
+    "failed_zero": true,
+    "observed_widths": [720],
+    "observed_heights": [3999, 5000]
+  },
+  "inputs_inspected": [
+    "WORKER_START.md@main sha:4f76c99a466b2db180d0c120c06eba9520f45067",
+    "AGENTS.md@main sha:0bf5919d8266ffd1051ed7949a75f58f40c58059",
+    "WORKER_PROTOCOL.md@main sha:a70bcf3309bfa793feac7485320be58ecb6196c7",
+    "TASK_PROTOCOL.md@main sha:add1d4d15d45339df563b96a18b27c396d3f83ab",
+    "config/pipeline.json@main sha:62c46a8d864dd6a5573a6b11a55425eb3f7787c7",
+    "README.md@main sha:f59a0be2d6d0bdf4b27903bde88300c64b4b89c7",
+    "projects/mangadistrict-com-title-stupidemic-uncensored/project.json@main sha:728e12c6b85741ffd02e4ecaa474213c9696dd70",
+    "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json@main sha:a026706bfc7ae80ad8f73f1f0856ced83a50d64f",
+    "GitHub Actions run 33192023708",
+    "GitHub Actions artifact 9694156152"
+  ],
+  "completed_atomic_units": [
+    "Reconciled the legacy Manga18fx source-derived project_id to the one canonical Stupidemic project using the canonical source binding, series key, and legacy_project_ids alias.",
+    "Validated the existing Chapter 1 acquisition artifact without re-downloading source pages.",
+    "Confirmed all 41 pages passed response, MIME, size, dimension, SHA-256, ordering, error, retry, and direct-HTTP checks."
+  ],
+  "remaining_work": [
+    "A coordinator with a valid lease/fencing token may accept the acquisition dependency under canonical project mangadistrict-com-title-stupidemic-uncensored and schedule the dependency-valid next stage.",
+    "Do not re-fetch Chapter 1 solely for project identity reconciliation; existing acquisition evidence is complete."
+  ],
+  "blockers": [
+    {
+      "code": "NO_COORDINATOR_LEASE",
+      "detail": "This session has no coordinator-issued lease/fencing token. It therefore does not submit a formal worker_result, mutate coordinator task state, create child tasks, run vision_scan as a production task, publish, or merge to main."
+    }
+  ],
+  "content_boundary": "No translation, redraw, reproduction, or publication work was performed; this unit is acquisition metadata/technical verification only.",
+  "next_recommended_smallest_action": "Have the coordinator accept this Chapter 1 acquisition under canonical project mangadistrict-com-title-stupidemic-uncensored, then schedule vision_scan if its normal dependency/authorization checks pass.",
+  "submission": {
+    "formal_worker_result_submitted": false,
+    "lease_id": null,
+    "fencing_token": null,
+    "task_proposals_created": false,
+    "main_modified": false
+  }
+}
