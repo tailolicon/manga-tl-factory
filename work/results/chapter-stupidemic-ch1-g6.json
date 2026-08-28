@@ -1,0 +1,38 @@
+{
+  "task_id": "chapter-stupidemic-ch1-g6",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "fencing_token": 6,
+  "context_version": "smoke:no-canonical-context",
+  "status": "partial",
+  "completed_units": [
+    "redraw_typeset-page-003",
+    "redraw_typeset-page-004",
+    "redraw_typeset-page-005",
+    "redraw_typeset-page-006",
+    "redraw_typeset-page-007",
+    "redraw_typeset-page-008"
+  ],
+  "artifacts": [
+    {"kind":"rendered_page","page_index":3,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-003.webp","git_blob_sha":"fc5d4f1b79a54fdf7bde831cea0179607c36f2d4","sha256":"68dbd4075ebeced4a9487d82c235781bffc07901298fd7e8f56586875cb5cb62","bytes":10408,"durable":true},
+    {"kind":"rendered_page","page_index":4,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-004.webp","git_blob_sha":"ab15a485920b70ca98069fbc09474af66cde8d91","sha256":"3a3fc42b41b698a216427effeaba4b2975390cf65b3448faac62d9bc624cbdfb","bytes":10750,"durable":true},
+    {"kind":"rendered_page","page_index":5,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-005.webp","git_blob_sha":"91edb37f6d3706b0b516257ad367e851c974be91","sha256":"5c4317e0625e99a199a69dcefaa34ffb9cbaa25970aec7bce0a14dc4586dbba5","bytes":9808,"durable":true},
+    {"kind":"rendered_page","page_index":6,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-006.webp","git_blob_sha":"d17533d60b8f3eeaeebec27c14cff5dbe9ebc749","sha256":"7ea4bbbcc2753644e8a132fdd196b7fa8cd2f627800b9d886387aec4e8a325c8","bytes":9726,"durable":true},
+    {"kind":"rendered_page","page_index":7,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-007.webp","git_blob_sha":"d39ed2f0c5b1abffa43c6c12e8036fcb9bd1bb6d","sha256":"c9337a5660b73f0977951d8ec786cf1e62e5b85f18b915be8780b513adbfc29d","bytes":8416,"durable":true},
+    {"kind":"rendered_page","page_index":8,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-008.webp","git_blob_sha":"04374d182a72926ef9095e468d83d43be327c890","sha256":"31a1c272d9dea98b57b6e800bc04f249bcd76f4b823791b0562b0bb0b444ccdd","bytes":9116,"durable":true}
+  ],
+  "warnings": [
+    "Accepted translation input is the lane-pinned migration source at commit 289e82cdbff610096209de9b5f56192338f4ee9f using context_version smoke:no-canonical-context.",
+    "Pages 3-8 were source-checked and visually inspected at the redraw/typeset gate. Full QA has not run; stylized SFX on some pages may need redraw cleanup during QA.",
+    "Connector transport required aggressively optimized 300px-wide WebP checkpoints. Text remained readable in the worker visual check, but QA must replace any page that does not meet publication-quality visual fidelity.",
+    "Raw chapter relay source images remained ephemeral and were not committed."
+  ],
+  "task_proposals": [],
+  "handoff": {
+    "status": "partial",
+    "lease_id": "chapter-lane-stupidemic-ch1-g6",
+    "branch": "chapter/stupidemic-ch1/g6",
+    "phase": "redraw_typeset",
+    "resume_page": 9,
+    "handoff_path": "work/handoffs/chapter-stupidemic-ch1-g6.json"
+  }
+}
