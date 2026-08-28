@@ -52,7 +52,7 @@
   "generation": 2,
   "next_task": {
     "task_type": "page_translation_smoke",
-    "goal": "Fetch and inspect only Chapter 1 page 1, then produce one durable Vietnamese translation_page smoke artifact if the actual page content is processable. Do not block from series/source adult metadata alone.",
+    "goal": "Fetch Chapter 1 page 1 from the existing source handoff and produce one durable Vietnamese translation_page smoke artifact.",
     "scope": {
       "page_index": 1
     }
