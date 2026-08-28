@@ -1,0 +1,62 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 16,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p016-b001",
+      "speaker_id": null,
+      "source_text": "YES, MA'AM.",
+      "translation": "Vâng, thưa cô.",
+      "speaker_confidence": 0.82,
+      "translation_confidence": 0.99,
+      "notes": "Visible male speaker."
+    },
+    {
+      "block_id": "p016-b002",
+      "speaker_id": null,
+      "source_text": "MUNCH",
+      "translation": "Nhồm nhoàm",
+      "speaker_confidence": null,
+      "translation_confidence": 0.95,
+      "notes": "Dog-eating sound effect; repeated visible instances are represented by one block."
+    },
+    {
+      "block_id": "p016-b003",
+      "speaker_id": null,
+      "source_text": "ISN'T THIS A FUCKED UP LIFE EVEN FOR A DOG?",
+      "translation": "Đời thế này đến chó cũng thấy khốn nạn nhỉ?",
+      "speaker_confidence": 0.82,
+      "translation_confidence": 0.96,
+      "notes": "Crude register preserved."
+    },
+    {
+      "block_id": "p016-b004",
+      "speaker_id": null,
+      "source_text": "WAG",
+      "translation": "Vẫy vẫy",
+      "speaker_confidence": null,
+      "translation_confidence": 0.95,
+      "notes": "Dog-tail movement effect; repeated instances represented by one block."
+    },
+    {
+      "block_id": "p016-b005",
+      "speaker_id": null,
+      "source_text": "I CAN'T BELIEVE A BITCH WHO COMES TO WORK TO SHOP ONLINE IS MY SUPERVISOR.",
+      "translation": "Không thể tin nổi một con mụ đi làm chỉ để mua sắm online lại là cấp trên của mình.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.98,
+      "notes": "Internal narration; insulting register preserved."
+    },
+    {
+      "block_id": "p016-b006",
+      "speaker_id": null,
+      "source_text": "IF IT WERE THE OLD ME, I WOULD HAVE JUST FUCKED HER BRAINS OUT AND LEFT HER ONE RANDOM MORNING.",
+      "translation": "Nếu là mình ngày trước, mình đã địt cô ta đến mất hồn rồi biến mất vào một buổi sáng nào đó.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.95,
+      "notes": "Internal narration; explicit sexual/vulgar wording preserved without adding context."
+    }
+  ]
+}
