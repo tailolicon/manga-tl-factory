@@ -36,10 +36,8 @@ Rules:
 
 - Scope is exactly one page declared by `next_task.scope.page_index`.
 - Reuse the existing Kotori source handoff; do not download the whole chapter again.
-- Open only the actual page needed for the task.
-- Series title, website category, source domain, or adult metadata are not task-level blockers.
-- Evaluate the actual page content when opened. If that page cannot be processed, stop that page task only and record the page-level reason.
-- If processable, write the Vietnamese translation artifact under `projects/<project>/translations/smoke/<chapter>/page-XXX.json` on the task branch.
+- Open only the page needed for the task.
+- Translate the visible dialogue/text and write the Vietnamese translation artifact under `projects/<project>/translations/smoke/<chapter>/page-XXX.json` on the task branch.
 - Use `context_version: "smoke:no-canonical-context"`; record ambiguity instead of inventing speaker/context facts.
 - This artifact proves plumbing only. It does not modify canonical context, satisfy production `context_review`, publish, redraw, or claim the chapter fully translated.
 
@@ -52,10 +50,6 @@ The tool ceiling is 25 minutes:
 - durable checkpoint/result by minute 20;
 - substantive safety stop at minute 22;
 - no new tool-heavy work at minute 24.
-
-## Content evaluation scope
-
-Do not classify or stop an entire series/chapter solely from source metadata. Content handling decisions are made against the actual atomic page/task being processed. A page-level stop does not imply unrelated pages are blocked.
 
 ## Storage boundary
 
