@@ -68,6 +68,19 @@ then return to the concurrent HTTP downloader with the in-memory browser session
 never serialized. The optional fallback requires `playwright` plus a locally installed Chromium;
 it does not solve CAPTCHAs or bypass source access controls.
 
+### Automatic GitHub test run
+
+Pushing a handoff to `work/imports/<project>/<run>/source_handoff.json` on `main` starts
+`.github/workflows/source-acquisition.yml`. The job validates the repository, installs a disposable
+headless Chromium, runs the same `fetch-source` CLI with concurrency 6, and uploads every generated
+`fetch_result.json` as a 14-day GitHub Actions artifact. Source images stay only in the runner's
+temporary directory and are deleted by the acquisition worker before the job ends.
+
+The workflow can also be started manually with **Actions → Kotori source acquisition → Run
+workflow** and a repository-relative handoff path. A partial result deliberately makes the job red
+after the result artifact and performance summary have been uploaded. This MVP proves acquisition;
+it does not start translation, persist raw images, or introduce R2/Android Bridge infrastructure.
+
 `submit` does not scrape arbitrary websites. It records a normalized intake request. A bootstrap worker with browser/web access resolves the site and writes a source manifest according to `contracts/source_manifest.schema.json`.
 
 Before a coordinator is installed, `STANDALONE_TEST.md` allows an explicit bootstrap-only test mode. It derives a deterministic test envelope from a pending intake request and permits an authorized GitHub connector to substitute for a local worktree.

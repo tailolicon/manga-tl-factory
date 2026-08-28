@@ -1,0 +1,348 @@
+{
+  "schema": 1,
+  "provider": "kotori",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "source": {
+    "source_id": 1,
+    "source_name": "MangaDistrict",
+    "manga_url": "https://mangadistrict.com/series/stupidemic-uncensored/"
+  },
+  "chapters": [
+    {
+      "id": "chapter-1",
+      "name": "Chapter 1",
+      "source_url": "https://mangadistrict.com/series/stupidemic-uncensored/chapter-1/",
+      "pages_resolved": true,
+      "pages": [
+        {
+          "index": 1,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/01.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 2,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/02.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 3,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/03.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 4,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/04.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 5,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/05.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 6,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/06.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 7,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/07.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 8,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/08.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 9,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/09.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 10,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/10.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 11,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/11.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 12,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/12.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 13,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/13.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 14,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/14.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 15,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/15.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 16,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/16.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 17,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/17.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 18,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/18.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 19,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/19.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 20,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/20.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 21,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/21.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 22,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/22.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 23,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/23.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 24,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/24.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 25,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/25.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 26,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/26.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 27,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/27.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 28,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/28.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 29,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/29.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 30,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/30.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 31,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/31.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 32,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/32.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 33,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/33.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 34,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/34.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 35,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/35.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 36,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/36.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 37,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/37.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 38,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/38.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 39,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/39.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 40,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/40.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        },
+        {
+          "index": 41,
+          "url": "https://cdn.mangadistrict.com/publication/manga_68c26c97b9ca8/chapter-1/41.jpg",
+          "headers": {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://mangadistrict.com/"
+          }
+        }
+      ]
+    }
+  ]
+}
