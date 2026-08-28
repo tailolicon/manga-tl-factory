@@ -3,9 +3,74 @@
   "identity": {
     "series_key": "stupidemic-uncensored",
     "canonical_title": "Stupidemic (Uncensored)",
+    "original_title": "멍청바이러스",
+    "alternative_titles": [
+      "Stupid Virus",
+      "Meongcheong Virus",
+      "Idiot Virus",
+      "Pandemia de estupidez",
+      "まぬけウイルス感染中",
+      "傻瓜病毒",
+      "傻傻病毒",
+      "Stupidémie",
+      "Deppidemie",
+      "Stupidemia",
+      "Estupidemia"
+    ],
     "legacy_project_ids": [
       "mangadistrict-com-title-stupidemic-uncensored",
       "manga18fx-com-manga-stupidemic-uncensored"
+    ]
+  },
+  "metadata": {
+    "original_title": "멍청바이러스",
+    "alternative_titles": [
+      "Stupid Virus",
+      "Meongcheong Virus",
+      "Idiot Virus",
+      "Pandemia de estupidez",
+      "まぬけウイルス感染中",
+      "傻瓜病毒",
+      "傻傻病毒",
+      "Stupidémie",
+      "Deppidemie",
+      "Stupidemia",
+      "Estupidemia"
+    ],
+    "authors": [
+      "Oasisoo (오아시수)"
+    ],
+    "artists": [
+      "Gangkul (갱꿀)"
+    ],
+    "publisher": "Toomics",
+    "type": "Manhwa / Webtoon",
+    "year": 2024,
+    "publication_status": "completed",
+    "total_chapters": 62,
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "content_rating": "Adult",
+    "synopsis": "Một nhà máy vùng nông thôn đối mặt với đợt bùng phát của một loại virus làm suy giảm trí tuệ; Daeho nhìn thấy cơ hội để trả đũa người sếp kiêu ngạo của mình.",
+    "cover_url": "https://manga18fx.com/webtoon/stupidemic-uncensoredm.jpg",
+    "sources": [
+      {
+        "provider": "Toomics",
+        "kind": "metadata",
+        "value": "https://global.toomics.com/en/webtoon/episode/toon/7532"
+      },
+      {
+        "provider": "RIDI",
+        "kind": "metadata",
+        "value": "https://ridibooks.com/books/5601002429"
+      },
+      {
+        "provider": "Kotori/Manga18fx",
+        "kind": "acquisition_handoff",
+        "value": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json"
+      }
     ]
   },
   "source": {
@@ -25,9 +90,14 @@
       "value": "https://manga18fx.com/manga/stupidemic-uncensored"
     }
   ],
-  "source_language": null,
+  "source_language": "ko",
   "target_language": "vi",
-  "status": "new",
+  "status": "active",
+  "translation_status": {
+    "translated_chapters": 1,
+    "published_chapters": 0,
+    "latest_translated_chapter": "ch-200c8c840df0"
+  },
   "context_version": null,
   "pipeline_version": "1.0.0",
   "created_from_request": "req-0d91e65dd475"
