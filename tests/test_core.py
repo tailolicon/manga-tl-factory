@@ -68,7 +68,7 @@ class StandaloneTests(unittest.TestCase):
             self.assertEqual(env["fencing_token"], 1)
             self.assertIn(req["project_id"], env["allowed_write_paths"][0])
 
-    def _write_lane(self, root, *, task_type="acquire_source", scope=None, legacy_content_boundary=None):
+    def _write_lane(self, root, *, task_type="acquire_source", scope=None):
         lane_dir = root / "work" / "test_lanes"
         lane_dir.mkdir(parents=True)
         (root / "projects" / "project-x").mkdir(parents=True)
@@ -102,8 +102,6 @@ class StandaloneTests(unittest.TestCase):
             "claim": None,
             "last_result": None,
         }
-        if legacy_content_boundary is not None:
-            lane["content_boundary"] = legacy_content_boundary
         (lane_dir / "x-ch1.json").write_text(json.dumps(lane), encoding="utf-8")
 
     def test_standalone_chapter_lane_envelope(self):
@@ -117,7 +115,7 @@ class StandaloneTests(unittest.TestCase):
             self.assertEqual(env["lease_id"], "standalone-lane-x-ch1-g3")
             self.assertEqual(env["fencing_token"], 3)
             self.assertEqual(env["task_branch"], "test/x-ch1/acquire_source/g3")
-            self.assertTrue(env["standalone_constraints"]["series_or_site_adult_metadata_must_not_preblock_pages"])
+            self.assertEqual(env["coordination_write_path"], "work/test_lanes/x-ch1.json")
 
     def test_page_translation_smoke_allows_translation_artifact_path(self):
         from manga_factory.standalone import build_standalone_chapter_test_envelope
@@ -127,22 +125,6 @@ class StandaloneTests(unittest.TestCase):
             env = build_standalone_chapter_test_envelope(root)
             self.assertEqual(env["scope"], {"page_index": 1})
             self.assertIn("projects/project-x/translations/smoke/**", env["allowed_write_paths"])
-
-    def test_legacy_series_level_content_boundary_does_not_preblock_page_task(self):
-        from manga_factory.standalone import build_standalone_chapter_test_envelope
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            self._write_lane(
-                root,
-                task_type="vision_scan",
-                legacy_content_boundary={
-                    "classification": "explicit_adult_source",
-                    "semantic_model_stages_allowed": False,
-                    "code": "SEMANTIC_MODEL_CONTENT_BOUNDARY",
-                },
-            )
-            env = build_standalone_chapter_test_envelope(root)
-            self.assertEqual(env["task_type"], "vision_scan")
 
 
 if __name__ == "__main__":
