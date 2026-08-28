@@ -12,8 +12,8 @@
   "state": "claimed",
   "generation": 5,
   "phase": "redraw_typeset",
-  "resume_page": 1,
-  "progress": {"translated_pages": 41, "rendered_pages": 0, "qa_pages": 0, "published": false},
+  "resume_page": 2,
+  "progress": {"translated_pages": 41, "rendered_pages": 1, "qa_pages": 0, "published": false},
   "accepted_inputs": {
     "translation": {
       "status": "complete",
@@ -25,7 +25,7 @@
   },
   "next_task": {
     "task_type": "localize_chapter",
-    "goal": "Finish Chapter 1 for publication. Resume redraw/typeset at page 1 using the accepted 41-page translation input and pinned whole-chapter relay. For every rendered page, persist the binary through GitHub create_blob with base64, then tree/commit/update the task branch before advancing rendered_pages. Continue into QA and publish whenever time permits.",
+    "goal": "Finish Chapter 1 for publication. Resume redraw/typeset at page 2 using the accepted 41-page translation input and pinned whole-chapter relay. For every rendered page, persist the binary through GitHub create_blob with base64, then tree/commit/update the task branch before advancing rendered_pages. Continue into QA and publish whenever time permits.",
     "scope": {"page_start": 1, "page_end": 41}
   },
   "claim": {
