@@ -56,12 +56,31 @@ When the lane contains a ready relay artifact, download it once and reuse it for
 
 Raw source images stay ephemeral. Final localized/rendered pages are output artifacts and may be committed according to the publication rules.
 
+## Binary checkpoint bridge
+
+A missing local `git`, `curl`, or GitHub DNS route is **not** a binary-persistence blocker when the connected GitHub capability exposes blob/tree/ref writes.
+
+For every completed rendered page:
+
+1. Save the final page locally in a web-friendly format, preferably WebP (or JPEG when appropriate). Preserve legibility; target roughly <= 1 MiB per page when practical so connector payloads stay manageable.
+2. Compute the page SHA-256 locally.
+3. Base64-encode the raw image bytes without line wrapping.
+4. Call the GitHub blob creation action with `encoding: base64` and that base64 payload. This creates a real Git binary blob; **do not commit the base64 text as a file**.
+5. Collect the returned blob SHA for `projects/<project>/chapters/<chapter>/rendered/page-XXX.<ext>`.
+6. After one or more page blobs are ready, create one Git tree using those blob SHAs, create a commit whose parent is the current task-branch head, then advance the task branch ref.
+7. Verify the branch advanced successfully before counting those pages as durable.
+
+`progress.rendered_pages` means **contiguous rendered pages durably present in a remote Git commit**, not pages that merely exist in ephemeral local storage. Never advance `rendered_pages` for an uncommitted local image.
+
+If a connector rejects a payload because an individual image is too large, optimize/compress that page while preserving readable text and visual quality, then retry. Prefer several binary blobs + one tree/commit rather than one commit per page.
+
 ## 25-minute budget
 
 - Minute 0-3: startup, claim, obtain/reuse source/relay inputs.
 - Minute 3-21: continuously advance the claimed chapter across any phases that become ready.
+- During redraw/typeset: make rolling binary checkpoints using the blob bridge so completed pages do not remain ephemeral for the whole session.
 - Minute 21: enter drain; do not begin a large new operation.
-- Minute 21-23: finish the smallest safe atomic unit, persist all completed work, validate resume state, write result/handoff.
+- Minute 21-23: finish the smallest safe atomic unit, persist all completed work (including outstanding binary blobs), validate resume state, write result/handoff.
 - Minute 23: resumable state should already be remotely recoverable.
 - Minute 24: no substantive work; only minimal release/bookkeeping.
 
@@ -69,7 +88,9 @@ Raw source images stay ephemeral. Final localized/rendered pages are output arti
 
 Use the authorized GitHub capability. `work/chapter_lanes/*.json` is coordinator state and may be updated directly on `main` with compare-and-swap semantics.
 
-Normal WIP artifacts belong on the worker task branch. After QA passes, the same worker may promote the final publication bundle (rendered pages + publication manifest) to `main` while holding the active fencing token, then mark the lane completed.
+Normal WIP artifacts belong on the worker task branch. Text files may use normal file/tree writes. Binary rendered assets must use the Git blob base64 bridge described above when no direct local-file upload action is available.
+
+After QA passes, the same worker may promote the final publication bundle (rendered pages + publication manifest) to `main` while holding the active fencing token, then mark the lane completed.
 
 ## Completion
 

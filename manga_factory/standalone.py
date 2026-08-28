@@ -180,6 +180,11 @@ def build_chapter_envelope(root: Path, lane_id: str | None = None) -> dict[str, 
             "final_localized_images_may_be_committed": True,
             "page_is_atomic_boundary": True,
             "remote_checkpoint_strategy": "batched",
+            "binary_persistence_strategy": "github_create_blob_base64_then_tree_commit",
+            "binary_base64_is_transport_only": True,
+            "rendered_progress_requires_remote_commit": True,
+            "preferred_render_format": "webp",
+            "target_render_bytes_per_page": 1048576,
         },
     }
 

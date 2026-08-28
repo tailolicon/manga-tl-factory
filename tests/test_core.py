@@ -102,6 +102,11 @@ class ChapterPipelineTests(unittest.TestCase):
             self.assertTrue(env["chapter_constraints"]["worker_may_advance_phase"])
             self.assertTrue(env["chapter_constraints"]["worker_may_redraw_and_typeset"])
             self.assertTrue(env["chapter_constraints"]["worker_may_publish_after_qa"])
+            self.assertEqual(env["chapter_constraints"]["binary_persistence_strategy"], "github_create_blob_base64_then_tree_commit")
+            self.assertTrue(env["chapter_constraints"]["binary_base64_is_transport_only"])
+            self.assertTrue(env["chapter_constraints"]["rendered_progress_requires_remote_commit"])
+            self.assertEqual(env["chapter_constraints"]["preferred_render_format"], "webp")
+            self.assertEqual(env["chapter_constraints"]["target_render_bytes_per_page"], 1048576)
 
 
 if __name__ == "__main__":
