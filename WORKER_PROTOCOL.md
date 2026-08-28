@@ -21,14 +21,14 @@ CLAIMED -> RUNNING -> DRAINING -> SUBMITTED
                    -> FAILED
 ```
 
-The coordinator, not the worker, owns the durable task state.
+The coordinator, not the worker, owns durable production task state.
 
 ## Runtime budget
 
 Reference defaults:
 
 - nominal work: <= 15 minutes
-- start drain: 18 minutes
+- start drain: 18 minutes in production; active standalone chapter lanes use minute 17
 - safety stop: 22 minutes
 
 The surrounding runtime may have a higher hard limit. The worker must not consume that entire limit.
@@ -54,13 +54,15 @@ When entering `DRAINING`:
 4. Commit/push WIP on the task branch if Git is available.
 5. Write a structured handoff.
 6. Submit result/progress with the active fencing token.
-7. Release the lease if still alive.
+7. Release the lease or standalone lane claim if still alive.
 
 Unexpected death is handled by lease expiry. Cleanup is an optimization, never the safety mechanism.
 
 ## Stale worker protection
 
-Every result mutation must include the current fencing token. The coordinator rejects stale tokens. A worker whose lease expired may preserve a WIP branch, but it cannot publish/merge the stale result.
+Every production result mutation must include the current coordinator fencing token. The coordinator rejects stale tokens. A worker whose lease expired may preserve a WIP branch, but it cannot publish/merge the stale result.
+
+For an explicit `standalone_chapter_test` lane, the lane `generation` on `main` is the test-only fencing token. Claim/release uses compare-and-swap writes against the current lane blob SHA. A stale standalone claim must be cleared with a generation increment before another worker resumes. Standalone fencing tokens are never valid for production tasks.
 
 ## Git policy
 
@@ -68,8 +70,17 @@ Suggested branch naming:
 
 `task/<task-id>/<fencing-token>`
 
-Workers never merge their own result into main. Review/integration is a separate task/role.
+Workers never merge their own production result into main. Review/integration is a separate task/role.
 
-## Standalone bootstrap testing
+Standalone chapter testing has one narrow direct-main exception: `work/test_lanes/*.json` is coordinator state, so a worker may atomically claim/release/complete that state according to `STANDALONE_TEST.md`. All normal task artifacts still belong on the envelope's test/task branch unless the lane explicitly says otherwise.
 
-The production requirements above remain authoritative. For coordinator-less repository testing only, `STANDALONE_TEST.md` defines a narrow bootstrap exception with a deterministic envelope. A worker in that explicit mode must not block solely because no local worktree exists: an authorized GitHub connector may be used as the repository backend. If write access is unavailable, return an honest `partial` result rather than inventing commits or fencing authority.
+## Standalone testing
+
+`STANDALONE_TEST.md` defines the only coordinator-less exceptions:
+
+1. the original deterministic bootstrap-only test envelope;
+2. an explicit active single-chapter lane declared on `main`.
+
+A worker in either mode must not block solely because no external coordinator or local worktree exists when the corresponding standalone authority is valid and an authorized GitHub connector is available.
+
+If write access is unavailable, return an honest `partial` result rather than inventing commits, claims or fencing authority.
