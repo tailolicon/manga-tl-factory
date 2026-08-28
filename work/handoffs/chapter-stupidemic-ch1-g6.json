@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "task_id": "chapter-stupidemic-ch1-g6",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "status": "partial",
+  "lease_id": "chapter-lane-stupidemic-ch1-g6",
+  "fencing_token": 6,
+  "branch": "chapter/stupidemic-ch1/g6",
+  "phase": "redraw_typeset",
+  "resume_page": 9,
+  "page_count": 41,
+  "durable_rendered_prefix": {"page_start": 1, "page_end": 8},
+  "accepted_translation": {
+    "source_commit": "289e82cdbff610096209de9b5f56192338f4ee9f",
+    "path_glob": "projects/mangadistrict-com-title-stupidemic-uncensored/translations/smoke/ch-200c8c840df0/page-*.json",
+    "context_version": "smoke:no-canonical-context"
+  },
+  "relay": {
+    "artifact_id": 9696850714,
+    "artifact_name": "chapter-relay-stupidemic-ch1-ch-200c8c840df0",
+    "page_count": 41
+  },
+  "current_session_render_commit": "d2dba74dbd70b6f36d507ede653494824c267fd1",
+  "rendered_pages_added": [3,4,5,6,7,8],
+  "next_worker": [
+    "Claim the live chapter lane generation created by this handoff.",
+    "Resume redraw/typeset at page 9; do not redo durable pages 1-8 unless QA later requires correction.",
+    "Continue batching multiple rendered page blobs into each remote tree/commit rather than checkpointing main per page.",
+    "During QA, inspect pages 3-8 closely for stylized SFX cleanup and publication-quality resolution; replace any optimized checkpoint asset that is visually insufficient.",
+    "Continue into QA and publish in the same session if redraw_typeset reaches page 41 with time remaining."
+  ],
+  "constraints": [
+    "Raw relay source images are ephemeral and must not be committed.",
+    "Only remotely committed rendered assets count toward rendered_pages."
+  ]
+}
