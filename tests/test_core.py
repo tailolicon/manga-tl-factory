@@ -68,7 +68,7 @@ class StandaloneTests(unittest.TestCase):
             self.assertEqual(env["fencing_token"], 1)
             self.assertIn(req["project_id"], env["allowed_write_paths"][0])
 
-    def _write_lane(self, root, *, task_type="acquire_source", scope=None):
+    def _write_lane(self, root, *, task_type="acquire_source", scope=None, relay=None):
         lane_dir = root / "work" / "test_lanes"
         lane_dir.mkdir(parents=True)
         (root / "projects" / "project-x").mkdir(parents=True)
@@ -102,6 +102,8 @@ class StandaloneTests(unittest.TestCase):
             "claim": None,
             "last_result": None,
         }
+        if relay is not None:
+            lane["relay"] = relay
         (lane_dir / "x-ch1.json").write_text(json.dumps(lane), encoding="utf-8")
 
     def test_standalone_chapter_lane_envelope(self):
@@ -117,14 +119,19 @@ class StandaloneTests(unittest.TestCase):
             self.assertEqual(env["task_branch"], "test/x-ch1/acquire_source/g3")
             self.assertEqual(env["coordination_write_path"], "work/test_lanes/x-ch1.json")
 
-    def test_page_translation_smoke_allows_translation_artifact_path(self):
+    def test_translation_chunk_allows_multi_page_artifacts_and_relay(self):
         from manga_factory.standalone import build_standalone_chapter_test_envelope
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            self._write_lane(root, task_type="page_translation_smoke", scope={"page_index": 1})
+            scope = {"page_start": 1, "page_end": 41, "resume_from": 1, "soft_target_pages": 10}
+            relay = {"status": "ready", "artifact_id": 123, "artifact_name": "chapter-relay-x"}
+            self._write_lane(root, task_type="translation_chunk_test", scope=scope, relay=relay)
             env = build_standalone_chapter_test_envelope(root)
-            self.assertEqual(env["scope"], {"page_index": 1})
+            self.assertEqual(env["scope"], scope)
+            self.assertEqual(env["relay"], relay)
             self.assertIn("projects/project-x/translations/smoke/**", env["allowed_write_paths"])
+            self.assertTrue(env["standalone_constraints"]["translation_chunk_is_time_budgeted"])
+            self.assertEqual(env["standalone_constraints"]["translation_checkpoint_unit"], "page")
 
 
 if __name__ == "__main__":
