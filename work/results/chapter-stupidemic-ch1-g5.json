@@ -1,0 +1,45 @@
+{
+  "task_id": "chapter-stupidemic-ch1-g5",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "fencing_token": 5,
+  "context_version": "smoke:no-canonical-context",
+  "status": "partial",
+  "completed_units": [
+    "redraw_typeset-page-001",
+    "redraw_typeset-page-002"
+  ],
+  "artifacts": [
+    {
+      "kind": "rendered_page",
+      "page_index": 1,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-001.webp",
+      "git_blob_sha": "c73543aaf2ef089f5bdc5ba381ef4ad44608c944",
+      "sha256": "6b2261c57371bd34761d4f04011ec06b1e01aa5e044dcd4d8df55cebcbaf2b67",
+      "bytes": 153564,
+      "durable": true
+    },
+    {
+      "kind": "rendered_page",
+      "page_index": 2,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-002.webp",
+      "git_blob_sha": "2b7be0f20910d48106d91c1a32152aa4c398b138",
+      "sha256": "3fcc3f12b7d0864ee2da1c700853fade94b955fe2c77409eab56be86d26e7ffb",
+      "bytes": 85072,
+      "durable": true
+    }
+  ],
+  "warnings": [
+    "Accepted translation input is the lane-pinned migration source at commit 289e82cdbff610096209de9b5f56192338f4ee9f using context_version smoke:no-canonical-context.",
+    "Rendered pages 1-2 were source-checked and visually inspected before persistence; page 2 required a local redraw correction to remove a remaining source-text fragment before its final blob was accepted.",
+    "Raw chapter relay source images remained ephemeral and were not committed."
+  ],
+  "task_proposals": [],
+  "handoff": {
+    "status": "partial",
+    "lease_id": "chapter-lane-stupidemic-ch1-g5",
+    "branch": "chapter/stupidemic-ch1/g5",
+    "phase": "redraw_typeset",
+    "resume_page": 3,
+    "handoff_path": "work/handoffs/chapter-stupidemic-ch1-g5.json"
+  }
+}
