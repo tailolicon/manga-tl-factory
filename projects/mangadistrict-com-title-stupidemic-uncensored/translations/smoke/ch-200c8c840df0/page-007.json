@@ -1,0 +1,107 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 7,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p007-b001",
+      "speaker_id": null,
+      "source_text": "BITCH",
+      "translation": "CON MỤ",
+      "speaker_confidence": null,
+      "translation_confidence": 0.9,
+      "notes": "Visible phone contact/display label; exact referent is not established by smoke context."
+    },
+    {
+      "block_id": "p007-b002",
+      "speaker_id": null,
+      "source_text": "\"YEAH, YOU GOT BIG TITTIES!\"",
+      "translation": "\"Ừ, ngực cô bự thật đấy!\"",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.97,
+      "notes": "Quoted speech in the retold story."
+    },
+    {
+      "block_id": "p007-b003",
+      "speaker_id": null,
+      "source_text": "\"EVEN I WOULD LIKE TO TOUCH THEM! LET HIM OFF THE HOOK, WILL YOU?!\" HAHA!",
+      "translation": "\"Đến tôi còn muốn sờ nữa! Tha cho ông ấy đi nhé?!\" Haha!",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.97,
+      "notes": "Quoted speech; crude tone preserved without adding context."
+    },
+    {
+      "block_id": "p007-b004",
+      "speaker_id": null,
+      "source_text": "KEKEKEKE. THAT'S FUNNY.",
+      "translation": "Kekekeke. Buồn cười thật.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p007-b005",
+      "speaker_id": null,
+      "source_text": "YEAH, AND TURNS OUT... THOSE TWO ACTED THAT WAY BECAUSE THEY GOT THE VIRUS.",
+      "translation": "Ừ, và hóa ra... hai người đó cư xử như vậy vì đã nhiễm virus.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p007-b006",
+      "speaker_id": null,
+      "source_text": "TSS",
+      "translation": "Xì",
+      "speaker_confidence": null,
+      "translation_confidence": 0.8,
+      "notes": "Small visible sound effect; exact source action is not fully clear."
+    },
+    {
+      "block_id": "p007-b007",
+      "speaker_id": null,
+      "source_text": "I STILL DON'T UNDERSTAND HOW THIS VIRUS WORKS.",
+      "translation": "Tôi vẫn không hiểu loại virus này hoạt động kiểu gì.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p007-b008",
+      "speaker_id": null,
+      "source_text": "RRING RRING",
+      "translation": "Reng reng",
+      "speaker_confidence": null,
+      "translation_confidence": 0.99,
+      "notes": "Phone ringing sound effect."
+    },
+    {
+      "block_id": "p007-b009",
+      "speaker_id": null,
+      "source_text": "BEEP",
+      "translation": "Bíp",
+      "speaker_confidence": null,
+      "translation_confidence": 0.99,
+      "notes": "Phone sound effect."
+    },
+    {
+      "block_id": "p007-b010",
+      "speaker_id": null,
+      "source_text": "HUH?! DID HE JUST HANG UP ON ME?",
+      "translation": "Hả?! Anh ta vừa cúp máy với mình à?",
+      "speaker_confidence": 0.62,
+      "translation_confidence": 0.98,
+      "notes": "Different visible character on phone; identity not established."
+    },
+    {
+      "block_id": "p007-b011",
+      "speaker_id": null,
+      "source_text": "DON'T TELL ME YOU HAVE THE",
+      "translation": "Đừng bảo tôi là cậu mắc...",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.93,
+      "notes": "Speech bubble is visibly cut by the page boundary; sentence continues on page 8 with 'VIRUS, BRO.'"
+    }
+  ]
+}
