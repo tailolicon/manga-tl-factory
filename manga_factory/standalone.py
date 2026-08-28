@@ -12,10 +12,12 @@ PROTOCOL_READ_PATHS = [
     "TASK_PROTOCOL.md",
     "CONTEXT_PROTOCOL.md",
     "STANDALONE_TEST.md",
+    "WORKER_START.md",
     "config/pipeline.json",
     "contracts/source_manifest.schema.json",
     "contracts/task_proposal.schema.json",
     "contracts/worker_result.schema.json",
+    "contracts/test_lane.schema.json",
 ]
 
 
@@ -84,5 +86,109 @@ def build_standalone_test_envelope(root: Path, request_id: str | None = None) ->
             "may_not_modify_canonical_context": True,
             "may_use_github_connector_without_local_worktree": True,
             "missing_local_git_is_not_a_blocker": True,
+        },
+    }
+
+
+def _active_lane_path(root: Path) -> Path:
+    pointer_path = root / "work" / "test_lanes" / "active.json"
+    if not pointer_path.exists():
+        raise ValueError("no active standalone chapter test lane")
+    pointer = read_json(pointer_path)
+    lane_path = pointer.get("lane_path")
+    if not isinstance(lane_path, str) or not lane_path.strip():
+        raise ValueError("active test lane pointer is missing lane_path")
+    return root / lane_path
+
+
+def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = None) -> dict[str, Any]:
+    if lane_id is None:
+        lane_path = _active_lane_path(root)
+    else:
+        lane_path = root / "work" / "test_lanes" / f"{lane_id}.json"
+    if not lane_path.exists():
+        raise ValueError(f"standalone chapter test lane not found: {lane_path.relative_to(root)}")
+
+    lane = read_json(lane_path)
+    if lane.get("mode") != "standalone_chapter_test":
+        raise ValueError("test lane mode must be standalone_chapter_test")
+    actual_lane_id = lane.get("lane_id")
+    if not isinstance(actual_lane_id, str) or not actual_lane_id:
+        raise ValueError("test lane is missing lane_id")
+    if lane_id is not None and actual_lane_id != lane_id:
+        raise ValueError(f"lane id mismatch: expected {lane_id}, found {actual_lane_id}")
+    if lane.get("state") not in {"ready", "partial"}:
+        raise ValueError(f"test lane is not runnable: state={lane.get('state')!r}")
+    if lane.get("claim") is not None:
+        raise ValueError("test lane already has an active claim")
+
+    project_id = lane.get("project_id")
+    if not isinstance(project_id, str) or not project_id:
+        raise ValueError("test lane is missing project_id")
+    chapter = lane.get("chapter")
+    if not isinstance(chapter, dict) or not chapter.get("id"):
+        raise ValueError("test lane is missing chapter identity")
+    handoff = lane.get("source_handoff")
+    if not isinstance(handoff, dict) or not handoff.get("path"):
+        raise ValueError("test lane is missing source_handoff.path")
+    next_task = lane.get("next_task")
+    if not isinstance(next_task, dict) or not next_task.get("task_type"):
+        raise ValueError("test lane has no runnable next_task")
+    generation = lane.get("generation")
+    if not isinstance(generation, int) or isinstance(generation, bool) or generation < 1:
+        raise ValueError("test lane generation must be a positive integer")
+
+    task_type = str(next_task["task_type"])
+    task_id = f"standalone-{actual_lane_id}-g{generation}-{task_type}"
+    lease_id = f"standalone-lane-{actual_lane_id}-g{generation}"
+    branch = f"test/{actual_lane_id}/{task_type}/g{generation}"
+    lane_rel = str(lane_path.relative_to(root)).replace("\\", "/")
+
+    return {
+        "execution_mode": "standalone_chapter_test",
+        "task_id": task_id,
+        "task_type": task_type,
+        "goal": next_task.get("goal"),
+        "project_id": project_id,
+        "series_key": lane.get("series_key"),
+        "chapter": chapter,
+        "lease_id": lease_id,
+        "fencing_token": generation,
+        "context_version": None,
+        "runtime_budget_minutes": 15,
+        "drain_after_minutes": 17,
+        "checkpoint_by_minutes": 20,
+        "safety_stop_minutes": 22,
+        "base_ref": "main",
+        "task_branch": branch,
+        "lane_path": lane_rel,
+        "source_handoff": handoff,
+        "acquisition_evidence": lane.get("acquisition_evidence", {}),
+        "input_artifacts": [
+            {"kind": "test_lane", "path": lane_rel},
+            {"kind": "project", "path": f"projects/{project_id}/project.json"},
+            {"kind": "source_handoff", "path": handoff["path"], "blob_sha": handoff.get("blob_sha")},
+        ],
+        "allowed_read_paths": PROTOCOL_READ_PATHS
+        + [
+            lane_rel,
+            f"projects/{project_id}/**",
+            str(handoff["path"]),
+            "work/imports/**/canonical_acquisition_validation.json",
+        ],
+        "allowed_write_paths": [
+            f"work/results/{task_id}.json",
+            f"work/handoffs/{task_id}.json",
+        ],
+        "coordination_write_path": lane_rel,
+        "standalone_constraints": {
+            "single_chapter_only": True,
+            "may_not_publish": True,
+            "may_not_modify_canonical_context": True,
+            "may_use_github_connector_without_local_worktree": True,
+            "missing_local_git_is_not_a_blocker": True,
+            "test_lease_only": True,
+            "lane_state_on_main_is_coordinator_state": True,
+            "raw_images_must_not_be_committed_to_git": True,
         },
     }
