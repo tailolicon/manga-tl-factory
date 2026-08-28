@@ -17,24 +17,9 @@ PROTOCOL_READ_PATHS = [
     "contracts/source_manifest.schema.json",
     "contracts/task_proposal.schema.json",
     "contracts/worker_result.schema.json",
+    "contracts/translation_page.schema.json",
     "contracts/test_lane.schema.json",
 ]
-
-SEMANTIC_MODEL_STAGES = {
-    "vision_scan",
-    "character_discovery",
-    "terminology_discovery",
-    "speech_discovery",
-    "story_discovery",
-    "context_review",
-    "translate_chunk",
-    "translation_review",
-    "redraw",
-    "typeset",
-    "vision_qa",
-    "final_qa",
-    "publish",
-}
 
 
 def _pending_bootstrap_requests(root: Path) -> list[dict[str, Any]]:
@@ -157,25 +142,24 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
         raise ValueError("test lane generation must be a positive integer")
 
     task_type = str(next_task["task_type"])
-    content_boundary = lane.get("content_boundary")
-    if isinstance(content_boundary, dict):
-        semantic_allowed = content_boundary.get("semantic_model_stages_allowed")
-        if semantic_allowed is False and task_type in SEMANTIC_MODEL_STAGES:
-            raise ValueError(
-                f"test lane content boundary forbids semantic model stage {task_type!r}: "
-                f"{content_boundary.get('code', 'CONTENT_BOUNDARY')}"
-            )
-
     task_id = f"standalone-{actual_lane_id}-g{generation}-{task_type}"
     lease_id = f"standalone-lane-{actual_lane_id}-g{generation}"
     branch = f"test/{actual_lane_id}/{task_type}/g{generation}"
     lane_rel = str(lane_path.relative_to(root)).replace("\\", "/")
+
+    allowed_write_paths = [
+        f"work/results/{task_id}.json",
+        f"work/handoffs/{task_id}.json",
+    ]
+    if task_type == "page_translation_smoke":
+        allowed_write_paths.append(f"projects/{project_id}/translations/smoke/**")
 
     return {
         "execution_mode": "standalone_chapter_test",
         "task_id": task_id,
         "task_type": task_type,
         "goal": next_task.get("goal"),
+        "scope": next_task.get("scope"),
         "project_id": project_id,
         "series_key": lane.get("series_key"),
         "chapter": chapter,
@@ -192,7 +176,6 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
         "source_handoff": handoff,
         "acquisition_evidence": lane.get("acquisition_evidence", {}),
         "workflow": lane.get("workflow"),
-        "content_boundary": content_boundary,
         "input_artifacts": [
             {"kind": "test_lane", "path": lane_rel},
             {"kind": "project", "path": f"projects/{project_id}/project.json"},
@@ -205,10 +188,7 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
             str(handoff["path"]),
             "work/imports/**/canonical_acquisition_validation.json",
         ],
-        "allowed_write_paths": [
-            f"work/results/{task_id}.json",
-            f"work/handoffs/{task_id}.json",
-        ],
+        "allowed_write_paths": allowed_write_paths,
         "coordination_write_path": lane_rel,
         "standalone_constraints": {
             "single_chapter_only": True,
@@ -219,9 +199,7 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
             "test_lease_only": True,
             "lane_state_on_main_is_coordinator_state": True,
             "raw_images_must_not_be_committed_to_git": True,
-            "semantic_model_stages_allowed": not (
-                isinstance(content_boundary, dict)
-                and content_boundary.get("semantic_model_stages_allowed") is False
-            ),
+            "series_or_site_adult_metadata_must_not_preblock_pages": True,
+            "actual_page_content_is_evaluated_only_when_opened": True,
         },
     }
