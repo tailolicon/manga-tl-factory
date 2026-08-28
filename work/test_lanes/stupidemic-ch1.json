@@ -27,10 +27,34 @@
     "validated_commit": "b964baa5ee74b5ca516335675fefd1511b95589f",
     "validation_path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/canonical_acquisition_validation.json"
   },
+  "workflow": {
+    "predeclared": true,
+    "steps": [
+      {
+        "ordinal": 1,
+        "task_type": "acquire_source",
+        "status": "completed",
+        "generation": 1,
+        "result_task_id": "standalone-stupidemic-ch1-g1-acquire_source"
+      }
+    ]
+  },
+  "content_boundary": {
+    "classification_source": "series/source metadata only",
+    "classification": "explicit_adult_source",
+    "semantic_model_stages_allowed": false,
+    "stop_after_task": "acquire_source",
+    "code": "SEMANTIC_MODEL_CONTENT_BOUNDARY",
+    "detail": "This standalone ChatGPT lane may validate acquisition plumbing and metadata, but it does not authorize semantic vision, translation, redraw, typesetting, or publication of explicit sexual source pages."
+  },
   "state": "completed",
   "generation": 1,
   "next_task": null,
   "claim": null,
+  "terminal_reason": {
+    "code": "SEMANTIC_MODEL_CONTENT_BOUNDARY",
+    "detail": "Acquisition test completed successfully. No downstream semantic model task is predeclared for this explicit-adult source lane. This is a deliberate terminal state, not a missing-coordinator blocker."
+  },
   "last_result": {
     "status": "completed",
     "task_id": "standalone-stupidemic-ch1-g1-acquire_source",
