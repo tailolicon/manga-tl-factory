@@ -7,7 +7,7 @@ from pathlib import Path
 from .acquisition import fetch_source
 from .context import compile_context
 from .intake import submit
-from .standalone import build_standalone_test_envelope
+from .standalone import build_standalone_chapter_test_envelope, build_standalone_test_envelope
 from .validate import validate_repo
 
 
@@ -29,6 +29,12 @@ def main() -> int:
 
     p_test = sub.add_parser("test-envelope", help="derive a standalone bootstrap envelope for coordinator-less testing")
     p_test.add_argument("--request-id", default=None)
+
+    p_chapter_test = sub.add_parser(
+        "chapter-test-envelope",
+        help="derive the active coordinator-less single-chapter test envelope",
+    )
+    p_chapter_test.add_argument("--lane-id", default=None)
 
     p_fetch = sub.add_parser("fetch-source", help="download and verify a Kotori source handoff in disposable storage")
     p_fetch.add_argument("handoff", type=Path)
@@ -64,6 +70,14 @@ def main() -> int:
     if args.command == "test-envelope":
         try:
             envelope = build_standalone_test_envelope(root, request_id=args.request_id)
+        except ValueError as exc:
+            raise SystemExit(str(exc))
+        print(json.dumps(envelope, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.command == "chapter-test-envelope":
+        try:
+            envelope = build_standalone_chapter_test_envelope(root, lane_id=args.lane_id)
         except ValueError as exc:
             raise SystemExit(str(exc))
         print(json.dumps(envelope, ensure_ascii=False, indent=2))
