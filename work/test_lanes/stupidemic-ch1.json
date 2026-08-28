@@ -27,18 +27,20 @@
     "validated_commit": "b964baa5ee74b5ca516335675fefd1511b95589f",
     "validation_path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/canonical_acquisition_validation.json"
   },
-  "state": "claimed",
+  "state": "completed",
   "generation": 1,
-  "next_task": {
+  "next_task": null,
+  "claim": null,
+  "last_result": {
+    "status": "completed",
+    "task_id": "standalone-stupidemic-ch1-g1-acquire_source",
     "task_type": "acquire_source",
-    "goal": "Accept and materialize the already-validated Chapter 1 acquisition as a formal standalone test result and handoff without re-downloading the 41 pages."
-  },
-  "claim": {
     "lease_id": "standalone-lane-stupidemic-ch1-g1",
     "fencing_token": 1,
-    "task_id": "standalone-stupidemic-ch1-g1-acquire_source",
-    "started_at": "2026-08-29T00:42:38+07:00",
-    "expires_at": "2026-08-29T01:07:38+07:00"
-  },
-  "last_result": null
+    "branch": "test/stupidemic-ch1/acquire_source/g1",
+    "commit": "7451ba71a06c33f17710d3a80c4ffd4c1e2bb132",
+    "result_path": "work/results/standalone-stupidemic-ch1-g1-acquire_source.json",
+    "handoff_path": "work/handoffs/standalone-stupidemic-ch1-g1-acquire_source.json",
+    "completed_at": "2026-08-29T00:44:36+07:00"
+  }
 }
