@@ -1,0 +1,98 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 11,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p011-b001",
+      "speaker_id": null,
+      "source_text": "SPRING",
+      "translation": "Bật",
+      "speaker_confidence": null,
+      "translation_confidence": 0.74,
+      "notes": "Visible movement sound effect as the worker springs up; exact SFX localization is approximate."
+    },
+    {
+      "block_id": "p011-b002",
+      "speaker_id": null,
+      "source_text": "FUU... I'M GOING TO HAVE TO GET BACK TO WORK...",
+      "translation": "Phù... Tôi phải quay lại làm việc đây...",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p011-b003",
+      "speaker_id": null,
+      "source_text": "HEY.",
+      "translation": "Này.",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.99,
+      "notes": "Visible female speaker later identified in narration as Aeyeong Lee; speaker_id remains null because smoke context has no canonical character registry."
+    },
+    {
+      "block_id": "p011-b004",
+      "speaker_id": null,
+      "source_text": "RECENTS / DAEHO LEE / MISS HONG",
+      "translation": "GẦN ĐÂY / DAEHO LEE / MISS HONG",
+      "speaker_confidence": null,
+      "translation_confidence": 0.99,
+      "notes": "Phone call-history UI; repeated contact rows/timestamps are not duplicated as separate blocks."
+    },
+    {
+      "block_id": "p011-b005",
+      "speaker_id": null,
+      "source_text": "CALL YOU? ARE YOU FUCKING KIDDING ME?",
+      "translation": "Gọi cho cô á? Cô đùa tôi đấy à?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": "Profanity rendered as an irritated rhetorical question rather than mechanically literal wording."
+    },
+    {
+      "block_id": "p011-b006",
+      "speaker_id": null,
+      "source_text": "MISTER DAEHO LEE, DID I NOT TELL YOU TO ANSWER MY CALLS EVEN WHEN YOU'RE TAKING A DUMP? OR WERE YOU ALSO A MUTT?",
+      "translation": "Anh Daeho Lee, tôi chẳng đã bảo anh là dù đang đi ỉa cũng phải nghe điện thoại của tôi sao? Hay anh cũng là chó à?",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.95,
+      "notes": "Source uses crude language and 'mutt' as an insult; tone preserved."
+    },
+    {
+      "block_id": "p011-b007",
+      "speaker_id": null,
+      "source_text": "HAHA...",
+      "translation": "Haha...",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p011-b008",
+      "speaker_id": null,
+      "source_text": "NO, MA'AM.",
+      "translation": "Không, thưa cô.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p011-b009",
+      "speaker_id": null,
+      "source_text": "HAA... SHE'S AT IT AGAIN.",
+      "translation": "Haizz... bà ấy lại bắt đầu rồi.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.98,
+      "notes": "Internal thought/narration bubble; speaker identity is inferable visually but not canonically pinned."
+    },
+    {
+      "block_id": "p011-b010",
+      "speaker_id": null,
+      "source_text": "THIS BITCH WHO STARTS BITCHING AT ME THE MOMENT SHE SEES ME IS... THE DEPUTY MANAGER OF THIS RUSTIC FACTORY, AEYEONG LEE.",
+      "translation": "Con mụ cứ vừa thấy mặt tôi là bắt đầu càm ràm này là... phó quản lý của cái nhà máy xó xỉnh này, Aeyeong Lee.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.95,
+      "notes": "Narration identifies Aeyeong Lee by name/title. Name is preserved verbatim because no canonical localization exists in smoke context."
+    }
+  ]
+}
