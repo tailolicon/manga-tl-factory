@@ -25,6 +25,26 @@ Then inspect only the minimum live files needed to find one runnable unit, such 
 
 Do not recursively read the whole repository before choosing work.
 
+## Project identity and source reconciliation
+
+Canonical project identity is about the series, not the website that supplied a chapter.
+
+A Kotori handoff can come from Manga18fx, MangaDistrict, or another source while still belonging to the same canonical project. Do not treat a different source domain as a blocker by itself.
+
+For current and legacy handoffs:
+
+1. Read the handoff `series.title`, `source.source_id`, `source.source_name`, and `source.manga_url`.
+2. Read candidate `projects/*/project.json` only as needed.
+3. Prefer an exact source binding in a project's `sources[]`.
+4. Otherwise match `project.identity.series_key` against a source-neutral normalized title key from `series.title`.
+5. Treat `project.identity.legacy_project_ids[]` as accepted aliases for older source-derived Kotori `project_id` values.
+6. If exactly one canonical project matches, continue the task under that canonical project's `project_id` even when the handoff's legacy `project_id` differs.
+7. Block only when no project matches or more than one project matches ambiguously. Record an identity-review handoff instead of guessing.
+
+Legacy schema-1 Kotori handoffs may contain a source-derived `project_id`; that value is an import hint, not authoritative canonical identity.
+
+Do not download a chapter again merely to repair project identity when the existing handoff/acquisition evidence is already complete and source bindings are sufficient.
+
 ## GitHub write-capability rule
 
 This repository is coordinated through GitHub. If a connected GitHub capability exists, discover and use its write actions rather than assuming GitHub is read-only.
