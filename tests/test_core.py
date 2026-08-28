@@ -68,6 +68,44 @@ class StandaloneTests(unittest.TestCase):
             self.assertEqual(env["fencing_token"], 1)
             self.assertIn(req["project_id"], env["allowed_write_paths"][0])
 
+    def test_standalone_chapter_lane_envelope(self):
+        from manga_factory.standalone import build_standalone_chapter_test_envelope
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            lane_dir = root / "work" / "test_lanes"
+            lane_dir.mkdir(parents=True)
+            (root / "projects" / "project-x").mkdir(parents=True)
+            (root / "work" / "imports" / "source-x").mkdir(parents=True)
+            (lane_dir / "active.json").write_text(json.dumps({
+                "schema": 1,
+                "active_lane": "x-ch1",
+                "lane_path": "work/test_lanes/x-ch1.json",
+            }), encoding="utf-8")
+            (lane_dir / "x-ch1.json").write_text(json.dumps({
+                "schema": 1,
+                "lane_id": "x-ch1",
+                "mode": "standalone_chapter_test",
+                "project_id": "project-x",
+                "series_key": "x",
+                "chapter": {"id": "ch-1", "name": "Chapter 1"},
+                "source_handoff": {
+                    "path": "work/imports/source-x/source_handoff.json",
+                    "blob_sha": "abcdef1234567890",
+                },
+                "state": "ready",
+                "generation": 3,
+                "next_task": {"task_type": "acquire_source", "goal": "accept existing acquisition"},
+                "claim": None,
+                "last_result": None,
+            }), encoding="utf-8")
+            env = build_standalone_chapter_test_envelope(root)
+            self.assertEqual(env["execution_mode"], "standalone_chapter_test")
+            self.assertEqual(env["task_id"], "standalone-x-ch1-g3-acquire_source")
+            self.assertEqual(env["lease_id"], "standalone-lane-x-ch1-g3")
+            self.assertEqual(env["fencing_token"], 3)
+            self.assertEqual(env["task_branch"], "test/x-ch1/acquire_source/g3")
+            self.assertEqual(env["coordination_write_path"], "work/test_lanes/x-ch1.json")
+
 
 if __name__ == "__main__":
     unittest.main()
