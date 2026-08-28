@@ -6,83 +6,96 @@ Do not rely on chat history, private memory, previous worker reasoning, or stale
 
 ## Objective
 
-Make one useful, repository-backed unit of progress on the manga pipeline within a strict 25-minute tool/runtime ceiling.
+Make one useful, repository-backed unit of progress within the strict 25-minute tool/runtime ceiling. Optimize for useful work per session, not one-page task granularity.
 
-For the current test phase, prefer the active single-chapter test lane when one exists. The first end-to-end success criterion is to produce one durable Vietnamese translation-page artifact before doing more infrastructure work.
+For the current test phase, prefer the active `standalone_chapter_test` lane. The first success target is durable Vietnamese translation artifacts for as many assigned pages as can be completed safely before draining.
 
-## Mandatory startup hot path
+## Startup hot path
 
-Read only these first, in order:
+Read only:
 
 1. `AGENTS.md`
 2. `WORKER_PROTOCOL.md`
 3. `TASK_PROTOCOL.md`
 4. `STANDALONE_TEST.md`
 5. `config/pipeline.json`
-6. `README.md`
-7. `work/test_lanes/active.json` if it exists
+6. `work/test_lanes/active.json`
+7. the referenced active lane
+8. only the handoff/relay/task artifacts named by that lane
 
-If an active lane exists, read only its referenced lane file and the minimum project/handoff/result evidence named by that lane. An active `standalone_chapter_test` lane is the explicit test authority described in `STANDALONE_TEST.md`.
+Do not recursively scan the repository.
 
-Do not recursively read the whole repository before choosing work.
+## Claim rule
 
-## Active chapter-lane rule
+For a runnable lane (`state` is `ready` or `partial`, `claim` is null):
 
-When `work/test_lanes/active.json` points to a lane:
+1. Derive `python -m manga_factory chapter-test-envelope` semantics.
+2. Atomically claim the lane on `main` using the blob SHA just read.
+3. Use lane `generation` as fencing token and `standalone-lane-<lane-id>-g<generation>` as lease.
+4. Execute exactly `next_task`.
+5. Checkpoint after every completed page.
+6. Release/complete/advance the lane on `main` before ending.
 
-1. Read the lane from current `main`.
-2. Require `mode == "standalone_chapter_test"`.
-3. If `state` is `ready` or `partial` and `claim` is null, derive the exact envelope described by `python -m manga_factory chapter-test-envelope`.
-4. Atomically claim the lane by updating only the lane JSON on `main` with the blob SHA just read.
-5. Use the lane `generation` as the standalone fencing token and `standalone-lane-<lane-id>-g<generation>` as the test lease.
-6. Execute exactly the lane's `next_task`. Do not add or substitute story/content classification rules.
-7. Write a formal test `worker_result`/handoff and any task artifact allowed by the envelope.
-8. Release or advance the lane on `main` before ending the session.
+`NO_COORDINATOR_LEASE` is not a blocker for an active standalone test lane.
 
-`NO_COORDINATOR_LEASE` is not a valid blocker for a runnable test lane.
+## Time-budgeted translation chunk
 
-## Page-translation smoke task
+`translation_chunk_test` is the current high-throughput test task.
 
-`page_translation_smoke` is a test-only task used to prove one page can travel from source handoff to a durable Vietnamese translation artifact without waiting for the full production DAG.
+Its scope contains:
 
-For this task:
+- `page_start`: first page belonging to this work unit;
+- `page_end`: last page allowed for this work unit;
+- `resume_from`: first not-yet-completed page;
+- `soft_target_pages`: planning hint only, not a hard cap.
 
-1. Use only the page index declared in `next_task.scope.page_index`.
-2. Resolve that page from the existing Kotori handoff; do not re-fetch the whole chapter.
-3. Download/open only that page in disposable runtime storage.
-4. Inspect the page and translate its visible dialogue/text to Vietnamese.
-5. Write a schema-compatible artifact under `projects/<project>/translations/smoke/<chapter>/page-XXX.json` on the task branch.
-6. Use `context_version: "smoke:no-canonical-context"` and record uncertainty/speaker ambiguity in notes rather than inventing context.
-7. Do not modify canonical context, publish, redraw, or claim production translation completion in this smoke task.
+Rules:
 
-## Project identity and source reconciliation
+1. Start at `resume_from` and process pages sequentially through at most `page_end`.
+2. Do **not** stop after one page merely because one page completed successfully.
+3. Continue while useful work can safely finish before the drain threshold.
+4. Persist one translation artifact per completed page under `projects/<project>/translations/smoke/<chapter>/page-XXX.json` on the task branch.
+5. After every page, that page is a durable checkpoint. Never redo completed pages unless explicitly requested.
+6. If all pages through `page_end` finish early, complete the task. Do not start another pipeline stage.
+7. If time runs out first, return `partial` and set the lane's next `resume_from` to the first uncompleted page. The next worker resumes there.
+8. Use `context_version: "smoke:no-canonical-context"` for this temporary test path and record uncertainty instead of inventing speaker/context facts.
 
-Canonical project identity is about the series, not the website that supplied a chapter. A Kotori handoff may come from Manga18fx, MangaDistrict, or another source while belonging to the same canonical project.
+## Chapter relay artifact
 
-Prefer exact `sources[]` binding, then `identity.series_key`, then `legacy_project_ids[]`. A legacy source-derived `project_id` is an import hint, not canonical identity.
+ChatGPT worker networking may not resolve every source image host even when GitHub Actions can. When the active lane contains `relay` metadata, prefer the relay artifact instead of retrying the origin repeatedly.
 
-## GitHub write-capability rule
+Relay procedure:
 
-If a connected GitHub capability exists, discover and use its write actions. Workers must not push directly to `main` except for coordinator state under `work/test_lanes/*.json`; normal artifacts go to the task/test branch.
+1. Read `relay.request_commit`, `relay.run_id` when present, and `relay.artifact_name`.
+2. If `run_id` is absent, find the `Chapter relay` Actions run whose `head_sha` equals `request_commit`.
+3. Require a successful run, then download the named artifact with the connected GitHub capability.
+4. The artifact contains the entire selected chapter plus `relay_manifest.json`.
+5. Verify page files against the manifest/fetch hashes where available.
+6. Reuse that one chapter artifact for every page processed in the current worker session; do not download the chapter once per page.
+7. Raw images remain ephemeral and must not be committed to normal Git history.
 
 ## 25-minute hard budget
 
-Treat 25 minutes as an external hard kill, not usable work time.
+Treat 25 minutes as an external kill.
 
-- Minute 0-3: startup + claim exactly one scope.
-- Minute 3-15: primary work.
-- Minute 15: mandatory durable checkpoint.
-- Minute 17: enter `DRAINING`.
-- Minute 20: result/handoff already recoverable.
-- Minute 22: stop substantive work.
+- Minute 0-3: startup, claim, obtain/reuse chapter relay artifact.
+- Minute 3-17: translate continuously, page by page.
+- Minute 15: ensure durable progress already exists.
+- Minute 17: enter `DRAINING`; finish only the current page if safe.
+- Minute 20: result/handoff/lane checkpoint must already be recoverable.
+- Minute 22: no substantive translation work.
 - Minute 24: no new tool-heavy operation.
 
-Never start another page or pipeline stage because time remains.
+The expected useful payload is multiple pages per session. `soft_target_pages` defaults around 10, but actual output is determined by page density and remaining time.
 
-## Acquisition rules
+## Project identity
 
-Use direct HTTP first, then safe source headers, then browser bootstrap only if direct HTTP fails. Do not commit raw page binaries to normal Git history.
+Canonical identity is series-based, not source-domain-based. Prefer exact `sources[]` binding, then `identity.series_key`, then `legacy_project_ids[]`.
 
-## Completion rule
+## GitHub writes
 
-A successful session ends with one small, durable, reviewable unit of progress. For the current smoke lane, success means a real Vietnamese `translation_page` artifact for the declared page plus result/handoff, not another infrastructure-only change.
+Use authorized GitHub write capability when available. Only test-lane coordinator state under `work/test_lanes/*.json` may be written directly to `main`; normal task artifacts belong on the task/test branch.
+
+## Completion
+
+A good session maximizes correctly completed assigned pages while leaving a clean page-boundary checkpoint. Infrastructure changes are not the task unless the active lane explicitly assigns infrastructure work.
