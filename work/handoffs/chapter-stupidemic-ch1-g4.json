@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "task_id": "chapter-stupidemic-ch1-g4",
+  "task_type": "localize_chapter",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "lease_id": "chapter-lane-stupidemic-ch1-g4",
+  "fencing_token": 4,
+  "branch": "chapter/stupidemic-ch1/g4",
+  "status": "partial",
+  "phase": "redraw_typeset",
+  "resume_page": 1,
+  "progress": {
+    "translated_pages": 41,
+    "rendered_pages": 0,
+    "qa_pages": 0,
+    "published": false
+  },
+  "inputs": {
+    "relay_artifact_id": 9696850714,
+    "relay_run_id": 33198730435,
+    "accepted_translation_commit": "289e82cdbff610096209de9b5f56192338f4ee9f"
+  },
+  "ephemeral_work": [
+    {
+      "page_index": 1,
+      "status": "rendered_and_visual_checked_locally",
+      "sha256": "6dca57b2b7a1d16344e78182772a40d2618f7fdeb4b49891c3304859c8a64857",
+      "bytes": 269054
+    },
+    {
+      "page_index": 2,
+      "status": "rendered_and_visual_checked_locally",
+      "sha256": "1275a20e222e7a43d473ed590c0ffd0521a82f287a748d44b4c128a8498bf40f",
+      "bytes": 128260
+    },
+    {
+      "page_index": 3,
+      "status": "rendered_and_visual_checked_locally",
+      "sha256": "4a8d396a5a022e473cfc6666bc40f93cf2d49f0998f2babd23fac76fbbc495d2",
+      "bytes": 157152
+    }
+  ],
+  "blocker": {
+    "code": "BINARY_ARTIFACT_PERSISTENCE_UNAVAILABLE",
+    "detail": "Rendered image bytes exist only in disposable runtime storage. The connected GitHub interface exposes UTF-8 file writes and inline blob creation but no local-file binary upload parameter, while direct git/curl access from the container cannot resolve GitHub hosts. Therefore no rendered page can be counted as a durable checkpoint in this session."
+  },
+  "resume_instructions": [
+    "Reclaim the production chapter lane at its new generation and remain in redraw_typeset phase from page 1.",
+    "Use relay artifact 9696850714 and the accepted translation commit 289e82cdbff610096209de9b5f56192338f4ee9f.",
+    "Only increment rendered_pages after each rendered image is durably persisted under projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/.",
+    "If the next runtime has a binary-capable GitHub/local git upload path, page 1-3 layout decisions in this result may be reproduced, but the ephemeral image bytes themselves must not be assumed recoverable."
+  ]
+}
