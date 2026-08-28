@@ -1,9 +1,40 @@
 {
   "project_id": "replace-me",
-  "source": {"kind": "url", "value": "https://example.com/series"},
+  "identity": {
+    "series_key": "replace-me",
+    "canonical_title": "Replace Me",
+    "original_title": null,
+    "alternative_titles": []
+  },
+  "metadata": {
+    "original_title": null,
+    "alternative_titles": [],
+    "authors": [],
+    "artists": [],
+    "publisher": null,
+    "type": null,
+    "year": null,
+    "publication_status": null,
+    "total_chapters": null,
+    "genres": [],
+    "content_rating": null,
+    "synopsis": null,
+    "cover_url": null,
+    "sources": []
+  },
+  "source": {
+    "kind": "url",
+    "value": "https://example.com/series"
+  },
+  "sources": [],
   "source_language": "ja",
   "target_language": "vi",
   "status": "new",
+  "translation_status": {
+    "translated_chapters": 0,
+    "published_chapters": 0,
+    "latest_translated_chapter": null
+  },
   "context_version": null,
   "pipeline_version": "1.0.0"
 }
