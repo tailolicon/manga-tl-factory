@@ -1,0 +1,80 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 3,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p003-b001",
+      "speaker_id": null,
+      "source_text": "OH, HEY! DAEHO!",
+      "translation": "Ồ, chào! Daeho!",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": "Name is visible in source; speaker identity itself is not canonically established."
+    },
+    {
+      "block_id": "p003-b002",
+      "speaker_id": null,
+      "source_text": "IS THIS WHERE YOU'RE GONNA SPEND TIME DITCHING WORK TODAY?",
+      "translation": "Hôm nay cậu định trốn việc ở đây à?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": "Visible male speaker; no canonical speaker ID."
+    },
+    {
+      "block_id": "p003-b003",
+      "speaker_id": null,
+      "source_text": "THE BOSS LADY TOLD ME TO FEED THE DOG. ARE YOU DONE WITH YOUR WORK?",
+      "translation": "Bà chủ bảo tôi đi cho chó ăn. Cậu làm xong việc chưa?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": "Same conversation; exact relationship/title not canonicalized."
+    },
+    {
+      "block_id": "p003-b004",
+      "speaker_id": null,
+      "source_text": "NAH. I JUST LEFT 'CAUSE I GOT TIRED.",
+      "translation": "Chưa. Tôi bỏ ra đây vì mệt quá thôi.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.97,
+      "notes": "Reply from the other visible male character."
+    },
+    {
+      "block_id": "p003-b005",
+      "speaker_id": null,
+      "source_text": "YOU LITTLE PUNK... ARE YOU SICK WITH THE VIRUS THAT CAUSES \"CID?\"",
+      "translation": "Thằng nhóc này... cậu mắc cái virus gây ra \"CID\" à?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.96,
+      "notes": "CID is preserved verbatim because smoke context has no canonical terminology."
+    },
+    {
+      "block_id": "p003-b006",
+      "speaker_id": null,
+      "source_text": "YOU'RE GONNA GET ON THE BOSS LADY'S BAD SIDE.",
+      "translation": "Cậu sẽ chọc giận bà chủ đấy.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p003-b007",
+      "speaker_id": null,
+      "source_text": "THE BOSS BITCH? SHE LETS ME OFF THE HOOK WHEN I SAY...",
+      "translation": "Con mụ sếp ấy hả? Chỉ cần tôi nói thế này là bà ta bỏ qua ngay...",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.95,
+      "notes": "Preserves the insulting tone of the source."
+    },
+    {
+      "block_id": "p003-b008",
+      "speaker_id": null,
+      "source_text": "I'M SOWWWY!",
+      "translation": "Em xin lũiii!",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.95,
+      "notes": "Source intentionally uses childish/mispronounced speech; Vietnamese mirrors that register."
+    }
+  ]
+}
