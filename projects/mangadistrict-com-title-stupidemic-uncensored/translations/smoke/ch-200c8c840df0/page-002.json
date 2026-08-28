@@ -1,0 +1,71 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 2,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p002-b001",
+      "speaker_id": null,
+      "source_text": "THIS COMPANY BELIEVES ONLY THOSE WITHOUT TRUST WRITE CONTRACTS.",
+      "translation": "Công ty này tin rằng chỉ những kẻ không tin nhau mới cần viết hợp đồng.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.96,
+      "notes": "Narration box; wording rendered naturally in Vietnamese."
+    },
+    {
+      "block_id": "p002-b002",
+      "speaker_id": null,
+      "source_text": "HAA... WHY COULDN'T HE JUST SEND ME TO A CITY...?",
+      "translation": "Haizz... Sao ông ta không thể cử mình đến thành phố chứ...?",
+      "speaker_confidence": 0.72,
+      "translation_confidence": 0.96,
+      "notes": "Male character is visible, but identity is not established by smoke context."
+    },
+    {
+      "block_id": "p002-b003",
+      "speaker_id": null,
+      "source_text": "DAMN THIS COUNTRYSIDE... I CAN'T BELIEVE I HAVE TO BE HERE FOR A YEAR.",
+      "translation": "Cái vùng quê chết tiệt này... Không thể tin được là mình phải ở đây tận một năm.",
+      "speaker_confidence": 0.72,
+      "translation_confidence": 0.98,
+      "notes": "Likely same visible male speaker; identity not invented."
+    },
+    {
+      "block_id": "p002-b004",
+      "speaker_id": null,
+      "source_text": "A LIFE WITH NO DEVELOPMENT, ONE THAT YOU JUST HAVE TO ENDURE... WELL, THAT'S MY LIFE.",
+      "translation": "Một cuộc sống chẳng có chút tiến triển nào, chỉ biết cắn răng chịu đựng... Ừ, đó chính là đời mình.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.95,
+      "notes": "Narration/internal monologue box."
+    },
+    {
+      "block_id": "p002-b005",
+      "speaker_id": null,
+      "source_text": "I THOUGHT I'D BE A FREE MAN ONCE THE EPIDEMIC WAS OVER.",
+      "translation": "Mình cứ tưởng khi dịch bệnh kết thúc thì mình sẽ được tự do.",
+      "speaker_confidence": 0.72,
+      "translation_confidence": 0.98,
+      "notes": "Likely same visible male speaker; exact identity unavailable."
+    },
+    {
+      "block_id": "p002-b006",
+      "speaker_id": null,
+      "source_text": "WHAT THE HELL HAS HAPPENED TO ME?",
+      "translation": "Rốt cuộc đời mình đã thành ra thế quái nào vậy?",
+      "speaker_confidence": 0.72,
+      "translation_confidence": 0.97,
+      "notes": "Likely same visible male speaker."
+    },
+    {
+      "block_id": "p002-b007",
+      "speaker_id": null,
+      "source_text": "SIGH...",
+      "translation": "Haizz...",
+      "speaker_confidence": 0.6,
+      "translation_confidence": 0.99,
+      "notes": "Visible sigh sound effect near another male character; identity not established."
+    }
+  ]
+}
