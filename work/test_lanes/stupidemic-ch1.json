@@ -64,18 +64,19 @@
       {
         "ordinal": 3,
         "task_type": "translation_chunk_test",
-        "status": "claimed",
+        "status": "partial",
         "generation": 3,
         "scope": {
           "page_start": 1,
           "page_end": 41,
-          "resume_from": 1,
+          "resume_from": 17,
           "soft_target_pages": 10
-        }
+        },
+        "result_task_id": "standalone-stupidemic-ch1-g3-translation_chunk_test"
       }
     ]
   },
-  "state": "claimed",
+  "state": "partial",
   "generation": 3,
   "next_task": {
     "task_type": "translation_chunk_test",
@@ -83,29 +84,22 @@
     "scope": {
       "page_start": 1,
       "page_end": 41,
-      "resume_from": 1,
+      "resume_from": 17,
       "soft_target_pages": 10
     }
   },
-  "claim": {
+  "claim": null,
+  "terminal_reason": null,
+  "last_result": {
+    "status": "partial",
     "task_id": "standalone-stupidemic-ch1-g3-translation_chunk_test",
     "task_type": "translation_chunk_test",
     "lease_id": "standalone-lane-stupidemic-ch1-g3",
     "fencing_token": 3,
     "branch": "test/stupidemic-ch1/translation_chunk_test/g3",
-    "claimed_at": "2026-08-29T01:22:38+07:00"
-  },
-  "terminal_reason": null,
-  "last_result": {
-    "status": "partial",
-    "task_id": "standalone-stupidemic-ch1-g2-page_translation_smoke",
-    "task_type": "page_translation_smoke",
-    "lease_id": "standalone-lane-stupidemic-ch1-g2",
-    "fencing_token": 2,
-    "branch": "test/stupidemic-ch1/page_translation_smoke/g2",
-    "commit": "4d086ab63adc1441064b8a8a36a163474202f546",
-    "result_path": "work/results/standalone-stupidemic-ch1-g2-page_translation_smoke.json",
-    "handoff_path": "work/handoffs/standalone-stupidemic-ch1-g2-page_translation_smoke.json",
-    "completed_at": "2026-08-29T01:10:43+07:00"
+    "commit": "fc897223f1715cd9041f107de1e50477189df98e",
+    "result_path": "work/results/standalone-stupidemic-ch1-g3-translation_chunk_test.json",
+    "handoff_path": "work/handoffs/standalone-stupidemic-ch1-g3-translation_chunk_test.json",
+    "completed_at": "2026-08-29T01:38:05+07:00"
   }
 }
