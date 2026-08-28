@@ -1,0 +1,69 @@
+{
+  "task_id": "standalone-stupidemic-ch1-g1-acquire_source",
+  "task_type": "acquire_source",
+  "execution_mode": "standalone_chapter_test",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "fencing_token": 1,
+  "lease_id": "standalone-lane-stupidemic-ch1-g1",
+  "context_version": null,
+  "status": "completed",
+  "chapter": {
+    "id": "ch-200c8c840df0",
+    "name": "Chapter 1"
+  },
+  "completed_units": [
+    "Accepted the existing validated acquisition evidence for Chapter 1 under the canonical Stupidemic project.",
+    "Confirmed the accepted acquisition covers 41/41 pages with 0 failures, 0 retries, and direct_http fetch mode.",
+    "Materialized a formal standalone test worker result and handoff without re-downloading source pages."
+  ],
+  "artifacts": [
+    {
+      "kind": "source_handoff",
+      "path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json",
+      "blob_sha": "a026706bfc7ae80ad8f73f1f0856ced83a50d64f"
+    },
+    {
+      "kind": "canonical_acquisition_validation",
+      "ref": "wip/stupidemic-ch1-acquisition-reconciled",
+      "commit": "b964baa5ee74b5ca516335675fefd1511b95589f",
+      "path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/canonical_acquisition_validation.json",
+      "blob_sha": "e948d1dc16af74a76d57f11dfb17102ba05f93c7"
+    },
+    {
+      "kind": "acquisition_fetch_result",
+      "workflow_run_id": 33192023708,
+      "workflow_conclusion": "success",
+      "artifact_id": 9694156152,
+      "artifact_digest": "sha256:845e91241cf60363027a53ef814fcc225f76f852a1efad841949506581aeb37e",
+      "fetch_result_sha256": "e3e3e780bc8b727ec793fd8c64ca887128ad717dccb2cad6cd6b24d42911d3e1",
+      "page_count": 41,
+      "downloaded": 41,
+      "failed": 0,
+      "fetch_mode": "direct_http",
+      "retries": 0
+    },
+    {
+      "kind": "handoff",
+      "path": "work/handoffs/standalone-stupidemic-ch1-g1-acquire_source.json"
+    }
+  ],
+  "warnings": [],
+  "task_proposals": [],
+  "handoff": {
+    "path": "work/handoffs/standalone-stupidemic-ch1-g1-acquire_source.json"
+  },
+  "acceptance": {
+    "identity_reconciled": true,
+    "canonical_project_id": "mangadistrict-com-title-stupidemic-uncensored",
+    "legacy_handoff_project_id": "manga18fx-com-manga-stupidemic-uncensored",
+    "source_id": 3157287889751723714,
+    "source_name": "Manga18fx",
+    "series_title": "Stupidemic (Uncensored)",
+    "page_count": 41,
+    "downloaded": 41,
+    "failed": 0,
+    "fetch_mode": "direct_http",
+    "retries": 0,
+    "redownload_performed": false
+  }
+}
