@@ -1,0 +1,80 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 4,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p004-b001",
+      "speaker_id": null,
+      "source_text": "YEAH, RIGHT. HAHAHA.",
+      "translation": "Ừ, phải rồi. Hahaha.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p004-b002",
+      "speaker_id": null,
+      "source_text": "SHE'S OBVIOUSLY JUST AVOIDING YOU 'CAUSE YOU LOOK LIKE A CID PATIENT.",
+      "translation": "Rõ ràng là bà ấy chỉ tránh cậu vì trông cậu giống bệnh nhân CID thôi.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": "CID preserved verbatim because no canonical terminology context is pinned."
+    },
+    {
+      "block_id": "p004-b003",
+      "speaker_id": null,
+      "source_text": "COME ON, BRO. CID HAPPENED AGES AGO.",
+      "translation": "Thôi nào ông anh. CID xảy ra từ đời nào rồi.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.97,
+      "notes": null
+    },
+    {
+      "block_id": "p004-b004",
+      "speaker_id": null,
+      "source_text": "ALSO, YOU'VE NEVER SEEN A CID PATIENT? THEY LOOK NORMAL AS FUCK.",
+      "translation": "Với lại, cậu chưa từng thấy bệnh nhân CID à? Trông họ bình thường vãi ra.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.97,
+      "notes": "Strong profanity preserved in register."
+    },
+    {
+      "block_id": "p004-b005",
+      "speaker_id": null,
+      "source_text": "YOU'VE SEEN ONE BEFORE? THE AUTHORITIES TAKE YOU AWAY WHEN YOU GET THE VIRUS, DON'T THEY?",
+      "translation": "Cậu từng thấy rồi à? Bị nhiễm virus là nhà chức trách đưa đi ngay mà, đúng không?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p004-b006",
+      "speaker_id": null,
+      "source_text": "I HEARD CID PATIENTS START DROOLING AND SAYING NONSENSE...",
+      "translation": "Tôi nghe nói bệnh nhân CID bắt đầu chảy dãi rồi nói nhảm...",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p004-b007",
+      "speaker_id": null,
+      "source_text": "OH... YOU'VE NEVER SEEN ONE, HUH? THEY DON'T DROOL.",
+      "translation": "Ồ... cậu chưa từng thấy ai thật à? Họ không chảy dãi.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p004-b008",
+      "speaker_id": null,
+      "source_text": "AS FOR THE NONSENSE PART... IT JUST FEELS LIKE THEY DON'T KNOW WHAT THEY'RE SAYING.",
+      "translation": "Còn vụ nói nhảm... chỉ là cảm giác như họ không biết mình đang nói gì thôi.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    }
+  ]
+}
