@@ -36,6 +36,38 @@
       }
     },
     "acquisition_evidence": {"type": "object"},
+    "workflow": {
+      "type": "object",
+      "properties": {
+        "predeclared": {"type": "boolean"},
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["ordinal", "task_type", "status"],
+            "properties": {
+              "ordinal": {"type": "integer", "minimum": 1},
+              "task_type": {"type": "string", "minLength": 1},
+              "status": {"enum": ["pending", "ready", "claimed", "completed", "partial", "blocked"]},
+              "generation": {"type": "integer", "minimum": 1},
+              "goal": {"type": "string"},
+              "result_task_id": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "content_boundary": {
+      "type": "object",
+      "properties": {
+        "classification_source": {"type": "string"},
+        "classification": {"type": "string"},
+        "semantic_model_stages_allowed": {"type": "boolean"},
+        "stop_after_task": {"type": "string"},
+        "code": {"type": "string"},
+        "detail": {"type": "string"}
+      }
+    },
     "state": {
       "enum": ["ready", "claimed", "partial", "completed", "blocked"]
     },
@@ -48,6 +80,13 @@
       }
     },
     "claim": {"type": ["object", "null"]},
+    "terminal_reason": {
+      "type": ["object", "null"],
+      "properties": {
+        "code": {"type": "string"},
+        "detail": {"type": "string"}
+      }
+    },
     "last_result": {"type": ["object", "null"]}
   }
 }
