@@ -1,0 +1,125 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 9,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p009-b001",
+      "speaker_id": null,
+      "source_text": "PEOPLE SAY WE HAVE TO LIVE WITH THE VIRUS NOW.",
+      "translation": "Người ta nói giờ chúng ta phải sống chung với virus rồi.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p009-b002",
+      "speaker_id": null,
+      "source_text": "YOU'LL PROBABLY GET PUNISHED IF YOU SCAM SOMEONE WHO HAS THE VIRUS OR WRONGFULLY FIRE SOMEONE FOR IT.",
+      "translation": "Chắc sẽ bị phạt nếu lừa đảo người nhiễm virus hoặc sa thải họ trái phép chỉ vì chuyện đó.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p009-b003",
+      "speaker_id": null,
+      "source_text": "TCH... I WAS GONNA JUMP THE BOSS LADY BITCH IF SHE HAS THE VIRUS.",
+      "translation": "Chậc... Nếu con mụ sếp đó mắc virus thì tôi còn định chụp lấy bà ta cơ.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.88,
+      "notes": "The slang verb 'jump' is contextually sexual/aggressive but ambiguous; translation keeps the predatory implication without over-specifying the act."
+    },
+    {
+      "block_id": "p009-b004",
+      "speaker_id": null,
+      "source_text": "HUH? I THOUGHT YOU TWO WERE GOING OUT. DID YOU TWO BREAK UP?",
+      "translation": "Hả? Tôi tưởng hai người đang hẹn hò. Chia tay rồi à?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p009-b005",
+      "speaker_id": null,
+      "source_text": "WHAT THE FUCK ARE YOU TALKING ABOUT?",
+      "translation": "Cậu đang nói cái đéo gì vậy?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.98,
+      "notes": "Strong profanity preserved."
+    },
+    {
+      "block_id": "p009-b006",
+      "speaker_id": null,
+      "source_text": "I THOUGHT SHE WAS HAZING YOU ON PURPOSE SO YOU TWO WOULDN'T GET CAUGHT.",
+      "translation": "Tôi tưởng bà ấy cố tình hành cậu để hai người khỏi bị phát hiện chứ.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.96,
+      "notes": "Hazing rendered as deliberately giving him a hard time; exact workplace relationship is not canonicalized."
+    },
+    {
+      "block_id": "p009-b007",
+      "speaker_id": null,
+      "source_text": "OR WHY DON'T YOU JUST MAKE HER YOURS, BRO? KEKE.",
+      "translation": "Hay cậu cứ chiếm lấy bà ấy luôn đi, ông anh? Keke.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.94,
+      "notes": "Predatory joking tone preserved."
+    },
+    {
+      "block_id": "p009-b008",
+      "speaker_id": null,
+      "source_text": "WHERE ON EARTH IS HE?",
+      "translation": "Rốt cuộc anh ta ở đâu rồi?",
+      "speaker_confidence": 0.62,
+      "translation_confidence": 0.98,
+      "notes": "Text appears beside a newly visible female character; exact identity unavailable."
+    },
+    {
+      "block_id": "p009-b009",
+      "speaker_id": null,
+      "source_text": "CLICK",
+      "translation": "Cạch",
+      "speaker_confidence": null,
+      "translation_confidence": 0.95,
+      "notes": "Mechanical/footstep-like sound effect."
+    },
+    {
+      "block_id": "p009-b010",
+      "speaker_id": null,
+      "source_text": "YOU LIKE HER?",
+      "translation": "Cậu thích bà ấy à?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p009-b011",
+      "speaker_id": null,
+      "source_text": "BE HONEST. DOESN'T SHE HAVE THE BEST BOOBS?",
+      "translation": "Nói thật đi. Ngực bà ấy chẳng phải đỉnh nhất sao?",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.97,
+      "notes": "Crude sexual joking tone preserved."
+    },
+    {
+      "block_id": "p009-b012",
+      "speaker_id": null,
+      "source_text": "CLACK",
+      "translation": "Cạch",
+      "speaker_confidence": null,
+      "translation_confidence": 0.95,
+      "notes": "Visible sound effect."
+    },
+    {
+      "block_id": "p009-b013",
+      "speaker_id": null,
+      "source_text": "ALSO, YOU NEVER KNOW. SHE MIGHT BECOME A LAMB WHEN YOU HAVE YOUR DICK INSIDE HER.",
+      "translation": "Với lại ai mà biết được. Biết đâu khi cậu đút chim vào trong bà ấy, bà ấy lại ngoan như cừu.",
+      "speaker_confidence": 0.78,
+      "translation_confidence": 0.96,
+      "notes": "Explicit vulgarity preserved from source; no speaker identity invented."
+    }
+  ]
+}
