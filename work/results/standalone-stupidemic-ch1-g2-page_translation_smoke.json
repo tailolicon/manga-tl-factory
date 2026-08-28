@@ -1,0 +1,36 @@
+{
+  "task_id": "standalone-stupidemic-ch1-g2-page_translation_smoke",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "fencing_token": 2,
+  "context_version": "smoke:no-canonical-context",
+  "status": "partial",
+  "completed_units": [
+    "Claimed standalone test lane stupidemic-ch1 generation 2 with the declared page_translation_smoke task.",
+    "Resolved Chapter 1 page 1 from the existing Kotori source handoff without re-fetching the chapter.",
+    "Preserved the no-invention boundary after the exact source page could not be opened in this worker runtime."
+  ],
+  "artifacts": [
+    {
+      "kind": "source_page_resolution",
+      "page_index": 1,
+      "source_handoff_path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json",
+      "source_url": "https://img02.manga18fx.com/chapters/4972/1/1-91130.jpg",
+      "persisted_binary": false
+    }
+  ],
+  "warnings": [
+    "The disposable worker runtime could not resolve img02.manga18fx.com, and alternate web access did not expose the exact page image. The page therefore could not be visually inspected in this session.",
+    "No translation_page artifact was fabricated because the smoke protocol requires translation of visible text from the exact declared page."
+  ],
+  "task_proposals": [],
+  "handoff": {
+    "status": "partial",
+    "lease_id": "standalone-lane-stupidemic-ch1-g2",
+    "branch": "test/stupidemic-ch1/page_translation_smoke/g2",
+    "handoff_path": "work/handoffs/standalone-stupidemic-ch1-g2-page_translation_smoke.json",
+    "remaining": [
+      "Retry fetching only Chapter 1 page 1 from the existing Kotori handoff in a runtime that can reach img02.manga18fx.com.",
+      "Visually inspect that exact page and create projects/mangadistrict-com-title-stupidemic-uncensored/translations/smoke/ch-200c8c840df0/page-001.json with context_version smoke:no-canonical-context."
+    ]
+  }
+}
