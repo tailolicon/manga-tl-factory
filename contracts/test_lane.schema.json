@@ -57,17 +57,6 @@
         }
       }
     },
-    "content_boundary": {
-      "type": "object",
-      "properties": {
-        "classification_source": {"type": "string"},
-        "classification": {"type": "string"},
-        "semantic_model_stages_allowed": {"type": "boolean"},
-        "stop_after_task": {"type": "string"},
-        "code": {"type": "string"},
-        "detail": {"type": "string"}
-      }
-    },
     "state": {
       "enum": ["ready", "claimed", "partial", "completed", "blocked"]
     },
@@ -76,7 +65,8 @@
       "type": ["object", "null"],
       "properties": {
         "task_type": {"type": "string"},
-        "goal": {"type": "string"}
+        "goal": {"type": "string"},
+        "scope": {"type": "object"}
       }
     },
     "claim": {"type": ["object", "null"]},
