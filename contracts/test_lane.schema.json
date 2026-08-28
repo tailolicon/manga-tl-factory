@@ -36,6 +36,7 @@
       }
     },
     "acquisition_evidence": {"type": "object"},
+    "relay": {"type": ["object", "null"]},
     "workflow": {
       "type": "object",
       "properties": {
@@ -48,10 +49,12 @@
             "properties": {
               "ordinal": {"type": "integer", "minimum": 1},
               "task_type": {"type": "string", "minLength": 1},
-              "status": {"enum": ["pending", "ready", "claimed", "completed", "partial", "blocked"]},
+              "status": {"enum": ["pending", "ready", "claimed", "completed", "partial", "blocked", "superseded"]},
               "generation": {"type": "integer", "minimum": 1},
               "goal": {"type": "string"},
-              "result_task_id": {"type": "string"}
+              "result_task_id": {"type": "string"},
+              "scope": {"type": "object"},
+              "reason": {"type": "string"}
             }
           }
         }
