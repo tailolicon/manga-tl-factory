@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+from .acquisition import fetch_source
 from .context import compile_context
 from .intake import submit
 from .standalone import build_standalone_test_envelope
@@ -28,6 +29,16 @@ def main() -> int:
 
     p_test = sub.add_parser("test-envelope", help="derive a standalone bootstrap envelope for coordinator-less testing")
     p_test.add_argument("--request-id", default=None)
+
+    p_fetch = sub.add_parser("fetch-source", help="download and verify a Kotori source handoff in disposable storage")
+    p_fetch.add_argument("handoff", type=Path)
+    p_fetch.add_argument("--result", type=Path, default=None)
+    p_fetch.add_argument("--output-dir", type=Path, default=None)
+    p_fetch.add_argument("--concurrency", type=int, default=6)
+    p_fetch.add_argument("--timeout", type=float, default=30.0)
+    p_fetch.add_argument("--retries", type=int, default=2)
+    p_fetch.add_argument("--keep-temp", action="store_true")
+    p_fetch.add_argument("--allow-private-hosts", action="store_true", help=argparse.SUPPRESS)
 
     p_context = sub.add_parser("compile-context", help="compile a deterministic canonical context bundle")
     p_context.add_argument("project_id")
@@ -57,6 +68,23 @@ def main() -> int:
             raise SystemExit(str(exc))
         print(json.dumps(envelope, ensure_ascii=False, indent=2))
         return 0
+
+    if args.command == "fetch-source":
+        try:
+            result = fetch_source(
+                args.handoff,
+                result_path=args.result,
+                output_root=args.output_dir,
+                concurrency=args.concurrency,
+                timeout=args.timeout,
+                retries=args.retries,
+                keep_temp=args.keep_temp,
+                allow_private_hosts=args.allow_private_hosts,
+            )
+        except (OSError, ValueError) as exc:
+            raise SystemExit(str(exc))
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0 if result["status"] == "success" else 1
 
     if args.command == "validate":
         errors = validate_repo(root)

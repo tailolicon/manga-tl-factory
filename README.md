@@ -46,6 +46,28 @@ python -m manga_factory validate
 python -m unittest discover -s tests -v
 ```
 
+## Kotori source acquisition test
+
+Kotori may commit a small `source_handoff.json` containing one selected chapter's resolved page
+URLs and only the safe request headers `Accept`, `Origin`, `Referer`, and `User-Agent`. It never
+places image bytes, cookies, authorization headers, or an Android session in Git.
+
+Fetch and verify the handoff with disposable local storage:
+
+```bash
+python -m manga_factory fetch-source work/imports/<project>/<run>/source_handoff.json
+```
+
+The acquisition worker downloads 4–8 pages concurrently (default 6), verifies the response MIME,
+file signature, dimensions, non-zero size and SHA-256, and writes `fetch_result.json` next to the
+handoff. Images live under the system temporary directory and are deleted after the run. Pass
+`--keep-temp` only for an explicit visual/vision inspection.
+
+Direct HTTP is always attempted first. Failed pages get one browser bootstrap for the chapter,
+then return to the concurrent HTTP downloader with the in-memory browser session. Browser state is
+never serialized. The optional fallback requires `playwright` plus a locally installed Chromium;
+it does not solve CAPTCHAs or bypass source access controls.
+
 `submit` does not scrape arbitrary websites. It records a normalized intake request. A bootstrap worker with browser/web access resolves the site and writes a source manifest according to `contracts/source_manifest.schema.json`.
 
 Before a coordinator is installed, `STANDALONE_TEST.md` allows an explicit bootstrap-only test mode. It derives a deterministic test envelope from a pending intake request and permits an authorized GitHub connector to substitute for a local worktree.
