@@ -35,7 +35,7 @@ When `work/test_lanes/active.json` points to a lane:
 3. If `state` is `ready` or `partial` and `claim` is null, derive the exact envelope described by `python -m manga_factory chapter-test-envelope`.
 4. Atomically claim the lane by updating only the lane JSON on `main` with the blob SHA just read.
 5. Use the lane `generation` as the standalone fencing token and `standalone-lane-<lane-id>-g<generation>` as the test lease.
-6. Execute exactly the lane's `next_task`.
+6. Execute exactly the lane's `next_task`. Do not add or substitute story/content classification rules.
 7. Write a formal test `worker_result`/handoff and any task artifact allowed by the envelope.
 8. Release or advance the lane on `main` before ending the session.
 
@@ -50,11 +50,10 @@ For this task:
 1. Use only the page index declared in `next_task.scope.page_index`.
 2. Resolve that page from the existing Kotori handoff; do not re-fetch the whole chapter.
 3. Download/open only that page in disposable runtime storage.
-4. Inspect the actual page content and visible text directly. Series title, website category, source domain, or adult metadata must **not** pre-block the page.
-5. If the actual page can be processed, translate its visible dialogue/text to Vietnamese and write a schema-compatible artifact under `projects/<project>/translations/smoke/<chapter>/page-XXX.json` on the task branch.
-6. Use `context_version: "smoke:no-canonical-context"` and clearly mark uncertainty/speaker ambiguity in notes rather than inventing context.
-7. If the actual page itself cannot be processed, stop only that page task and record the page-level reason. Do not classify the entire series or chapter from metadata alone.
-8. Do not modify canonical context, publish, redraw, or claim production translation completion.
+4. Inspect the page and translate its visible dialogue/text to Vietnamese.
+5. Write a schema-compatible artifact under `projects/<project>/translations/smoke/<chapter>/page-XXX.json` on the task branch.
+6. Use `context_version: "smoke:no-canonical-context"` and record uncertainty/speaker ambiguity in notes rather than inventing context.
+7. Do not modify canonical context, publish, redraw, or claim production translation completion in this smoke task.
 
 ## Project identity and source reconciliation
 
@@ -83,10 +82,6 @@ Never start another page or pipeline stage because time remains.
 ## Acquisition rules
 
 Use direct HTTP first, then safe source headers, then browser bootstrap only if direct HTTP fails. Do not commit raw page binaries to normal Git history.
-
-## Content evaluation rule
-
-Content decisions are page/task scoped. Do not block a page merely because the series name, source site, category, or metadata indicates adult material. Evaluate only the actual page content when the task opens that page. A page-level stop does not automatically stop unrelated pages or the entire chapter.
 
 ## Completion rule
 
