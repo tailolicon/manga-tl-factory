@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "task_id": "chapter-stupidemic-ch1-g5",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "status": "partial",
+  "lease_id": "chapter-lane-stupidemic-ch1-g5",
+  "fencing_token": 5,
+  "branch": "chapter/stupidemic-ch1/g5",
+  "phase": "redraw_typeset",
+  "resume_page": 3,
+  "page_count": 41,
+  "durable_rendered_prefix": {"page_start": 1, "page_end": 2},
+  "accepted_translation": {
+    "source_commit": "289e82cdbff610096209de9b5f56192338f4ee9f",
+    "path_glob": "projects/mangadistrict-com-title-stupidemic-uncensored/translations/smoke/ch-200c8c840df0/page-*.json",
+    "context_version": "smoke:no-canonical-context"
+  },
+  "relay": {
+    "artifact_id": 9696850714,
+    "artifact_name": "chapter-relay-stupidemic-ch1-ch-200c8c840df0",
+    "page_count": 41
+  },
+  "rendered_pages": [
+    {
+      "page_index": 1,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-001.webp",
+      "git_blob_sha": "c73543aaf2ef089f5bdc5ba381ef4ad44608c944",
+      "sha256": "6b2261c57371bd34761d4f04011ec06b1e01aa5e044dcd4d8df55cebcbaf2b67"
+    },
+    {
+      "page_index": 2,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-002.webp",
+      "git_blob_sha": "2b7be0f20910d48106d91c1a32152aa4c398b138",
+      "sha256": "3fcc3f12b7d0864ee2da1c700853fade94b955fe2c77409eab56be86d26e7ffb"
+    }
+  ],
+  "next_worker": [
+    "Claim the live chapter lane generation created by this handoff.",
+    "Resume redraw/typeset at page 3; do not redo durable pages 1-2 unless explicit QA later requires a correction.",
+    "Use the same GitHub base64 blob/tree/commit/ref bridge for every rendered binary before advancing rendered_pages.",
+    "Continue into QA and publish in the same session if redraw_typeset reaches page 41 with time remaining."
+  ],
+  "constraints": [
+    "Raw relay source images are ephemeral and must not be committed.",
+    "Only remotely committed rendered assets count toward rendered_pages."
+  ]
+}
