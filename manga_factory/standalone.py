@@ -20,6 +20,22 @@ PROTOCOL_READ_PATHS = [
     "contracts/test_lane.schema.json",
 ]
 
+SEMANTIC_MODEL_STAGES = {
+    "vision_scan",
+    "character_discovery",
+    "terminology_discovery",
+    "speech_discovery",
+    "story_discovery",
+    "context_review",
+    "translate_chunk",
+    "translation_review",
+    "redraw",
+    "typeset",
+    "vision_qa",
+    "final_qa",
+    "publish",
+}
+
 
 def _pending_bootstrap_requests(root: Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
@@ -118,7 +134,9 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
     if lane_id is not None and actual_lane_id != lane_id:
         raise ValueError(f"lane id mismatch: expected {lane_id}, found {actual_lane_id}")
     if lane.get("state") not in {"ready", "partial"}:
-        raise ValueError(f"test lane is not runnable: state={lane.get('state')!r}")
+        terminal = lane.get("terminal_reason")
+        suffix = f"; terminal_reason={terminal!r}" if terminal else ""
+        raise ValueError(f"test lane is not runnable: state={lane.get('state')!r}{suffix}")
     if lane.get("claim") is not None:
         raise ValueError("test lane already has an active claim")
 
@@ -139,6 +157,15 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
         raise ValueError("test lane generation must be a positive integer")
 
     task_type = str(next_task["task_type"])
+    content_boundary = lane.get("content_boundary")
+    if isinstance(content_boundary, dict):
+        semantic_allowed = content_boundary.get("semantic_model_stages_allowed")
+        if semantic_allowed is False and task_type in SEMANTIC_MODEL_STAGES:
+            raise ValueError(
+                f"test lane content boundary forbids semantic model stage {task_type!r}: "
+                f"{content_boundary.get('code', 'CONTENT_BOUNDARY')}"
+            )
+
     task_id = f"standalone-{actual_lane_id}-g{generation}-{task_type}"
     lease_id = f"standalone-lane-{actual_lane_id}-g{generation}"
     branch = f"test/{actual_lane_id}/{task_type}/g{generation}"
@@ -164,6 +191,8 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
         "lane_path": lane_rel,
         "source_handoff": handoff,
         "acquisition_evidence": lane.get("acquisition_evidence", {}),
+        "workflow": lane.get("workflow"),
+        "content_boundary": content_boundary,
         "input_artifacts": [
             {"kind": "test_lane", "path": lane_rel},
             {"kind": "project", "path": f"projects/{project_id}/project.json"},
@@ -190,5 +219,9 @@ def build_standalone_chapter_test_envelope(root: Path, lane_id: str | None = Non
             "test_lease_only": True,
             "lane_state_on_main_is_coordinator_state": True,
             "raw_images_must_not_be_committed_to_git": True,
+            "semantic_model_stages_allowed": not (
+                isinstance(content_boundary, dict)
+                and content_boundary.get("semantic_model_stages_allowed") is False
+            ),
         },
     }
