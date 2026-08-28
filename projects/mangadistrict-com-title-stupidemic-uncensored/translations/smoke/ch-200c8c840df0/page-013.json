@@ -1,0 +1,116 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 13,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p013-b001",
+      "speaker_id": null,
+      "source_text": "ALSO.",
+      "translation": "Còn nữa.",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.99,
+      "notes": "Female speaker punctuates the sentence with repeated pokes."
+    },
+    {
+      "block_id": "p013-b002",
+      "speaker_id": null,
+      "source_text": "DID.",
+      "translation": "Anh.",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.94,
+      "notes": "Staccato sentence reordered across Vietnamese blocks for natural reading."
+    },
+    {
+      "block_id": "p013-b003",
+      "speaker_id": null,
+      "source_text": "YOU.",
+      "translation": "Đã.",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.94,
+      "notes": "Staccato sentence reordered across Vietnamese blocks."
+    },
+    {
+      "block_id": "p013-b004",
+      "speaker_id": null,
+      "source_text": "RETURN.",
+      "translation": "Trả.",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p013-b005",
+      "speaker_id": null,
+      "source_text": "MY PERFUME.",
+      "translation": "Nước hoa của tôi chưa?",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.96,
+      "notes": "Completes the Vietnamese question formed by the preceding staccato bubbles."
+    },
+    {
+      "block_id": "p013-b006",
+      "speaker_id": null,
+      "source_text": "POKE",
+      "translation": "Chọc",
+      "speaker_confidence": null,
+      "translation_confidence": 0.96,
+      "notes": "Repeated poke sound/action effect; identical repeats are represented by one translation block."
+    },
+    {
+      "block_id": "p013-b007",
+      "speaker_id": null,
+      "source_text": "LIKE I ASKED?",
+      "translation": "Như tôi đã bảo chứ?",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p013-b008",
+      "speaker_id": null,
+      "source_text": "I DIDN'T GET MY REFUND YET! ARE YOU SURE YOU SENT IT BACK?! HUH?!",
+      "translation": "Tôi vẫn chưa nhận được tiền hoàn lại! Anh chắc là đã gửi trả rồi chứ?! Hả?!",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p013-b009",
+      "speaker_id": null,
+      "source_text": "WHY IS SHE TELLING ME TO RETURN SOMETHING SHE BOUGHT...? DOES SHE NOT HAVE HANDS? OR FEET?",
+      "translation": "Sao cô ta lại bắt mình trả món đồ cô ta mua chứ...? Cô ta không có tay à? Hay không có chân?",
+      "speaker_confidence": null,
+      "translation_confidence": 0.98,
+      "notes": "Internal narration."
+    },
+    {
+      "block_id": "p013-b010",
+      "speaker_id": null,
+      "source_text": "IF YOU'RE NOT GOING TO USE THEM, DO YOU WANT ME TO GET RID OF THEM FOR GOOD?",
+      "translation": "Nếu không định dùng chúng thì có muốn tôi xử luôn cho khỏi cần nữa không?",
+      "speaker_confidence": 0.72,
+      "translation_confidence": 0.92,
+      "notes": "Speaker/reference of 'them' is visually ambiguous in the smoke page; translation preserves the threat without inventing the referent."
+    },
+    {
+      "block_id": "p013-b011",
+      "speaker_id": null,
+      "source_text": "WHAT'S WITH THAT LOOK?! YOU WANT ME TO PLUCK THOSE EYES OUT?",
+      "translation": "Cái ánh mắt đó là sao hả?! Muốn tôi móc hai con mắt ấy ra không?",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.98,
+      "notes": "Threatening tone preserved."
+    },
+    {
+      "block_id": "p013-b012",
+      "speaker_id": null,
+      "source_text": "BEAM",
+      "translation": "Lườm",
+      "speaker_confidence": null,
+      "translation_confidence": 0.78,
+      "notes": "Stylized visual effect associated with the intense stare; localized semantically rather than phonetically."
+    }
+  ]
+}
