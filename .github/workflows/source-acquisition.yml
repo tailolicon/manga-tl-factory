@@ -1,0 +1,149 @@
+name: Kotori source acquisition
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "work/imports/**/source_handoff.json"
+  workflow_dispatch:
+    inputs:
+      handoff:
+        description: Repository-relative source_handoff.json path
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: source-acquisition-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      HANDOFF_INPUT: ${{ inputs.handoff || '' }}
+      BEFORE_SHA: ${{ github.event.before || '' }}
+    steps:
+      - name: Check out handoffs
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install acquisition runtime
+        run: |
+          python -m pip install --disable-pip-version-check "playwright>=1.50,<2"
+          python -m playwright install --with-deps chromium
+
+      - name: Validate repository
+        run: |
+          python -m unittest discover -s tests -v
+          python -m manga_factory validate
+
+      - name: Locate changed handoffs
+        id: locate
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$RUNNER_TEMP/source-handoffs.txt"
+          : > "$output"
+
+          if [[ -n "$HANDOFF_INPUT" ]]; then
+            printf '%s\n' "$HANDOFF_INPUT" > "$output"
+          elif [[ "$BEFORE_SHA" =~ ^0+$ ]]; then
+            git show --format= --name-only "$GITHUB_SHA" -- 'work/imports/**/source_handoff.json' > "$output"
+          else
+            git diff --name-only "$BEFORE_SHA" "$GITHUB_SHA" -- 'work/imports/**/source_handoff.json' > "$output"
+          fi
+
+          sed -i '/^[[:space:]]*$/d' "$output"
+          if [[ ! -s "$output" ]]; then
+            echo "No source handoff was selected." >&2
+            exit 1
+          fi
+
+          while IFS= read -r handoff; do
+            if [[ ! "$handoff" =~ ^work/imports/.+/source_handoff\.json$ ]] || [[ ! -f "$handoff" ]]; then
+              echo "Unsafe or missing handoff path: $handoff" >&2
+              exit 1
+            fi
+            echo "Selected $handoff"
+          done < "$output"
+
+          echo "path=$output" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch and verify source pages
+        id: acquire
+        shell: bash
+        run: |
+          set -uo pipefail
+          failed=0
+          while IFS= read -r handoff; do
+            result="${handoff%source_handoff.json}fetch_result.json"
+            echo "Fetching $handoff"
+            python -m manga_factory fetch-source \
+              "$handoff" \
+              --result "$result" \
+              --output-dir "$RUNNER_TEMP/manga-factory" \
+              --concurrency 6 || failed=1
+          done < "${{ steps.locate.outputs.path }}"
+          echo "failed=$failed" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Write acquisition summary
+        if: always() && steps.locate.outcome == 'success'
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          rows = []
+          for path in sorted(Path("work/imports").glob("**/fetch_result.json")):
+              result = json.loads(path.read_text(encoding="utf-8"))
+              for chapter in result.get("chapters", []):
+                  rows.append(
+                      (
+                          result.get("project_id", ""),
+                          chapter.get("name", chapter.get("id", "")),
+                          f"{chapter.get('downloaded', 0)}/{chapter.get('page_count', 0)}",
+                          chapter.get("fetch_mode", ""),
+                          chapter.get("total_bytes", 0),
+                          chapter.get("elapsed_ms", 0),
+                          chapter.get("retries", 0),
+                      )
+                  )
+
+          summary = Path(os.environ["GITHUB_STEP_SUMMARY"])
+          with summary.open("a", encoding="utf-8") as stream:
+              stream.write("## Kotori source acquisition\n\n")
+              stream.write("| Project | Chapter | Pages | Mode | Bytes | Elapsed ms | Retries |\n")
+              stream.write("|---|---|---:|---|---:|---:|---:|\n")
+              for row in rows:
+                  stream.write("| " + " | ".join(map(str, row)) + " |\n")
+          PY
+
+      - name: Upload fetch results
+        if: always() && steps.locate.outcome == 'success'
+        uses: actions/upload-artifact@v7
+        with:
+          name: fetch-results-${{ github.run_id }}
+          path: work/imports/**/fetch_result.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Report unsupported source
+        if: steps.acquire.outputs.failed == '1'
+        run: |
+          echo "One or more handoffs were only partially acquired. Inspect fetch_result.json." >&2
+          exit 1
