@@ -1,0 +1,89 @@
+{
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_index": 14,
+  "context_version": "smoke:no-canonical-context",
+  "blocks": [
+    {
+      "block_id": "p014-b001",
+      "speaker_id": null,
+      "source_text": "SHE'S THE PATHETIC KIND OF PERSON WHO INDULGES IN HER POWER IN THIS HICKSVILLE, A TYPICAL POWER-TRIPPER.",
+      "translation": "Cô ta là kiểu người đáng khinh, thích lạm quyền ở cái xó quê mùa này — đúng kiểu kẻ nghiện quyền lực.",
+      "speaker_confidence": null,
+      "translation_confidence": 0.96,
+      "notes": "Internal narration; insulting tone preserved."
+    },
+    {
+      "block_id": "p014-b002",
+      "speaker_id": null,
+      "source_text": "YOU PISSED, PUNK?",
+      "translation": "Bực à, nhóc?",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.96,
+      "notes": "Visible female speaker; confrontational register preserved."
+    },
+    {
+      "block_id": "p014-b003",
+      "speaker_id": null,
+      "source_text": "NO, MA'AM.",
+      "translation": "Không, thưa cô.",
+      "speaker_confidence": 0.82,
+      "translation_confidence": 0.99,
+      "notes": null
+    },
+    {
+      "block_id": "p014-b004",
+      "speaker_id": null,
+      "source_text": "I CAN SEE THE COMPLAINTS ON YOUR FACE. SMILE PROPERLY.",
+      "translation": "Tôi nhìn mặt anh là biết đang bất mãn rồi. Cười cho đàng hoàng đi.",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.98,
+      "notes": null
+    },
+    {
+      "block_id": "p014-b005",
+      "speaker_id": null,
+      "source_text": "EVER SINCE SHE REALIZED THAT I'VE BEEN SUCKING UP TO HER SO I WOULDN'T GET FIRED...",
+      "translation": "Kể từ khi cô ta nhận ra tôi cứ nịnh nọt để khỏi bị đuổi việc...",
+      "speaker_confidence": null,
+      "translation_confidence": 0.98,
+      "notes": "Internal narration."
+    },
+    {
+      "block_id": "p014-b006",
+      "speaker_id": null,
+      "source_text": "IT FEELS LIKE SHE'S BEEN USING ME TO LASH OUT WHENEVER SHE'S MAD. IT REALLY PISSES ME OFF, BUT I'M TRYING MY BEST NOT TO SHOW IT...",
+      "translation": "Cứ như mỗi lần nổi cáu là cô ta lại lấy tôi ra trút giận. Tôi bực điên lên, nhưng vẫn cố hết sức không để lộ ra...",
+      "speaker_confidence": null,
+      "translation_confidence": 0.98,
+      "notes": "Internal narration."
+    },
+    {
+      "block_id": "p014-b007",
+      "speaker_id": null,
+      "source_text": "SIGH",
+      "translation": "Haizz",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.99,
+      "notes": "Visible sigh sound effect beside the female character."
+    },
+    {
+      "block_id": "p014-b008",
+      "speaker_id": null,
+      "source_text": "WHY AM I EVEN TRYING TO TEACH THIS IDIOT HOW TO DO HIS JOB...? HAA...",
+      "translation": "Sao mình còn phải cố dạy tên ngốc này cách làm việc nữa chứ...? Haizz...",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.98,
+      "notes": "Visible female thought/speech bubble."
+    },
+    {
+      "block_id": "p014-b009",
+      "speaker_id": null,
+      "source_text": "I'M THE",
+      "translation": "Tôi mới là...",
+      "speaker_confidence": 0.9,
+      "translation_confidence": 0.94,
+      "notes": "Bubble is cut by the source page boundary; sentence continues on page 15 with 'ONE GOING THROUGH ALL THE TROUBLE...'."
+    }
+  ]
+}
