@@ -33,11 +33,18 @@ jobs:
           run-id: 33198730435
 
       - name: Install rendering dependencies
+        shell: bash
         run: |
+          set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y fonts-noto-core
           python -m pip install --upgrade pip
           python -m pip install 'Pillow>=12,<13'
+          FONT_SOURCE="$(fc-match -f '%{file}\n' 'Noto Sans Condensed:style=Bold' | head -n 1)"
+          test -n "$FONT_SOURCE"
+          test -f "$FONT_SOURCE"
+          sudo mkdir -p /usr/share/fonts/truetype/noto
+          sudo ln -sf "$FONT_SOURCE" /usr/share/fonts/truetype/noto/NotoSans-CondensedBold.ttf
 
       - name: Render full-resolution localized pages
         run: python work/scripts/render-stupidemic-ch1-q001-008-g1.py
@@ -49,8 +56,9 @@ jobs:
           set -euo pipefail
           git config user.name 'manga-tl-factory worker'
           git config user.email 'actions@users.noreply.github.com'
-          for i in $(seq -w 1 8); do
-            test -s "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-0${i}.webp"
+          for i in $(seq 1 8); do
+            printf -v p '%03d' "$i"
+            test -s "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-${p}.webp"
           done
           git add projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-00{1,2,3,4,5,6,7,8}.webp
           git commit -m 'render stupidemic ch1 q001-008 g1 [skip ci]'
