@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "status": "partial",
+  "task_id": "chapter-stupidemic-ch1-r033-037-g1",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r033-037",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "branch": "chapter/stupidemic-ch1/r033-037/g1",
+  "fencing_token": 1,
+  "phase": "redraw_typeset",
+  "resume_page": 33,
+  "result_path": "work/results/chapter-stupidemic-ch1-r033-037-g1.json",
+  "recipe_path": "work/handoffs/chapter-stupidemic-ch1-r033-037-g1-recipe.py",
+  "resume": {
+    "page_33": "redo from source with a cleaner art-preserving redraw for JOLT/FLICK/BUBBLE, then QA",
+    "pages_34_37": "run the durable recipe against the lane relay; locally QA-accepted candidate SHA-256 values are recorded in the result; persist exact final binaries before counting progress",
+    "binary_checkpoint": "batch final pages through create_blob(base64) -> one tree -> one commit -> one branch ref update",
+    "range_completion": "after every page 33-37 is durable and QA-accepted, write the completed range manifest and release the range as completed"
+  },
+  "warnings": [
+    "No image binary from this session is durable in Git; do not treat local candidate hashes as Git blob identities.",
+    "Do not replace source-size 720x5000 pages with preview-resolution assets."
+  ],
+  "completed_at": "2026-08-29T09:12:30+07:00"
+}
