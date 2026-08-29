@@ -1,153 +1,180 @@
 # Chapter Production Pipeline
 
-This is the production execution contract for `manga-tl-factory`. It replaces the old smoke/test chapter flow for active work.
+This is the production execution contract for `manga-tl-factory`.
 
-## One chapter, one generalist worker task
+## Generalist workers, parallel by range
 
-The coordinator exposes one task type: `localize_chapter`.
+The coordinator exposes one worker task type: `localize_chapter`.
 
-A worker claims one chapter and may perform every localization function needed by that chapter: translation, translation correction, redraw, typesetting, visual inspection, QA, fixes, and publication.
+Every worker is a generalist. Parallelism is achieved by assigning **non-overlapping page ranges**, never by splitting workers into translator/redraw/typesetter/QA roles.
 
-Internal phases are resumable state markers only:
+For `coordination_mode: parallel_ranges`, each range runs every remaining local phase in order:
 
 ```text
-translate -> redraw_typeset -> qa -> publish -> done
+translate -> redraw_typeset -> qa -> done
 ```
 
-They are **not separate worker roles** and are **not scheduling boundaries**. If a phase finishes and useful session time remains, the current worker immediately advances to the next phase.
+A range may begin at a later phase when earlier work is already durable. Phase boundaries are resume markers only. The same worker continues across them whenever time remains.
 
-## Phase rules
+Chapter-wide finalization is dependency-driven:
+
+```text
+all ranges done -> verify coverage -> assemble final blobs -> manifest -> publish -> chapter done
+```
+
+Any normal generalist worker may claim finalization.
+
+## Range partitioning
+
+Ranges must not overlap. Prefer ranges sized to fit one 25-minute session based on observed throughput. For redraw/typeset-heavy work, roughly 4-8 pages per initial range is a useful default; the lane may choose another size from live evidence.
+
+A parallel lane records `parallel.units[]`. Each unit has its own:
+
+- `id`;
+- `page_start` / `page_end`;
+- `phase` and `resume_page`;
+- `state`;
+- `generation` fencing token;
+- `claim` and expiry;
+- `checkpoint_commit`;
+- final `result`.
+
+There is no exclusive chapter-wide worker claim in parallel mode. `lane.claim` stays null.
+
+## Atomic subclaim protocol
+
+Claims are coordinated by compare-and-swap on the lane file.
+
+A worker:
+
+1. reads the latest lane and blob SHA;
+2. selects one claimable range returned by `chapter-envelope`;
+3. patches only that range entry to `claimed` with `claimed_at`, `expires_at`, task id, branch, and fencing token;
+4. writes the whole lane using the blob SHA it just read;
+5. on conflict, refetches and selects again.
+
+Because claim writes are tiny and useful work occurs on separate branches, many workers can operate on the same chapter concurrently.
+
+A range claim expires after the configured lease. Reclaiming an expired range increments only that range's generation. A dead worker therefore cannot lock the whole chapter.
+
+## Range branches and conflict avoidance
+
+Every range has its own branch:
+
+`chapter/<lane-id>/<range-id>/g<range-generation>`
+
+A fresh range branch starts from immutable `parallel.base_commit`. A partial resumed range starts from its own `checkpoint_commit`.
+
+Workers may write only page paths inside their claimed range plus their own result/handoff paths. Disjoint ranges therefore cannot overwrite one another's images.
+
+Do not continuously merge range branches. Each completed range publishes a result manifest containing the exact final page blob SHAs. Chapter finalization assembles those manifests once.
+
+## Phase rules inside a range
 
 ### translate
 
-Inspect the source page directly, translate all reader-facing text, and verify the translation before marking the page complete. Store canonical page translation artifacts under:
-
-`projects/<project>/chapters/<chapter>/translation/page-XXX.json`
-
-Historical translation artifacts may be accepted as migration input when the lane explicitly pins their commit/path.
+Inspect the source, translate all reader-facing text, and verify it. Persist page translation artifacts. Immediately continue to redraw/typeset when the page/range translation is ready.
 
 ### redraw_typeset
 
-For each page, use the source page plus accepted translation to remove/cover source text where required and typeset Vietnamese. The same worker performs redraw and typesetting.
+Use source + accepted translation, remove/cover source text as needed, typeset Vietnamese, then perform lightweight visual acceptance.
 
-Store final localized page images under:
+Final page path:
 
 `projects/<project>/chapters/<chapter>/rendered/page-XXX.<ext>`
 
-Raw source images are ephemeral and must not be committed. Final localized/rendered pages are publication outputs and may be committed.
-
-Before typesetting a page, correct an obvious translation mistake discovered while comparing source and translation; record material corrections in the page translation artifact.
-
-Perform a lightweight visual acceptance check immediately after rendering so obvious missing source text, clipping, unreadable text, or redraw damage is fixed before the page enters the persistence queue.
+Correct obvious translation mistakes immediately when discovered.
 
 ### qa
 
-QA is performed by the same chapter worker. Visually inspect durable rendered pages for missing text, clipped text, unreadable layout, wrong order, untranslated reader-facing text, translation errors, or redraw damage. Fix issues directly and re-check them.
+Inspect the exact durable rendered asset. Check missing/untranslated text, clipping, readability, layout, wrong order, translation errors, and redraw damage. Fix failures directly and persist the replacement binary before marking the page accepted.
 
-QA may only count a page backed by the exact remotely committed rendered asset being inspected. If QA changes an image, persist the corrected binary before advancing `qa_pages`.
-
-### publish
-
-After QA passes, create a valid publication manifest under:
-
-`projects/<project>/publication/<chapter>/manifest.json`
-
-The manifest must reference final localized assets, not raw source pages. The worker holding the live chapter fencing token may promote the final rendered bundle + manifest to `main` and mark the lane completed.
+A range is `completed` only when every page in it is QA-accepted and its exact final binary is durable.
 
 ## Throughput-first persistence
 
-Page completion is an atomic correctness boundary. Git persistence is a **batch boundary**.
+Page correctness is atomic; Git persistence is batched.
 
-Do not use this anti-pattern:
+Preferred loop:
 
-`render page -> blob -> tree -> commit -> ref -> lane/main update -> next page`
+`process/accept page -> queue -> next page -> ... -> batch blobs -> one tree -> one commit -> one ref update`
 
-Use this pattern:
+Default checkpoint target is around 6 pages, adaptive roughly 4-10 pages. Force a checkpoint after about 7 minutes without one, when payload becomes risky, at phase/range completion, around minute 18-19 with backlog, or at drain.
 
-`render/accept page -> queue -> next page -> ... -> batch blobs -> one tree -> one commit -> one ref update -> continue`
+Independent blob creation calls should run concurrently when supported.
 
-Default steady-state checkpoint target is **6 completed pages**. Adapt roughly within **4-10 pages** according to file size, connector latency, and remaining runtime.
+Do not update lane/main per page or per normal branch checkpoint.
 
-Force a checkpoint when any of these occurs:
+## Binary durability
 
-- around 6 pages are queued;
-- roughly 7 minutes have elapsed since the last durable checkpoint;
-- pending binary payload is becoming risky/large;
-- an internal phase reaches completion;
-- minute 18-19 is reached with uncommitted completed work;
-- drain begins.
+When direct binary upload is unavailable:
 
-The default batch checkpoint is:
+1. preserve publication-quality dimensions and readability;
+2. optimize WebP/JPEG compression when practical;
+3. compute SHA-256;
+4. base64-encode exact bytes;
+5. create Git blob with `encoding: base64`;
+6. collect batch blob SHAs;
+7. create one tree;
+8. create one commit;
+9. update the range branch once.
 
-`N page binaries -> N Git blobs -> 1 Git tree -> 1 Git commit -> 1 task-branch ref update`
+Base64 is transport only. Do not commit base64 text.
 
-Independent blob creation calls should be issued concurrently/parallel where the available tool runner supports that safely. Do not create N trees/commits/ref updates merely because the batch contains N pages.
+A tiny preview-resolution image is not acceptable merely because it is easier to upload. QA must replace any artifact that does not preserve publication-quality visual fidelity.
 
-Do not update chapter-lane state on `main` per page or per normal task-branch checkpoint. Main coordination state is normally written at claim and at final release/handoff or publish completion.
+## Range result contract
 
-## Durable binary persistence
+A completed range result must enumerate every page with:
 
-A rendered page is durable only after its final binary is present in a remote task-branch commit.
+- page index;
+- final repository path;
+- Git blob SHA;
+- SHA-256;
+- width and height;
+- durable commit;
+- QA status.
 
-When local `git`/`curl` is unavailable, use the connected GitHub Git-data bridge:
+The lane's unit result points to that result file/commit. Finalization treats these exact blob SHAs as source of truth.
 
-1. optimize the finished page to WebP/JPEG where practical while preserving readability/fidelity;
-2. target about <= 1 MiB/page when practical, but do not damage text/artwork merely to hit that target;
-3. compute SHA-256 for final bytes;
-4. base64-encode raw bytes without line wrapping;
-5. create a Git blob with `encoding: base64`;
-6. collect returned blob SHAs for the whole batch;
-7. create one tree mapping all batch paths (`mode: 100644`, `type: blob`);
-8. create one commit parented by the current task-branch head;
-9. update the task branch ref once;
-10. only after ref update succeeds advance the in-memory durable contiguous prefix.
+## Same-session continuation
 
-Never store base64 text itself in the repository. Base64 is transport only.
+If a range completes with about 7 or more useful minutes remaining, the worker should refetch the lane and claim another range. If no range remains and all are completed, it should claim finalization and continue.
 
-## Cross-generation continuity
+Completing a range is not automatically the end of a worker session.
 
-A new generation must inherit accumulated durable chapter work.
+## Finalization
 
-When the lane has a previous durable result commit, create the new generation branch from that checkpoint commit rather than from a clean `main` head. This keeps rendered pages and other accumulated chapter artifacts on one commit lineage and avoids later reconstruction during publish.
+`parallel.finalization` becomes claimable only when all units are completed.
 
-`last_result.commit` (or an explicitly recorded durable checkpoint head) is the preferred branch base for the next generation.
+The finalizer must:
 
-## Resume/checkpoint state
+1. claim finalization atomically;
+2. read every range result;
+3. verify pages 1..N are covered exactly once with no gaps or overlaps;
+4. validate every artifact is QA-accepted and durable;
+5. build a new tree based on current `main`, adding only final localized pages, publication manifest, required metadata, and final coordinator state;
+6. create the publication manifest;
+7. commit/promote the publication bundle to `main`;
+8. set chapter `state: completed`, `phase: done`, `progress.published: true`, finalization completed, and `next_task: null`.
 
-The lane stores at least:
+Do not merge whole WIP branch trees into main.
 
-- `phase`;
-- `resume_page`;
-- `progress.translated_pages`;
-- `progress.rendered_pages`;
-- `progress.qa_pages`;
-- `progress.published`.
+## Progress semantics
 
-Progress counters are durability counters. In particular, `rendered_pages` counts only the contiguous rendered prefix present in a remote Git commit. Ephemeral local renders do not change lane progress.
+In parallel mode, global progress counters are aggregate durable counts and may complete out of page order. `parallel.units[]` is the authoritative source for ownership and completion.
 
-When a phase reaches its last page, advance phase immediately and reset `resume_page` to 1. Continue in the same session if time remains.
+The site must still consider the chapter unreadable until a publication manifest exists.
 
 ## Runtime
 
-For a 25-minute worker session:
+For each 25-minute worker session:
 
-- minute 0-2: state read, claim, inherit previous checkpoint, acquire/reuse relay;
-- minute 2-18: continuous useful chapter work with adaptive batched checkpoints;
-- minute 18-21: continue useful work while ensuring completed local backlog is flushed before it becomes risky;
-- minute 21: drain begins;
-- minute 21-23: finish the smallest safe unit already in progress, flush all queued artifacts, validate contiguous durable progress, write result/handoff;
-- minute 24: only final bookkeeping/claim release.
+- minute 0-2: derive envelope, claim range/finalization, get relay/base checkpoint;
+- minute 2-18: continuous useful work across local phases;
+- minute 18-21: continue while keeping binary backlog safe;
+- minute 21: drain;
+- minute 21-23: flush, result/handoff, release subclaim;
+- minute 24: minimal bookkeeping only.
 
-There is no fixed or soft page-count stop. Continue until chapter completion or the runtime budget forces drain.
-
-## Claim/fencing
-
-`work/chapter_lanes/*.json` on `main` is coordinator state.
-
-A runnable lane has `state` in `ready|partial` and `claim: null`. Claim it atomically using the current blob SHA. Lane `generation` is the session fencing token.
-
-On partial handoff, persist exact `phase`/`resume_page`, clear claim, and increment generation. On successful publish, set `state: completed`, `phase: done`, `progress.published: true`, clear claim, and set `next_task: null`.
-
-## Throughput rule
-
-The chapter is the scheduling unit. Phases and pages are correctness/resume boundaries only. A worker must not voluntarily hand off because it completed one role, one phase, or a small arbitrary number of pages.
+There is no soft page-count stop.
