@@ -1,0 +1,223 @@
+name: Finalize Stupidemic Chapter 1 g1
+
+on:
+  push:
+    branches:
+      - chapter/stupidemic-ch1/finalize/g1
+    paths:
+      - .github/workflows/finalize-stupidemic-ch1-g1.yml
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  finalize:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout finalizer branch
+        uses: actions/checkout@v4
+        with:
+          ref: chapter/stupidemic-ch1/finalize/g1
+          fetch-depth: 0
+
+      - name: Fetch all range commits
+        run: git fetch origin '+refs/heads/*:refs/remotes/origin/*'
+
+      - name: Assemble exact QA-approved publication from current main
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/stupidemic-publish
+          git worktree add --detach /tmp/stupidemic-publish origin/main
+          python - <<'PY'
+          import hashlib
+          import json
+          import subprocess
+          from pathlib import Path
+
+          root = Path('/tmp/stupidemic-publish')
+          lane_path = root / 'work/chapter_lanes/stupidemic-ch1.json'
+          lane = json.loads(lane_path.read_text(encoding='utf-8'))
+          project_id = 'mangadistrict-com-title-stupidemic-uncensored'
+          chapter_id = 'ch-200c8c840df0'
+          expected_lease = 'chapter-lane-stupidemic-ch1-finalization-g1'
+
+          assert lane['project_id'] == project_id
+          assert lane['chapter']['id'] == chapter_id
+          assert int(lane['page_count']) == 41
+          final = lane['parallel']['finalization']
+          assert final['state'] == 'claimed', final
+          assert int(final['generation']) == 1, final
+          claim = final['claim']
+          assert claim['lease_id'] == expected_lease, claim
+          assert int(claim['fencing_token']) == 1, claim
+          assert claim['branch'] == 'chapter/stupidemic-ch1/finalize/g1', claim
+
+          rows = []
+          coverage = []
+          for unit in lane['parallel']['units']:
+              assert unit['state'] == 'completed', unit
+              assert unit['phase'] == 'done', unit
+              assert unit['claim'] is None, unit
+              result = unit.get('result') or {}
+              assert result.get('status') == 'completed', unit
+              result_commit = result['commit']
+              result_path = result['result_path']
+              raw = subprocess.check_output(['git', 'show', f'{result_commit}:{result_path}'])
+              payload = json.loads(raw.decode('utf-8'))
+              assert payload.get('status') == 'completed', (unit['id'], payload.get('status'))
+              qa = payload.get('qa')
+              if isinstance(qa, dict) and qa.get('status') is not None:
+                  assert qa['status'] == 'accepted', (unit['id'], qa)
+              if payload.get('qa_status') is not None:
+                  assert payload['qa_status'] == 'accepted', (unit['id'], payload['qa_status'])
+              artifacts = payload.get('artifacts') or payload.get('pages') or []
+              expected_indexes = list(range(int(unit['page_start']), int(unit['page_end']) + 1))
+              actual_indexes = sorted(int(r['page_index']) for r in artifacts)
+              assert actual_indexes == expected_indexes, (unit['id'], actual_indexes, expected_indexes)
+              for art in artifacts:
+                  idx = int(art['page_index'])
+                  assert art.get('qa_status') == 'accepted', (unit['id'], idx, art.get('qa_status'))
+                  expected_path = f'projects/{project_id}/chapters/{chapter_id}/rendered/page-{idx:03d}.webp'
+                  path = art['path']
+                  assert path == expected_path, (idx, path, expected_path)
+                  blob = art.get('git_blob_sha') or art.get('blob_sha')
+                  assert blob, (idx, 'missing blob sha')
+                  durable = art.get('durable_branch_commit') or art.get('durable_commit') or payload.get('binary_commit') or payload.get('page_commit')
+                  assert durable, (idx, 'missing durable commit')
+                  resolved = subprocess.check_output(['git', 'rev-parse', f'{durable}:{path}'], text=True).strip()
+                  assert resolved == blob, (idx, resolved, blob)
+                  data = subprocess.check_output(['git', 'show', f'{durable}:{path}'])
+                  sha = hashlib.sha256(data).hexdigest()
+                  assert sha == art['sha256'], (idx, sha, art['sha256'])
+                  width = int(art['width']); height = int(art['height'])
+                  assert width > 0 and height > 0
+                  dest = root / path
+                  dest.parent.mkdir(parents=True, exist_ok=True)
+                  dest.write_bytes(data)
+                  rows.append({
+                      'index': idx,
+                      'url': '/' + path,
+                      'width': width,
+                      'height': height,
+                      'sha256': sha,
+                  })
+                  coverage.append(idx)
+
+          assert sorted(coverage) == list(range(1, 42)), coverage
+          assert len(coverage) == len(set(coverage)) == 41
+          rows.sort(key=lambda r: r['index'])
+
+          manifest_path = root / f'projects/{project_id}/publication/{chapter_id}.json'
+          version = 1
+          if manifest_path.exists():
+              previous = json.loads(manifest_path.read_text(encoding='utf-8'))
+              version = int(previous.get('version', 0)) + 1
+          manifest = {
+              'series_id': project_id,
+              'chapter_id': chapter_id,
+              'title': 'Chapter 1',
+              'version': version,
+              'pages': rows,
+          }
+          manifest_path.parent.mkdir(parents=True, exist_ok=True)
+          manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          project_path = root / f'projects/{project_id}/project.json'
+          project = json.loads(project_path.read_text(encoding='utf-8'))
+          ts = project.setdefault('translation_status', {})
+          ts['translated_chapters'] = max(int(ts.get('translated_chapters') or 0), 1)
+          ts['published_chapters'] = max(int(ts.get('published_chapters') or 0), 1)
+          ts['latest_translated_chapter'] = chapter_id
+          ts['latest_published_chapter'] = chapter_id
+          project_path.write_text(json.dumps(project, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          print('verified exact page coverage 1..41; publication manifest assembled')
+          PY
+
+      - name: Commit publication payload only
+        run: |
+          set -euo pipefail
+          cd /tmp/stupidemic-publish
+          git config user.name 'manga-tl-factory finalizer'
+          git config user.email 'actions@users.noreply.github.com'
+          git add projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-*.webp
+          git add projects/mangadistrict-com-title-stupidemic-uncensored/publication/ch-200c8c840df0.json
+          git add projects/mangadistrict-com-title-stupidemic-uncensored/project.json
+          git diff --cached --quiet && { echo 'publication payload unexpectedly empty'; exit 1; } || true
+          git commit -m 'publish Stupidemic Chapter 1'
+          echo "PUBLICATION_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Mark finalization completed
+        run: |
+          set -euo pipefail
+          cd /tmp/stupidemic-publish
+          python - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone, timedelta
+          from pathlib import Path
+
+          path = Path('work/chapter_lanes/stupidemic-ch1.json')
+          lane = json.loads(path.read_text(encoding='utf-8'))
+          final = lane['parallel']['finalization']
+          claim = final['claim']
+          assert final['state'] == 'claimed'
+          assert int(final['generation']) == 1
+          assert claim['lease_id'] == 'chapter-lane-stupidemic-ch1-finalization-g1'
+          assert int(claim['fencing_token']) == 1
+          for unit in lane['parallel']['units']:
+              assert unit['state'] == 'completed'
+
+          pub_commit = os.environ['PUBLICATION_COMMIT']
+          completed_at = datetime.now(timezone(timedelta(hours=7))).isoformat(timespec='seconds')
+          manifest_path = 'projects/mangadistrict-com-title-stupidemic-uncensored/publication/ch-200c8c840df0.json'
+          final_result = {
+              'status': 'completed',
+              'task_id': 'chapter-stupidemic-ch1-finalize-g1',
+              'lease_id': 'chapter-lane-stupidemic-ch1-finalization-g1',
+              'fencing_token': 1,
+              'publication_commit': pub_commit,
+              'publication_manifest_path': manifest_path,
+              'page_count': 41,
+              'completed_at': completed_at,
+          }
+          lane['state'] = 'completed'
+          lane['phase'] = 'done'
+          lane['resume_page'] = 42
+          lane['progress'] = {'translated_pages': 41, 'rendered_pages': 41, 'qa_pages': 41, 'published': True}
+          lane['parallel']['finalization'] = {'state': 'completed', 'generation': 1, 'claim': None, 'result': final_result}
+          lane['next_task'] = None
+          lane['terminal_reason'] = None
+          lane['last_result'] = {
+              'status': 'completed',
+              'task_id': 'chapter-stupidemic-ch1-finalize-g1',
+              'task_type': 'localize_chapter',
+              'lease_id': 'chapter-lane-stupidemic-ch1-finalization-g1',
+              'fencing_token': 1,
+              'branch': 'chapter/stupidemic-ch1/finalize/g1',
+              'commit': pub_commit,
+              'result_path': manifest_path,
+              'completed_at': completed_at,
+          }
+          path.write_text(json.dumps(lane, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+          git add work/chapter_lanes/stupidemic-ch1.json
+          git commit -m 'complete Stupidemic Chapter 1 finalization [skip ci]'
+          echo "FINAL_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Validate completed publication
+        run: |
+          set -euo pipefail
+          cd /tmp/stupidemic-publish
+          python -m manga_factory validate
+          python -m unittest discover -s tests -v
+
+      - name: Promote publication to main
+        run: |
+          set -euo pipefail
+          cd /tmp/stupidemic-publish
+          git fetch origin main
+          test "$(git rev-parse HEAD~1~1)" = "$(git rev-parse origin/main)" || { echo 'main advanced during finalization; refusing non-CAS promotion'; exit 1; }
+          git push origin HEAD:main
+          echo "published main head $(git rev-parse HEAD)"
