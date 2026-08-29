@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -87,68 +88,61 @@ def _active_chapter_lane_path(root: Path) -> Path:
     return root / lane_path
 
 
-def build_chapter_envelope(root: Path, lane_id: str | None = None) -> dict[str, Any]:
-    lane_path = _active_chapter_lane_path(root) if lane_id is None else root / "work" / "chapter_lanes" / f"{lane_id}.json"
-    if not lane_path.exists():
-        raise ValueError(f"chapter lane not found: {lane_path.relative_to(root)}")
+def _parse_timestamp(value: Any) -> datetime | None:
+    if not isinstance(value, str) or not value.strip():
+        return None
+    text = value.strip().replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
 
-    lane = read_json(lane_path)
-    if lane.get("mode") != "chapter_pipeline":
-        raise ValueError("chapter lane mode must be chapter_pipeline")
-    actual_lane_id = lane.get("lane_id")
-    if not isinstance(actual_lane_id, str) or not actual_lane_id:
-        raise ValueError("chapter lane is missing lane_id")
-    if lane_id is not None and actual_lane_id != lane_id:
-        raise ValueError(f"lane id mismatch: expected {lane_id}, found {actual_lane_id}")
-    if lane.get("state") not in {"ready", "partial"}:
-        raise ValueError(f"chapter lane is not runnable: state={lane.get('state')!r}")
-    if lane.get("claim") is not None:
-        raise ValueError("chapter lane already has an active claim")
 
+def _claim_expired(claim: Any, now: datetime) -> bool:
+    if not isinstance(claim, dict):
+        return False
+    expires = _parse_timestamp(claim.get("expires_at"))
+    return expires is not None and expires <= now
+
+
+def _common_lane_values(lane: dict[str, Any], lane_path: Path, root: Path) -> tuple[str, dict[str, Any], dict[str, Any], str, str]:
     project_id = lane.get("project_id")
     chapter = lane.get("chapter")
     next_task = lane.get("next_task")
-    generation = lane.get("generation")
+    actual_lane_id = lane.get("lane_id")
+    if not isinstance(actual_lane_id, str) or not actual_lane_id:
+        raise ValueError("chapter lane is missing lane_id")
     if not isinstance(project_id, str) or not project_id:
         raise ValueError("chapter lane is missing project_id")
     if not isinstance(chapter, dict) or not chapter.get("id"):
         raise ValueError("chapter lane is missing chapter identity")
     if not isinstance(next_task, dict) or next_task.get("task_type") != "localize_chapter":
         raise ValueError("chapter lane has no runnable localize_chapter task")
-    if not isinstance(generation, int) or isinstance(generation, bool) or generation < 1:
-        raise ValueError("chapter lane generation must be a positive integer")
-
-    chapter_id = str(chapter["id"])
-    task_id = f"chapter-{actual_lane_id}-g{generation}"
-    lease_id = f"chapter-lane-{actual_lane_id}-g{generation}"
     lane_rel = lane_path.relative_to(root).as_posix()
-    handoff = lane.get("source_handoff") or {}
-    last_result = lane.get("last_result") or {}
-    checkpoint_base_commit = last_result.get("commit") if isinstance(last_result, dict) else None
+    return project_id, chapter, next_task, actual_lane_id, lane_rel
 
+
+def _base_envelope(lane: dict[str, Any], lane_path: Path, root: Path) -> dict[str, Any]:
+    project_id, chapter, next_task, actual_lane_id, lane_rel = _common_lane_values(lane, lane_path, root)
+    chapter_id = str(chapter["id"])
+    handoff = lane.get("source_handoff") or {}
     return {
         "execution_mode": "chapter_pipeline",
-        "task_id": task_id,
         "task_type": "localize_chapter",
         "goal": next_task.get("goal"),
-        "scope": next_task.get("scope"),
         "project_id": project_id,
         "series_key": lane.get("series_key"),
         "chapter": chapter,
-        "phase": lane.get("phase"),
-        "resume_page": lane.get("resume_page", 1),
         "page_count": lane.get("page_count"),
         "progress": lane.get("progress") or {},
         "accepted_inputs": lane.get("accepted_inputs") or {},
-        "lease_id": lease_id,
-        "fencing_token": generation,
         "runtime_budget_minutes": 25,
         "drain_after_minutes": 21,
         "checkpoint_by_minutes": 23,
         "safety_stop_minutes": 24,
-        "base_ref": "main",
-        "checkpoint_base_commit": checkpoint_base_commit,
-        "task_branch": f"chapter/{actual_lane_id}/g{generation}",
         "lane_path": lane_rel,
         "source_handoff": handoff,
         "acquisition_evidence": lane.get("acquisition_evidence", {}),
@@ -164,18 +158,14 @@ def build_chapter_envelope(root: Path, lane_id: str | None = None) -> dict[str, 
             str(handoff.get("path") or ""),
             "work/imports/**/canonical_acquisition_validation.json",
             "work/relay_requests/*.json",
-        ],
-        "allowed_write_paths": [
-            f"projects/{project_id}/chapters/{chapter_id}/translation/**",
-            f"projects/{project_id}/chapters/{chapter_id}/rendered/**",
-            f"projects/{project_id}/publication/{chapter_id}/**",
-            f"work/results/{task_id}.json",
-            f"work/handoffs/{task_id}.json",
+            "work/results/*.json",
+            "work/handoffs/*.json",
         ],
         "coordination_write_path": lane_rel,
         "chapter_constraints": {
             "single_chapter_only": True,
             "generalist_worker": True,
+            "parallelism_is_by_page_range_not_role": True,
             "phase_boundaries_are_handoffs": False,
             "worker_may_advance_phase": True,
             "worker_may_translate": True,
@@ -183,7 +173,7 @@ def build_chapter_envelope(root: Path, lane_id: str | None = None) -> dict[str, 
             "worker_may_redraw_and_typeset": True,
             "worker_may_qa": True,
             "worker_may_fix_qa_issues": True,
-            "worker_may_publish_after_qa": True,
+            "worker_may_publish_after_dependencies": True,
             "raw_source_images_must_not_be_committed": True,
             "final_localized_images_may_be_committed": True,
             "page_is_atomic_boundary": True,
@@ -197,14 +187,216 @@ def build_chapter_envelope(root: Path, lane_id: str | None = None) -> dict[str, 
             "parallel_blob_creation_when_supported": True,
             "one_tree_commit_ref_update_per_batch": True,
             "main_lane_updates_per_page": False,
-            "inherit_previous_checkpoint_commit": True,
             "binary_persistence_strategy": "github_create_blob_base64_then_tree_commit",
             "binary_base64_is_transport_only": True,
-            "rendered_progress_requires_remote_commit": True,
             "preferred_render_format": "webp",
-            "target_render_bytes_per_page": 1048576,
+            "publication_quality_resolution_required": True,
+            "preview_resolution_is_not_final": True,
         },
+        "_lane_id": actual_lane_id,
+        "_chapter_id": chapter_id,
     }
+
+
+def _select_parallel_work(lane: dict[str, Any]) -> dict[str, Any]:
+    parallel = lane.get("parallel")
+    if not isinstance(parallel, dict):
+        raise ValueError("parallel chapter lane is missing parallel coordinator state")
+    units = parallel.get("units")
+    if not isinstance(units, list) or not units:
+        raise ValueError("parallel chapter lane has no work units")
+
+    now = datetime.now(timezone.utc)
+    active_claims = 0
+    for unit in units:
+        if isinstance(unit, dict) and unit.get("state") == "claimed" and not _claim_expired(unit.get("claim"), now):
+            active_claims += 1
+    max_active = int(parallel.get("max_active_claims") or len(units))
+
+    # Prefer released ready/partial units in page order.
+    if active_claims < max_active:
+        for unit in sorted((u for u in units if isinstance(u, dict)), key=lambda u: (int(u.get("page_start") or 0), str(u.get("id") or ""))):
+            if unit.get("state") in {"ready", "partial"} and unit.get("claim") is None:
+                return {"kind": "range", "unit": unit, "reclaim_expired": False}
+
+        # Then allow stealing an expired claim without blocking other ranges.
+        for unit in sorted((u for u in units if isinstance(u, dict)), key=lambda u: (int(u.get("page_start") or 0), str(u.get("id") or ""))):
+            if unit.get("state") == "claimed" and _claim_expired(unit.get("claim"), now):
+                return {"kind": "range", "unit": unit, "reclaim_expired": True}
+
+    all_complete = all(isinstance(u, dict) and u.get("state") == "completed" for u in units)
+    finalization = parallel.get("finalization") or {}
+    if all_complete:
+        fin_state = finalization.get("state")
+        fin_claim = finalization.get("claim")
+        if fin_state in {"ready", "partial"} and fin_claim is None:
+            return {"kind": "finalize", "finalization": finalization, "reclaim_expired": False}
+        if fin_state == "blocked":
+            # Lane writers may leave it blocked until the first envelope observes all units complete.
+            return {"kind": "finalize", "finalization": finalization, "reclaim_expired": False}
+        if fin_state == "claimed" and _claim_expired(fin_claim, now):
+            return {"kind": "finalize", "finalization": finalization, "reclaim_expired": True}
+
+    raise ValueError(f"no claimable chapter range; active_claims={active_claims}/{max_active}")
+
+
+def _build_parallel_chapter_envelope(lane: dict[str, Any], lane_path: Path, root: Path) -> dict[str, Any]:
+    env = _base_envelope(lane, lane_path, root)
+    actual_lane_id = env.pop("_lane_id")
+    chapter_id = env.pop("_chapter_id")
+    parallel = lane["parallel"]
+    selected = _select_parallel_work(lane)
+    base_commit = parallel.get("base_commit")
+    lease_minutes = int(parallel.get("lease_minutes") or 35)
+
+    if selected["kind"] == "range":
+        unit = selected["unit"]
+        unit_id = str(unit.get("id") or "")
+        if not unit_id:
+            raise ValueError("parallel unit is missing id")
+        generation = int(unit.get("generation") or 1) + (1 if selected["reclaim_expired"] else 0)
+        task_id = f"chapter-{actual_lane_id}-{unit_id}-g{generation}"
+        checkpoint_commit = unit.get("checkpoint_commit") or base_commit
+        page_start = int(unit.get("page_start") or 1)
+        page_end = int(unit.get("page_end") or page_start)
+        phase = unit.get("phase") or "translate"
+        resume_page = int(unit.get("resume_page") or page_start)
+        env.update({
+            "task_id": task_id,
+            "lease_id": f"chapter-range-{actual_lane_id}-{unit_id}-g{generation}",
+            "fencing_token": generation,
+            "coordination_epoch": lane.get("generation"),
+            "scope": {"page_start": page_start, "page_end": page_end},
+            "phase": phase,
+            "resume_page": resume_page,
+            "base_ref": checkpoint_commit or "main",
+            "checkpoint_base_commit": checkpoint_commit,
+            "task_branch": f"chapter/{actual_lane_id}/{unit_id}/g{generation}",
+            "work_unit": {
+                "kind": "page_range",
+                "id": unit_id,
+                "page_start": page_start,
+                "page_end": page_end,
+                "phase": phase,
+                "resume_page": resume_page,
+                "expected_generation": int(unit.get("generation") or 1),
+                "claim_generation": generation,
+                "reclaim_expired_claim": bool(selected["reclaim_expired"]),
+                "lease_minutes": lease_minutes,
+            },
+        })
+        env["allowed_write_paths"] = [
+            f"projects/{env['project_id']}/chapters/{chapter_id}/translation/**",
+            f"projects/{env['project_id']}/chapters/{chapter_id}/rendered/**",
+            f"work/results/{task_id}.json",
+            f"work/handoffs/{task_id}.json",
+        ]
+        env["chapter_constraints"].update({
+            "global_chapter_claim_is_used": False,
+            "worker_owns_only_claimed_page_range": True,
+            "non_overlapping_range_writes_required": True,
+            "range_completion_requires_qa": True,
+            "range_result_must_list_final_blob_shas": True,
+            "worker_may_claim_another_range_if_time_remains": True,
+            "claim_another_range_min_remaining_minutes": 7,
+            "range_claim_lease_minutes": lease_minutes,
+            "expired_range_claims_are_reclaimable": True,
+        })
+        return env
+
+    finalization = selected["finalization"]
+    generation = int(finalization.get("generation") or 1) + (1 if selected["reclaim_expired"] else 0)
+    task_id = f"chapter-{actual_lane_id}-finalize-g{generation}"
+    env.update({
+        "task_id": task_id,
+        "lease_id": f"chapter-finalize-{actual_lane_id}-g{generation}",
+        "fencing_token": generation,
+        "coordination_epoch": lane.get("generation"),
+        "scope": {"page_start": 1, "page_end": int(lane.get("page_count") or 1)},
+        "phase": "publish",
+        "resume_page": 1,
+        "base_ref": "main",
+        "checkpoint_base_commit": None,
+        "task_branch": f"chapter/{actual_lane_id}/finalize/g{generation}",
+        "work_unit": {
+            "kind": "finalize",
+            "id": "finalize",
+            "expected_generation": int(finalization.get("generation") or 1),
+            "claim_generation": generation,
+            "reclaim_expired_claim": bool(selected["reclaim_expired"]),
+            "lease_minutes": lease_minutes,
+        },
+    })
+    env["allowed_write_paths"] = [
+        f"projects/{env['project_id']}/chapters/{chapter_id}/rendered/**",
+        f"projects/{env['project_id']}/publication/{chapter_id}/**",
+        f"work/results/{task_id}.json",
+        f"work/handoffs/{task_id}.json",
+    ]
+    env["chapter_constraints"].update({
+        "global_chapter_claim_is_used": False,
+        "finalizer_is_generalist_worker": True,
+        "all_ranges_must_be_completed_before_publish": True,
+        "finalizer_must_verify_exact_page_coverage": True,
+        "finalizer_promotes_only_publication_outputs_to_main": True,
+        "finalization_claim_lease_minutes": lease_minutes,
+    })
+    return env
+
+
+def _build_single_claim_chapter_envelope(lane: dict[str, Any], lane_path: Path, root: Path) -> dict[str, Any]:
+    env = _base_envelope(lane, lane_path, root)
+    actual_lane_id = env.pop("_lane_id")
+    chapter_id = env.pop("_chapter_id")
+    generation = lane.get("generation")
+    if lane.get("state") not in {"ready", "partial"}:
+        raise ValueError(f"chapter lane is not runnable: state={lane.get('state')!r}")
+    if lane.get("claim") is not None:
+        raise ValueError("chapter lane already has an active claim")
+    if not isinstance(generation, int) or isinstance(generation, bool) or generation < 1:
+        raise ValueError("chapter lane generation must be a positive integer")
+    task_id = f"chapter-{actual_lane_id}-g{generation}"
+    last_result = lane.get("last_result") or {}
+    checkpoint_base_commit = last_result.get("commit") if isinstance(last_result, dict) else None
+    env.update({
+        "task_id": task_id,
+        "lease_id": f"chapter-lane-{actual_lane_id}-g{generation}",
+        "fencing_token": generation,
+        "scope": (lane.get("next_task") or {}).get("scope"),
+        "phase": lane.get("phase"),
+        "resume_page": lane.get("resume_page", 1),
+        "base_ref": checkpoint_base_commit or "main",
+        "checkpoint_base_commit": checkpoint_base_commit,
+        "task_branch": f"chapter/{actual_lane_id}/g{generation}",
+        "work_unit": {"kind": "legacy_single_claim"},
+    })
+    env["allowed_write_paths"] = [
+        f"projects/{env['project_id']}/chapters/{chapter_id}/translation/**",
+        f"projects/{env['project_id']}/chapters/{chapter_id}/rendered/**",
+        f"projects/{env['project_id']}/publication/{chapter_id}/**",
+        f"work/results/{task_id}.json",
+        f"work/handoffs/{task_id}.json",
+    ]
+    env["chapter_constraints"]["global_chapter_claim_is_used"] = True
+    return env
+
+
+def build_chapter_envelope(root: Path, lane_id: str | None = None) -> dict[str, Any]:
+    lane_path = _active_chapter_lane_path(root) if lane_id is None else root / "work" / "chapter_lanes" / f"{lane_id}.json"
+    if not lane_path.exists():
+        raise ValueError(f"chapter lane not found: {lane_path.relative_to(root)}")
+    lane = read_json(lane_path)
+    if lane.get("mode") != "chapter_pipeline":
+        raise ValueError("chapter lane mode must be chapter_pipeline")
+    actual_lane_id = lane.get("lane_id")
+    if lane_id is not None and actual_lane_id != lane_id:
+        raise ValueError(f"lane id mismatch: expected {lane_id}, found {actual_lane_id}")
+    if lane.get("state") in {"completed", "blocked"}:
+        raise ValueError(f"chapter lane is not runnable: state={lane.get('state')!r}")
+
+    if lane.get("coordination_mode") == "parallel_ranges":
+        return _build_parallel_chapter_envelope(lane, lane_path, root)
+    return _build_single_claim_chapter_envelope(lane, lane_path, root)
 
 
 # Compatibility alias for old callers. Active production work must use chapter-envelope.
