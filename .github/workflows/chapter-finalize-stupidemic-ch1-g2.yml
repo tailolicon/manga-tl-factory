@@ -1,0 +1,223 @@
+name: Finalize stupidemic ch1 g2
+
+on:
+  push:
+    branches:
+      - chapter/stupidemic-ch1/finalize/g2
+    paths:
+      - .github/workflows/chapter-finalize-stupidemic-ch1-g2.yml
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  verify-assemble-publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout claimed main snapshot
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Fence main and fetch completed range branches
+        run: |
+          set -euo pipefail
+          expected_main=4c3632385e1ebacb2cd3ef86502824210951cec8
+          actual_main=$(git rev-parse HEAD)
+          echo "main=$actual_main"
+          test "$actual_main" = "$expected_main"
+          for ref in \
+            chapter/stupidemic-ch1/q001-008/g1 \
+            chapter/stupidemic-ch1/r009-014/g1 \
+            chapter/stupidemic-ch1/r015-020/g4 \
+            chapter/stupidemic-ch1/r021-026/g1 \
+            chapter/stupidemic-ch1/r027-032/g1 \
+            chapter/stupidemic-ch1/r033-037/g2 \
+            chapter/stupidemic-ch1/r038-041/g3
+          do
+            git fetch origin "refs/heads/$ref:refs/remotes/origin/$ref"
+          done
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          lane=json.loads(Path('work/chapter_lanes/stupidemic-ch1.json').read_text(encoding='utf-8'))
+          fin=lane['parallel']['finalization']
+          claim=fin.get('claim') or {}
+          assert fin.get('state')=='claimed', fin
+          assert fin.get('generation')==2, fin
+          assert claim.get('task_id')=='chapter-stupidemic-ch1-finalize-g2', claim
+          assert claim.get('lease_id')=='chapter-finalize-stupidemic-ch1-g2', claim
+          assert claim.get('fencing_token')==2, claim
+          assert claim.get('branch')=='chapter/stupidemic-ch1/finalize/g2', claim
+          assert all(u.get('state')=='completed' for u in lane['parallel']['units'])
+          PY
+
+      - name: Install verifier dependency
+        run: |
+          set -euo pipefail
+          python -m pip install 'Pillow==12.3.0'
+
+      - name: Verify all 41 durable blobs and assemble publication
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, io, json, subprocess
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from PIL import Image
+
+          lane_path=Path('work/chapter_lanes/stupidemic-ch1.json')
+          lane=json.loads(lane_path.read_text(encoding='utf-8'))
+          sources=[
+            ('q001-008','e4c3395e0bdd9256d29f68d090098db794cfd5fa','work/results/chapter-stupidemic-ch1-q001-008-g1.json'),
+            ('r009-014','09971b2e6c77f84ca926c99b961523fe5f5070c4','work/results/chapter-stupidemic-ch1-r009-014-g1.json'),
+            ('r015-020','c1ed46ebfa67087dae948e7695ec90c51436e671','work/results/chapter-stupidemic-ch1-r015-020-g4.json'),
+            ('r021-026','a93f8544ed3f0ddc79fbbda6c4fe566dd0ecc984','work/results/chapter-stupidemic-ch1-r021-026-g1.json'),
+            ('r027-032','bef6cedce21e37a6d9ca7add06ce2cea76ffbd2d','work/results/chapter-stupidemic-ch1-r027-032-g1.json'),
+            ('r033-037','ee51558fb434545e77637278d0de3f852392cfc1','work/results/chapter-stupidemic-ch1-r033-037-g2.json'),
+            ('r038-041','78a579e0bec6dbb1f6e0592e28fed4e010923089','work/results/chapter-stupidemic-ch1-r038-041-g3.json'),
+          ]
+          units={u['id']:u for u in lane['parallel']['units']}
+          normalized=[]
+          source_results=[]
+          for range_id,result_commit,result_path in sources:
+              unit=units[range_id]
+              assert unit['state']=='completed'
+              assert unit['claim'] is None
+              assert unit['result']['commit']==result_commit,(range_id,unit['result'])
+              assert unit['result']['result_path']==result_path,(range_id,unit['result'])
+              raw=subprocess.check_output(['git','show',f'{result_commit}:{result_path}'])
+              result=json.loads(raw.decode('utf-8'))
+              assert result.get('status')=='completed',(range_id,result.get('status'))
+              assert int(result.get('page_start'))==int(unit['page_start'])
+              assert int(result.get('page_end'))==int(unit['page_end'])
+              if isinstance(result.get('qa'),dict):
+                  assert result['qa'].get('status')=='accepted',(range_id,result['qa'])
+              rows=result.get('artifacts') or result.get('pages') or []
+              expected_count=unit['page_end']-unit['page_start']+1
+              assert len(rows)==expected_count,(range_id,len(rows),expected_count)
+              source_results.append({'range_id':range_id,'result_commit':result_commit,'result_path':result_path})
+              for row in rows:
+                  p=int(row['page_index'])
+                  expected_path=f"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-{p:03d}.webp"
+                  path=str(row['path'])
+                  assert path==expected_path,(p,path,expected_path)
+                  assert row.get('qa_status')=='accepted',(p,row.get('qa_status'))
+                  page_commit=(row.get('durable_branch_commit') or row.get('durable_commit') or result.get('binary_commit') or result.get('page_commit'))
+                  assert page_commit,(p,'missing page commit')
+                  expected_blob=row.get('git_blob_sha') or row.get('blob_sha')
+                  assert expected_blob,(p,'missing blob sha')
+                  actual_blob=subprocess.check_output(['git','rev-parse',f'{page_commit}:{path}'],text=True).strip()
+                  assert actual_blob==expected_blob,(p,actual_blob,expected_blob)
+                  data=subprocess.check_output(['git','show',f'{page_commit}:{path}'])
+                  got=hashlib.sha256(data).hexdigest()
+                  assert got==row['sha256'],(p,got,row['sha256'])
+                  with Image.open(io.BytesIO(data)) as im:
+                      size=im.size
+                      fmt=im.format
+                      im.verify()
+                  want_size=(int(row['width']),int(row['height']))
+                  assert size==want_size,(p,size,want_size)
+                  assert fmt=='WEBP',(p,fmt)
+                  out=Path(path); out.parent.mkdir(parents=True,exist_ok=True); out.write_bytes(data)
+                  normalized.append({'index':p,'url':'/'+path,'width':want_size[0],'height':want_size[1],'sha256':got,'git_blob_sha':actual_blob,'source_commit':page_commit})
+                  print('verified',p,actual_blob,got,size)
+
+          normalized.sort(key=lambda x:x['index'])
+          assert [x['index'] for x in normalized]==list(range(1,42)),[x['index'] for x in normalized]
+          assert len({x['git_blob_sha'] for x in normalized})==41
+          assert len({x['url'] for x in normalized})==41
+          page_set=hashlib.sha256('\n'.join(f"{x['index']}:{x['sha256']}:{x['git_blob_sha']}" for x in normalized).encode()).hexdigest()
+          manifest={
+            'series_id':'stupidemic-uncensored',
+            'chapter_id':'ch-200c8c840df0',
+            'title':'Chapter 1',
+            'version':1,
+            'pages':[{k:x[k] for k in ('index','url','width','height','sha256')} for x in normalized],
+          }
+          manifest_path=Path('projects/mangadistrict-com-title-stupidemic-uncensored/publication/ch-200c8c840df0/manifest.json')
+          manifest_path.parent.mkdir(parents=True,exist_ok=True)
+          manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+
+          completed_at=datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
+          result_path='work/results/chapter-stupidemic-ch1-finalize-g2.json'
+          handoff_path='work/handoffs/chapter-stupidemic-ch1-finalize-g2.json'
+          final_result={
+            'schema':1,'status':'completed','task_id':'chapter-stupidemic-ch1-finalize-g2','task_type':'localize_chapter',
+            'lane_id':'stupidemic-ch1','lease_id':'chapter-finalize-stupidemic-ch1-g2','fencing_token':2,
+            'branch':'chapter/stupidemic-ch1/finalize/g2','project_id':'mangadistrict-com-title-stupidemic-uncensored','chapter_id':'ch-200c8c840df0',
+            'page_start':1,'page_end':41,'page_count':41,'qa_status':'accepted','publication_manifest':manifest_path.as_posix(),
+            'page_set_sha256':page_set,'source_range_results':source_results,'completed_at':completed_at,
+            'verification':'all 41 page paths were resolved at each durable page commit; Git blob SHA, SHA-256, WebP decode, dimensions, QA status, coverage and uniqueness were verified before assembly'
+          }
+          handoff={
+            'schema':1,'status':'completed','task_id':'chapter-stupidemic-ch1-finalize-g2','task_type':'localize_chapter',
+            'lane_id':'stupidemic-ch1','lease_id':'chapter-finalize-stupidemic-ch1-g2','fencing_token':2,
+            'branch':'chapter/stupidemic-ch1/finalize/g2','phase':'done','resume_page':42,'page_start':1,'page_end':41,
+            'result_path':result_path,'publication_manifest':manifest_path.as_posix(),'page_set_sha256':page_set,'completed_at':completed_at
+          }
+          rp=Path(result_path); hp=Path(handoff_path); rp.parent.mkdir(parents=True,exist_ok=True); hp.parent.mkdir(parents=True,exist_ok=True)
+          rp.write_text(json.dumps(final_result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          hp.write_text(json.dumps(handoff,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+
+          lane['state']='completed'
+          lane['phase']='done'
+          lane['resume_page']=42
+          lane['progress']={'translated_pages':41,'rendered_pages':41,'qa_pages':41,'published':True}
+          lane['parallel']['finalization']={
+            'state':'completed','generation':2,'claim':None,
+            'result':{'status':'completed','result_path':result_path,'handoff_path':handoff_path,'publication_manifest':manifest_path.as_posix(),'page_count':41,'page_set_sha256':page_set,'completed_at':completed_at}
+          }
+          lane['next_task']=None
+          lane['claim']=None
+          lane['last_result']={
+            'status':'completed','task_id':'chapter-stupidemic-ch1-finalize-g2','task_type':'localize_chapter','lease_id':'chapter-finalize-stupidemic-ch1-g2','fencing_token':2,
+            'branch':'chapter/stupidemic-ch1/finalize/g2','result_path':result_path,'handoff_path':handoff_path,'publication_manifest':manifest_path.as_posix(),'page_set_sha256':page_set,'completed_at':completed_at
+          }
+          lane['terminal_reason']=None
+          lane_path.write_text(json.dumps(lane,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('page_set_sha256',page_set)
+          PY
+
+      - name: Validate publication state
+        run: |
+          set -euo pipefail
+          python -m manga_factory validate
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('projects/mangadistrict-com-title-stupidemic-uncensored/publication/ch-200c8c840df0/manifest.json').read_text())
+          assert m['series_id']=='stupidemic-uncensored'
+          assert m['chapter_id']=='ch-200c8c840df0'
+          assert len(m['pages'])==41
+          assert [p['index'] for p in m['pages']]==list(range(1,42))
+          lane=json.loads(Path('work/chapter_lanes/stupidemic-ch1.json').read_text())
+          assert lane['state']=='completed' and lane['phase']=='done'
+          assert lane['progress']=={'translated_pages':41,'rendered_pages':41,'qa_pages':41,'published':True}
+          assert lane['parallel']['finalization']['state']=='completed'
+          assert lane['parallel']['finalization']['claim'] is None
+          assert lane['next_task'] is None
+          PY
+          git diff --check
+
+      - name: Commit and atomically promote publication to main
+        run: |
+          set -euo pipefail
+          git config user.name 'manga-tl-factory finalizer'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-*.webp \
+            projects/mangadistrict-com-title-stupidemic-uncensored/publication/ch-200c8c840df0/manifest.json \
+            work/results/chapter-stupidemic-ch1-finalize-g2.json \
+            work/handoffs/chapter-stupidemic-ch1-finalize-g2.json \
+            work/chapter_lanes/stupidemic-ch1.json
+          git commit -m 'publish stupidemic chapter 1 [skip ci]'
+          publication_commit=$(git rev-parse HEAD)
+          echo "publication_commit=$publication_commit"
+          git push origin HEAD:main
