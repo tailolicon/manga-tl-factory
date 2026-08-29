@@ -1,15 +1,19 @@
 {
-  "pipeline_version": "2.0.0",
-  "execution_model": "chapter_owned",
+  "pipeline_version": "2.1.0",
+  "execution_model": "chapter_owned_parallel_ranges",
   "stages": {
     "bootstrap": {"requires": [], "role": "chapter-localizer"},
     "acquire_source": {"requires": ["bootstrap"], "role": "chapter-localizer"},
     "localize_chapter": {
       "requires": ["acquire_source"],
       "role": "chapter-localizer",
-      "worker_owns_chapter": true,
+      "worker_is_generalist": true,
+      "worker_owns_page_range": true,
+      "parallel_page_ranges": true,
       "continue_across_phases_in_same_session": true,
-      "phases": ["translate", "redraw_typeset", "qa", "publish"]
+      "range_phases": ["translate", "redraw_typeset", "qa"],
+      "chapter_finalization": ["assemble", "publish"],
+      "finalizer_is_same_generalist_worker_type": true
     }
   }
 }
