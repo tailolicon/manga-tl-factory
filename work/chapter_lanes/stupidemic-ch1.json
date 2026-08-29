@@ -5,34 +5,237 @@
   "coordination_mode": "parallel_ranges",
   "project_id": "mangadistrict-com-title-stupidemic-uncensored",
   "series_key": "stupidemic-uncensored",
-  "chapter": {"id": "ch-200c8c840df0", "name": "Chapter 1"},
+  "chapter": {
+    "id": "ch-200c8c840df0",
+    "name": "Chapter 1"
+  },
   "page_count": 41,
-  "source_handoff": {"path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json", "blob_sha": "a026706bfc7ae80ad8f73f1f0856ced83a50d64f"},
-  "acquisition_evidence": {"workflow_run_id":33192023708,"workflow_conclusion":"success","artifact_id":9694156152,"artifact_digest":"sha256:845e91241cf60363027a53ef814fcc225f76f852a1efad841949506581aeb37e","fetch_result_sha256":"e3e3e780bc8b727ec793fd8c64ca887128ad717dccb2cad6cd6b24d42911d3e1","page_count":41,"downloaded":41,"failed":0,"fetch_mode":"direct_http","retries":0,"validated_on_branch":"wip/stupidemic-ch1-acquisition-reconciled","validated_commit":"b964baa5ee74b5ca516335675fefd1511b95589f","validation_path":"work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/canonical_acquisition_validation.json"},
-  "relay": {"status":"ready","request_path":"work/relay_requests/stupidemic-ch1.json","request_commit":"d2f09f22f24fd9e2c88cf77fe811f510cd5c72d2","run_id":33198730435,"artifact_id":9696850714,"artifact_name":"chapter-relay-stupidemic-ch1-ch-200c8c840df0","artifact_digest":"sha256:0682ce294d5ba541483c3c67d4cb5894edf6390e00277f5a79695fbf014e420d","artifact_size_bytes":13565843,"retention_days":2,"expires_at":"2026-08-30T18:19:09Z","page_count":41},
-  "state": "ready",
+  "source_handoff": {
+    "path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json",
+    "blob_sha": "a026706bfc7ae80ad8f73f1f0856ced83a50d64f"
+  },
+  "acquisition_evidence": {
+    "workflow_run_id": 33192023708,
+    "workflow_conclusion": "success",
+    "artifact_id": 9694156152,
+    "artifact_digest": "sha256:845e91241cf60363027a53ef814fcc225f76f852a1efad841949506581aeb37e",
+    "fetch_result_sha256": "e3e3e780bc8b727ec793fd8c64ca887128ad717dccb2cad6cd6b24d42911d3e1",
+    "page_count": 41,
+    "downloaded": 41,
+    "failed": 0,
+    "fetch_mode": "direct_http",
+    "retries": 0,
+    "validated_on_branch": "wip/stupidemic-ch1-acquisition-reconciled",
+    "validated_commit": "b964baa5ee74b5ca516335675fefd1511b95589f",
+    "validation_path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/canonical_acquisition_validation.json"
+  },
+  "relay": {
+    "status": "ready",
+    "request_path": "work/relay_requests/stupidemic-ch1.json",
+    "request_commit": "d2f09f22f24fd9e2c88cf77fe811f510cd5c72d2",
+    "run_id": 33198730435,
+    "artifact_id": 9696850714,
+    "artifact_name": "chapter-relay-stupidemic-ch1-ch-200c8c840df0",
+    "artifact_digest": "sha256:0682ce294d5ba541483c3c67d4cb5894edf6390e00277f5a79695fbf014e420d",
+    "artifact_size_bytes": 13565843,
+    "retention_days": 2,
+    "expires_at": "2026-08-30T18:19:09Z",
+    "page_count": 41
+  },
+  "state": "completed",
   "generation": 7,
-  "phase": "redraw_typeset",
-  "resume_page": 1,
-  "progress": {"translated_pages": 41, "rendered_pages": 8, "qa_pages": 0, "published": false},
-  "accepted_inputs": {"translation":{"status":"complete","migration_source":"legacy translation_chunk_test","source_commit":"289e82cdbff610096209de9b5f56192338f4ee9f","path_glob":"projects/mangadistrict-com-title-stupidemic-uncensored/translations/smoke/ch-200c8c840df0/page-*.json","page_count":41}},
+  "phase": "done",
+  "resume_page": 42,
+  "progress": {
+    "translated_pages": 41,
+    "rendered_pages": 41,
+    "qa_pages": 41,
+    "published": true
+  },
+  "accepted_inputs": {
+    "translation": {
+      "status": "complete",
+      "migration_source": "legacy translation_chunk_test",
+      "source_commit": "289e82cdbff610096209de9b5f56192338f4ee9f",
+      "path_glob": "projects/mangadistrict-com-title-stupidemic-uncensored/translations/smoke/ch-200c8c840df0/page-*.json",
+      "page_count": 41
+    }
+  },
   "parallel": {
     "max_active_claims": 7,
     "lease_minutes": 35,
     "base_commit": "e1111c174ee214d0d2fa0ca6a51ec6194d18b78a",
     "units": [
-      {"id":"q001-008","page_start":1,"page_end":8,"state":"completed","generation":1,"phase":"done","resume_page":9,"claim":null,"checkpoint_commit":"e4c3395e0bdd9256d29f68d090098db794cfd5fa","result":{"status":"completed","commit":"e4c3395e0bdd9256d29f68d090098db794cfd5fa","page_commit":"36bcffcb7289e09f58f208dd3d7ad6b9634c1f98","result_path":"work/results/chapter-stupidemic-ch1-q001-008-g1.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-q001-008-g1.json","completed_at":"2026-08-29T08:47:16+07:00"},"note":"QA accepted eight publication-size 720x5000 WebP pages; prior 300px preview checkpoints were superseded and exact blob identities are recorded in the range result."},
-      {"id":"r009-014","page_start":9,"page_end":14,"state":"completed","generation":1,"phase":"done","resume_page":15,"claim":null,"checkpoint_commit":"09971b2e6c77f84ca926c99b961523fe5f5070c4","result":{"status":"completed","commit":"09971b2e6c77f84ca926c99b961523fe5f5070c4","page_commit":"8e58fb3a80da37163a5501274069ed32a99b8676","result_path":"work/results/chapter-stupidemic-ch1-r009-014-g1.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-r009-014-g1.json","completed_at":"2026-08-29T08:43:49+07:00"},"note":"QA accepted six publication-size 720x5000 WebP pages; exact blob identities are recorded in the range result."},
-      {"id":"r015-020","page_start":15,"page_end":20,"state":"completed","generation":4,"phase":"done","resume_page":21,"claim":null,"checkpoint_commit":"c1ed46ebfa67087dae948e7695ec90c51436e671","result":{"status":"completed","commit":"c1ed46ebfa67087dae948e7695ec90c51436e671","page_commit":"c25fbb048ade83a2541cf97845f2e9e8768a39ce","result_path":"work/results/chapter-stupidemic-ch1-r015-020-g4.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-r015-020-g4.json","completed_at":"2026-08-29T11:04:31+07:00"},"note":"QA accepted six publication-size 720x5000 WebP pages; exact durable bytes reproduce the generation-3 visually accepted quality-55 candidates and all six SHA-256 values were asserted before persistence."},
-      {"id":"r021-026","page_start":21,"page_end":26,"state":"completed","generation":1,"phase":"done","resume_page":27,"claim":null,"checkpoint_commit":"a93f8544ed3f0ddc79fbbda6c4fe566dd0ecc984","result":{"status":"completed","commit":"a93f8544ed3f0ddc79fbbda6c4fe566dd0ecc984","page_commit":"2ebb1073d1d1e3c6de58acfc649c95b3de544290","result_path":"work/results/chapter-stupidemic-ch1-r021-026-g1.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-r021-026-g1.json","completed_at":"2026-08-29T09:12:00+07:00"},"note":"QA accepted six publication-size 720x5000 WebP pages; exact durable SHA-256 values match the visually inspected local outputs and exact blob identities are recorded in the range result."},
-      {"id":"r027-032","page_start":27,"page_end":32,"state":"completed","generation":1,"phase":"done","resume_page":33,"claim":null,"checkpoint_commit":"bef6cedce21e37a6d9ca7add06ce2cea76ffbd2d","result":{"status":"completed","commit":"bef6cedce21e37a6d9ca7add06ce2cea76ffbd2d","page_commit":"afe9239ecbb17c40f3f159e0ca5c1f7c10d3c24d","result_path":"work/results/chapter-stupidemic-ch1-r027-032-g1.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-r027-032-g1.json","completed_at":"2026-08-29T09:16:00+07:00"},"note":"QA accepted six publication-size 720x5000 WebP pages; exact durable SHA-256 values match the locally visually inspected outputs and exact blob identities are recorded in the range result."},
-      {"id":"r033-037","page_start":33,"page_end":37,"state":"completed","generation":2,"phase":"done","resume_page":38,"claim":null,"checkpoint_commit":"ee51558fb434545e77637278d0de3f852392cfc1","result":{"status":"completed","commit":"ee51558fb434545e77637278d0de3f852392cfc1","page_commit":"34cb8b376c4782226d4feca7d74ed848b0a4982b","result_path":"work/results/chapter-stupidemic-ch1-r033-037-g2.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-r033-037-g2.json","completed_at":"2026-08-29T10:58:14+07:00"},"note":"QA accepted five publication-size 720x5000 WebP pages. Page 33 exact SHA-256 matches the newly visually inspected art-preserving repair; pages 34-37 match the prior visually accepted candidates byte-for-byte."},
-      {"id":"r038-041","page_start":38,"page_end":41,"state":"completed","generation":3,"phase":"done","resume_page":42,"claim":null,"checkpoint_commit":"78a579e0bec6dbb1f6e0592e28fed4e010923089","result":{"status":"completed","commit":"78a579e0bec6dbb1f6e0592e28fed4e010923089","page_commit":"9e5b26c0feee58e634dbd368e12624f33c90df29","result_path":"work/results/chapter-stupidemic-ch1-r038-041-g3.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-r038-041-g3.json","completed_at":"2026-08-29T11:57:47+07:00"},"note":"Generation 3 regenerated pages 38-41 from the clean relay, visually QA-accepted publication-size outputs, reproduced exact asserted SHA-256 bytes in Actions, pushed them, then re-fetched the remote commit and re-verified all four bytes/dimensions before completion."}
+      {
+        "id": "q001-008",
+        "page_start": 1,
+        "page_end": 8,
+        "state": "completed",
+        "generation": 1,
+        "phase": "done",
+        "resume_page": 9,
+        "claim": null,
+        "checkpoint_commit": "e4c3395e0bdd9256d29f68d090098db794cfd5fa",
+        "result": {
+          "status": "completed",
+          "commit": "e4c3395e0bdd9256d29f68d090098db794cfd5fa",
+          "page_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+          "result_path": "work/results/chapter-stupidemic-ch1-q001-008-g1.json",
+          "handoff_path": "work/handoffs/chapter-stupidemic-ch1-q001-008-g1.json",
+          "completed_at": "2026-08-29T08:47:16+07:00"
+        },
+        "note": "QA accepted eight publication-size 720x5000 WebP pages; prior 300px preview checkpoints were superseded and exact blob identities are recorded in the range result."
+      },
+      {
+        "id": "r009-014",
+        "page_start": 9,
+        "page_end": 14,
+        "state": "completed",
+        "generation": 1,
+        "phase": "done",
+        "resume_page": 15,
+        "claim": null,
+        "checkpoint_commit": "09971b2e6c77f84ca926c99b961523fe5f5070c4",
+        "result": {
+          "status": "completed",
+          "commit": "09971b2e6c77f84ca926c99b961523fe5f5070c4",
+          "page_commit": "8e58fb3a80da37163a5501274069ed32a99b8676",
+          "result_path": "work/results/chapter-stupidemic-ch1-r009-014-g1.json",
+          "handoff_path": "work/handoffs/chapter-stupidemic-ch1-r009-014-g1.json",
+          "completed_at": "2026-08-29T08:43:49+07:00"
+        },
+        "note": "QA accepted six publication-size 720x5000 WebP pages; exact blob identities are recorded in the range result."
+      },
+      {
+        "id": "r015-020",
+        "page_start": 15,
+        "page_end": 20,
+        "state": "completed",
+        "generation": 4,
+        "phase": "done",
+        "resume_page": 21,
+        "claim": null,
+        "checkpoint_commit": "c1ed46ebfa67087dae948e7695ec90c51436e671",
+        "result": {
+          "status": "completed",
+          "commit": "c1ed46ebfa67087dae948e7695ec90c51436e671",
+          "page_commit": "c25fbb048ade83a2541cf97845f2e9e8768a39ce",
+          "result_path": "work/results/chapter-stupidemic-ch1-r015-020-g4.json",
+          "handoff_path": "work/handoffs/chapter-stupidemic-ch1-r015-020-g4.json",
+          "completed_at": "2026-08-29T11:04:31+07:00"
+        },
+        "note": "QA accepted six publication-size 720x5000 WebP pages; exact durable bytes reproduce the generation-3 visually accepted quality-55 candidates and all six SHA-256 values were asserted before persistence."
+      },
+      {
+        "id": "r021-026",
+        "page_start": 21,
+        "page_end": 26,
+        "state": "completed",
+        "generation": 1,
+        "phase": "done",
+        "resume_page": 27,
+        "claim": null,
+        "checkpoint_commit": "a93f8544ed3f0ddc79fbbda6c4fe566dd0ecc984",
+        "result": {
+          "status": "completed",
+          "commit": "a93f8544ed3f0ddc79fbbda6c4fe566dd0ecc984",
+          "page_commit": "2ebb1073d1d1e3c6de58acfc649c95b3de544290",
+          "result_path": "work/results/chapter-stupidemic-ch1-r021-026-g1.json",
+          "handoff_path": "work/handoffs/chapter-stupidemic-ch1-r021-026-g1.json",
+          "completed_at": "2026-08-29T09:12:00+07:00"
+        },
+        "note": "QA accepted six publication-size 720x5000 WebP pages; exact durable SHA-256 values match the visually inspected local outputs and exact blob identities are recorded in the range result."
+      },
+      {
+        "id": "r027-032",
+        "page_start": 27,
+        "page_end": 32,
+        "state": "completed",
+        "generation": 1,
+        "phase": "done",
+        "resume_page": 33,
+        "claim": null,
+        "checkpoint_commit": "bef6cedce21e37a6d9ca7add06ce2cea76ffbd2d",
+        "result": {
+          "status": "completed",
+          "commit": "bef6cedce21e37a6d9ca7add06ce2cea76ffbd2d",
+          "page_commit": "afe9239ecbb17c40f3f159e0ca5c1f7c10d3c24d",
+          "result_path": "work/results/chapter-stupidemic-ch1-r027-032-g1.json",
+          "handoff_path": "work/handoffs/chapter-stupidemic-ch1-r027-032-g1.json",
+          "completed_at": "2026-08-29T09:16:00+07:00"
+        },
+        "note": "QA accepted six publication-size 720x5000 WebP pages; exact durable SHA-256 values match the locally visually inspected outputs and exact blob identities are recorded in the range result."
+      },
+      {
+        "id": "r033-037",
+        "page_start": 33,
+        "page_end": 37,
+        "state": "completed",
+        "generation": 2,
+        "phase": "done",
+        "resume_page": 38,
+        "claim": null,
+        "checkpoint_commit": "ee51558fb434545e77637278d0de3f852392cfc1",
+        "result": {
+          "status": "completed",
+          "commit": "ee51558fb434545e77637278d0de3f852392cfc1",
+          "page_commit": "34cb8b376c4782226d4feca7d74ed848b0a4982b",
+          "result_path": "work/results/chapter-stupidemic-ch1-r033-037-g2.json",
+          "handoff_path": "work/handoffs/chapter-stupidemic-ch1-r033-037-g2.json",
+          "completed_at": "2026-08-29T10:58:14+07:00"
+        },
+        "note": "QA accepted five publication-size 720x5000 WebP pages. Page 33 exact SHA-256 matches the newly visually inspected art-preserving repair; pages 34-37 match the prior visually accepted candidates byte-for-byte."
+      },
+      {
+        "id": "r038-041",
+        "page_start": 38,
+        "page_end": 41,
+        "state": "completed",
+        "generation": 3,
+        "phase": "done",
+        "resume_page": 42,
+        "claim": null,
+        "checkpoint_commit": "78a579e0bec6dbb1f6e0592e28fed4e010923089",
+        "result": {
+          "status": "completed",
+          "commit": "78a579e0bec6dbb1f6e0592e28fed4e010923089",
+          "page_commit": "9e5b26c0feee58e634dbd368e12624f33c90df29",
+          "result_path": "work/results/chapter-stupidemic-ch1-r038-041-g3.json",
+          "handoff_path": "work/handoffs/chapter-stupidemic-ch1-r038-041-g3.json",
+          "completed_at": "2026-08-29T11:57:47+07:00"
+        },
+        "note": "Generation 3 regenerated pages 38-41 from the clean relay, visually QA-accepted publication-size outputs, reproduced exact asserted SHA-256 bytes in Actions, pushed them, then re-fetched the remote commit and re-verified all four bytes/dimensions before completion."
+      }
     ],
-    "finalization": {"state":"claimed","generation":2,"claim":{"task_id":"chapter-stupidemic-ch1-finalize-g2","lease_id":"chapter-finalize-stupidemic-ch1-g2","branch":"chapter/stupidemic-ch1/finalize/g2","fencing_token":2,"claimed_at":"2026-08-29T11:58:16+07:00","expires_at":"2026-08-29T12:33:16+07:00"},"result":null}
+    "finalization": {
+      "state": "completed",
+      "generation": 2,
+      "claim": null,
+      "result": {
+        "status": "completed",
+        "result_path": "work/results/chapter-stupidemic-ch1-finalize-g2.json",
+        "handoff_path": "work/handoffs/chapter-stupidemic-ch1-finalize-g2.json",
+        "publication_manifest": "projects/mangadistrict-com-title-stupidemic-uncensored/publication/ch-200c8c840df0/manifest.json",
+        "page_count": 41,
+        "page_set_sha256": "b2a3e2eaf9d04d34c2dfb7f84a9964fc42532728443cb6fd1ef884b33a8a41b6",
+        "completed_at": "2026-08-29T05:01:33.062295Z"
+      }
+    }
   },
-  "next_task": {"task_type":"localize_chapter","goal":"Finish Chapter 1 through parallel non-overlapping page ranges. Every coworker is a full-stack localizer for its claimed range and must continue through QA. When all ranges are QA-complete, any generalist worker may assemble exact blob results and publish the chapter.","scope":{"page_start":1,"page_end":41}},
+  "next_task": null,
   "claim": null,
-  "last_result": {"status":"partial","task_id":"chapter-stupidemic-ch1-g6","task_type":"localize_chapter","lease_id":"chapter-lane-stupidemic-ch1-g6","fencing_token":6,"branch":"chapter/stupidemic-ch1/g6","commit":"e1111c174ee214d0d2fa0ca6a51ec6194d18b78a","result_path":"work/results/chapter-stupidemic-ch1-g6.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-g6.json","completed_at":"2026-08-29T03:20:59+07:00"},
+  "last_result": {
+    "status": "completed",
+    "task_id": "chapter-stupidemic-ch1-finalize-g2",
+    "task_type": "localize_chapter",
+    "lease_id": "chapter-finalize-stupidemic-ch1-g2",
+    "fencing_token": 2,
+    "branch": "chapter/stupidemic-ch1/finalize/g2",
+    "result_path": "work/results/chapter-stupidemic-ch1-finalize-g2.json",
+    "handoff_path": "work/handoffs/chapter-stupidemic-ch1-finalize-g2.json",
+    "publication_manifest": "projects/mangadistrict-com-title-stupidemic-uncensored/publication/ch-200c8c840df0/manifest.json",
+    "page_set_sha256": "b2a3e2eaf9d04d34c2dfb7f84a9964fc42532728443cb6fd1ef884b33a8a41b6",
+    "completed_at": "2026-08-29T05:01:33.062295Z"
+  },
   "terminal_reason": null
 }
