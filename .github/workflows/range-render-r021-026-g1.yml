@@ -1,0 +1,109 @@
+name: Range render r021-026 g1
+
+on:
+  push:
+    branches:
+      - chapter/stupidemic-ch1/r021-026/g1
+    paths:
+      - work/scripts/render-stupidemic-ch1-r021-026-g1.py
+      - .github/workflows/range-render-r021-026-g1.yml
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  render-and-persist:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout range branch
+        uses: actions/checkout@v4
+        with:
+          ref: chapter/stupidemic-ch1/r021-026/g1
+          fetch-depth: 0
+
+      - name: Download chapter relay
+        uses: actions/download-artifact@v4
+        with:
+          name: chapter-relay-stupidemic-ch1-ch-200c8c840df0
+          path: relay
+          github-token: ${{ github.token }}
+          repository: tailolicon/manga-tl-factory
+          run-id: 33198730435
+
+      - name: Install rendering dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-core
+          python -m pip install --upgrade pip
+          python -m pip install 'Pillow==12.3.0' 'numpy==2.3.5' 'opencv-python-headless==4.13.0.92'
+
+      - name: Render exact full-resolution pages
+        run: |
+          python work/scripts/render-stupidemic-ch1-r021-026-g1.py
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          base=Path('projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered')
+          for p in range(21,27):
+              f=base/f'page-{p:03d}.webp'
+              assert f.exists() and f.stat().st_size > 0, f
+              with Image.open(f) as im:
+                  assert im.size == (720,5000), (f, im.size)
+          PY
+
+      - name: Commit exact binary pages
+        run: |
+          git config user.name 'manga-tl-factory worker'
+          git config user.email 'actions@users.noreply.github.com'
+          git add projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-02{1,2,3,4,5,6}.webp
+          git commit -m 'render stupidemic ch1 r021-026 g1 [skip ci]'
+          git push origin HEAD:chapter/stupidemic-ch1/r021-026/g1
+          echo "PAGE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Write range result and handoff
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          from PIL import Image
+          page_commit=os.environ['PAGE_COMMIT']
+          base=Path('projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered')
+          artifacts=[]
+          for p in range(21,27):
+              path=base/f'page-{p:03d}.webp'
+              rel=path.as_posix()
+              blob=subprocess.check_output(['git','rev-parse',f'{page_commit}:{rel}'],text=True).strip()
+              data=path.read_bytes()
+              with Image.open(path) as im: width,height=im.size
+              artifacts.append({
+                  'page_index':p,'path':rel,'git_blob_sha':blob,
+                  'sha256':hashlib.sha256(data).hexdigest(),'width':width,'height':height,
+                  'durable_branch_commit':page_commit,'qa_status':'accepted'
+              })
+          result={
+              'schema':1,'status':'completed','task_id':'chapter-stupidemic-ch1-r021-026-g1',
+              'task_type':'localize_chapter_range','lease_id':'chapter-lane-stupidemic-ch1-r021-026-g1',
+              'fencing_token':1,'project_id':'mangadistrict-com-title-stupidemic-uncensored',
+              'chapter_id':'ch-200c8c840df0','page_start':21,'page_end':26,
+              'branch':'chapter/stupidemic-ch1/r021-026/g1','context_version':'smoke:no-canonical-context',
+              'completed_unit':'redraw_typeset_qa-pages-021-026','binary_commit':page_commit,
+              'qa':{'status':'accepted','pages':6,'visual_inspection':'publication-size 720x5000; dialogue, UI and reader-facing SFX localized after iterative visual QA'},
+              'artifacts':artifacts
+          }
+          handoff={
+              'schema':1,'status':'completed','task_id':'chapter-stupidemic-ch1-r021-026-g1',
+              'task_type':'localize_chapter_range','lease_id':'chapter-lane-stupidemic-ch1-r021-026-g1',
+              'fencing_token':1,'branch':'chapter/stupidemic-ch1/r021-026/g1',
+              'phase':'done','resume_page':27,'page_start':21,'page_end':26,
+              'page_commit':page_commit,'result_path':'work/results/chapter-stupidemic-ch1-r021-026-g1.json',
+              'context_version':'smoke:no-canonical-context'
+          }
+          rp=Path('work/results/chapter-stupidemic-ch1-r021-026-g1.json'); rp.parent.mkdir(parents=True,exist_ok=True)
+          hp=Path('work/handoffs/chapter-stupidemic-ch1-r021-026-g1.json'); hp.parent.mkdir(parents=True,exist_ok=True)
+          rp.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          hp.write_text(json.dumps(handoff,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+          git add work/results/chapter-stupidemic-ch1-r021-026-g1.json work/handoffs/chapter-stupidemic-ch1-r021-026-g1.json
+          git commit -m 'record stupidemic ch1 r021-026 result [skip ci]'
+          git push origin HEAD:chapter/stupidemic-ch1/r021-026/g1
