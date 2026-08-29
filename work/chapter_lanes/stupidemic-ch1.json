@@ -15,15 +15,7 @@
   "phase": "redraw_typeset",
   "resume_page": 1,
   "progress": {"translated_pages": 41, "rendered_pages": 8, "qa_pages": 0, "published": false},
-  "accepted_inputs": {
-    "translation": {
-      "status": "complete",
-      "migration_source": "legacy translation_chunk_test",
-      "source_commit": "289e82cdbff610096209de9b5f56192338f4ee9f",
-      "path_glob": "projects/mangadistrict-com-title-stupidemic-uncensored/translations/smoke/ch-200c8c840df0/page-*.json",
-      "page_count": 41
-    }
-  },
+  "accepted_inputs": {"translation":{"status":"complete","migration_source":"legacy translation_chunk_test","source_commit":"289e82cdbff610096209de9b5f56192338f4ee9f","path_glob":"projects/mangadistrict-com-title-stupidemic-uncensored/translations/smoke/ch-200c8c840df0/page-*.json","page_count":41}},
   "parallel": {
     "max_active_claims": 7,
     "lease_minutes": 35,
@@ -32,30 +24,15 @@
       {"id":"q001-008","page_start":1,"page_end":8,"state":"completed","generation":1,"phase":"done","resume_page":9,"claim":null,"checkpoint_commit":"e4c3395e0bdd9256d29f68d090098db794cfd5fa","result":{"status":"completed","commit":"e4c3395e0bdd9256d29f68d090098db794cfd5fa","page_commit":"36bcffcb7289e09f58f208dd3d7ad6b9634c1f98","result_path":"work/results/chapter-stupidemic-ch1-q001-008-g1.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-q001-008-g1.json","completed_at":"2026-08-29T08:47:16+07:00"},"note":"QA accepted eight publication-size 720x5000 WebP pages; prior 300px preview checkpoints were superseded and exact blob identities are recorded in the range result."},
       {"id":"r009-014","page_start":9,"page_end":14,"state":"completed","generation":1,"phase":"done","resume_page":15,"claim":null,"checkpoint_commit":"09971b2e6c77f84ca926c99b961523fe5f5070c4","result":{"status":"completed","commit":"09971b2e6c77f84ca926c99b961523fe5f5070c4","page_commit":"8e58fb3a80da37163a5501274069ed32a99b8676","result_path":"work/results/chapter-stupidemic-ch1-r009-014-g1.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-r009-014-g1.json","completed_at":"2026-08-29T08:43:49+07:00"},"note":"QA accepted six publication-size 720x5000 WebP pages; exact blob identities are recorded in the range result."},
       {"id":"r015-020","page_start":15,"page_end":20,"state":"claimed","generation":2,"phase":"redraw_typeset","resume_page":15,"claim":{"task_id":"chapter-stupidemic-ch1-r015-020-g2","lease_id":"chapter-lane-stupidemic-ch1-r015-020-g2","branch":"chapter/stupidemic-ch1/r015-020/g2","fencing_token":2,"claimed_at":"2026-08-29T08:50:00+07:00","expires_at":"2026-08-29T09:25:00+07:00"},"checkpoint_commit":"d2c46b9fdd6f8852b78bd13cc4cf3531b6887bae","result":{"status":"partial","commit":"d2c46b9fdd6f8852b78bd13cc4cf3531b6887bae","result_path":"work/results/chapter-stupidemic-ch1-r015-020-g1.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-r015-020-g1.json","completed_at":"2026-08-29T08:48:00+07:00"},"note":"Local redraw/typeset and visual-check recipe for pages 15-20 is durable, but publication image binaries are not; resume at page 15 and persist exact final blobs before counting rendered/QA progress."},
-      {"id":"r021-026","page_start":21,"page_end":26,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":21,"claim":null,"checkpoint_commit":null,"result":null},
+      {"id":"r021-026","page_start":21,"page_end":26,"state":"claimed","generation":1,"phase":"redraw_typeset","resume_page":21,"claim":{"task_id":"chapter-stupidemic-ch1-r021-026-g1","lease_id":"chapter-lane-stupidemic-ch1-r021-026-g1","branch":"chapter/stupidemic-ch1/r021-026/g1","fencing_token":1,"claimed_at":"2026-08-29T08:52:00+07:00","expires_at":"2026-08-29T09:27:00+07:00"},"checkpoint_commit":null,"result":null},
       {"id":"r027-032","page_start":27,"page_end":32,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":27,"claim":null,"checkpoint_commit":null,"result":null},
       {"id":"r033-037","page_start":33,"page_end":37,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":33,"claim":null,"checkpoint_commit":null,"result":null},
       {"id":"r038-041","page_start":38,"page_end":41,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":38,"claim":null,"checkpoint_commit":null,"result":null}
     ],
     "finalization": {"state":"blocked","generation":1,"claim":null,"result":null}
   },
-  "next_task": {
-    "task_type": "localize_chapter",
-    "goal": "Finish Chapter 1 through parallel non-overlapping page ranges. Every coworker is a full-stack localizer for its claimed range and must continue through QA. When all ranges are QA-complete, any generalist worker may assemble exact blob results and publish the chapter.",
-    "scope": {"page_start": 1, "page_end": 41}
-  },
+  "next_task": {"task_type":"localize_chapter","goal":"Finish Chapter 1 through parallel non-overlapping page ranges. Every coworker is a full-stack localizer for its claimed range and must continue through QA. When all ranges are QA-complete, any generalist worker may assemble exact blob results and publish the chapter.","scope":{"page_start":1,"page_end":41}},
   "claim": null,
-  "last_result": {
-    "status": "partial",
-    "task_id": "chapter-stupidemic-ch1-g6",
-    "task_type": "localize_chapter",
-    "lease_id": "chapter-lane-stupidemic-ch1-g6",
-    "fencing_token": 6,
-    "branch": "chapter/stupidemic-ch1/g6",
-    "commit": "e1111c174ee214d0d2fa0ca6a51ec6194d18b78a",
-    "result_path": "work/results/chapter-stupidemic-ch1-g6.json",
-    "handoff_path": "work/handoffs/chapter-stupidemic-ch1-g6.json",
-    "completed_at": "2026-08-29T03:20:59+07:00"
-  },
+  "last_result": {"status":"partial","task_id":"chapter-stupidemic-ch1-g6","task_type":"localize_chapter","lease_id":"chapter-lane-stupidemic-ch1-g6","fencing_token":6,"branch":"chapter/stupidemic-ch1/g6","commit":"e1111c174ee214d0d2fa0ca6a51ec6194d18b78a","result_path":"work/results/chapter-stupidemic-ch1-g6.json","handoff_path":"work/handoffs/chapter-stupidemic-ch1-g6.json","completed_at":"2026-08-29T03:20:59+07:00"},
   "terminal_reason": null
 }
