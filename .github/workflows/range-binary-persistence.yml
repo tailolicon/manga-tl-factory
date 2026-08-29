@@ -1,0 +1,140 @@
+name: Range binary persistence
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "work/persistence_requests/*.json"
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  persist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out coordinator state
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install image verifier
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Locate and validate request
+        id: request
+        run: |
+          set -euo pipefail
+          request=$(git show --format= --name-only "$GITHUB_SHA" -- 'work/persistence_requests/*.json' | sed '/^[[:space:]]*$/d' | head -n 1)
+          if [[ -z "$request" || ! -f "$request" ]]; then
+            echo "No persistence request found in triggering commit" >&2
+            exit 1
+          fi
+          request_copy="$RUNNER_TEMP/persistence-request.json"
+          cp "$request" "$request_copy"
+          REQUEST_COPY="$request_copy" python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from manga_factory.persistence_bridge import load_request
+
+          request = load_request(Path(os.environ["REQUEST_COPY"]))
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as stream:
+              stream.write(f"request_copy={os.environ['REQUEST_COPY']}\n")
+              stream.write(f"request_id={request['request_id']}\n")
+              stream.write(f"target_branch={request['target_branch']}\n")
+              stream.write(f"expected_head={request['expected_head']}\n")
+          print(json.dumps(request, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Fence target branch and create worktree
+        env:
+          TARGET_BRANCH: ${{ steps.request.outputs.target_branch }}
+          EXPECTED_HEAD: ${{ steps.request.outputs.expected_head }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin "refs/heads/$TARGET_BRANCH"
+          fetched=$(git rev-parse FETCH_HEAD)
+          if [[ "$fetched" != "$EXPECTED_HEAD" ]]; then
+            echo "Stale persistence request: expected $EXPECTED_HEAD but branch is $fetched" >&2
+            exit 1
+          fi
+          target_dir="$RUNNER_TEMP/persistence-target"
+          git worktree add --detach "$target_dir" "$EXPECTED_HEAD"
+          echo "TARGET_DIR=$target_dir" >> "$GITHUB_ENV"
+
+      - name: Reconstruct and verify exact image bytes
+        env:
+          REQUEST_COPY: ${{ steps.request.outputs.request_copy }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from manga_factory.persistence_bridge import (
+              github_blob_loader,
+              load_request,
+              materialize_request,
+              write_receipt,
+          )
+
+          request = load_request(Path(os.environ["REQUEST_COPY"]))
+          loader = github_blob_loader(os.environ["GITHUB_REPOSITORY"], os.environ["GITHUB_TOKEN"])
+          receipt = materialize_request(request, Path(os.environ["TARGET_DIR"]), loader)
+          receipt_path = write_receipt(receipt, Path(os.environ["TARGET_DIR"]))
+          print(json.dumps(receipt, ensure_ascii=False, indent=2))
+          print(f"receipt={receipt_path}")
+          PY
+
+      - name: Commit exact assets with branch CAS
+        env:
+          REQUEST_COPY: ${{ steps.request.outputs.request_copy }}
+          REQUEST_ID: ${{ steps.request.outputs.request_id }}
+          TARGET_BRANCH: ${{ steps.request.outputs.target_branch }}
+          EXPECTED_HEAD: ${{ steps.request.outputs.expected_head }}
+        run: |
+          set -euo pipefail
+          git -C "$TARGET_DIR" config user.name "github-actions[bot]"
+          git -C "$TARGET_DIR" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          while IFS= read -r path; do
+            git -C "$TARGET_DIR" add -- "$path"
+          done < <(REQUEST_COPY="$REQUEST_COPY" python - <<'PY'
+          import os
+          from pathlib import Path
+          from manga_factory.persistence_bridge import load_request, staged_paths
+          for path in staged_paths(load_request(Path(os.environ["REQUEST_COPY"]))):
+              print(path)
+          PY
+          )
+
+          if git -C "$TARGET_DIR" diff --cached --quiet; then
+            echo "Persistence request produced no staged changes" >&2
+            exit 1
+          fi
+
+          remote_now=$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | awk '{print $1}')
+          if [[ "$remote_now" != "$EXPECTED_HEAD" ]]; then
+            echo "Target branch moved during reconstruction: expected $EXPECTED_HEAD, got $remote_now" >&2
+            exit 1
+          fi
+
+          git -C "$TARGET_DIR" commit -m "Persist exact range binaries: $REQUEST_ID"
+          new_head=$(git -C "$TARGET_DIR" rev-parse HEAD)
+          git -C "$TARGET_DIR" push \
+            --force-with-lease="refs/heads/$TARGET_BRANCH:$EXPECTED_HEAD" \
+            origin "HEAD:refs/heads/$TARGET_BRANCH"
+          echo "Persisted exact binaries at $new_head"

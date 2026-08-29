@@ -34,6 +34,7 @@ Read only:
 6. `work/chapter_lanes/active.json`
 7. the referenced active lane
 8. only source/relay/result artifacts named by that lane or selected range
+9. `BINARY_PERSISTENCE.md` only when final binary transport is needed
 
 Do not recursively scan the repository.
 
@@ -93,7 +94,7 @@ Rules:
 
 For final rendered images, prefer WebP/JPEG while preserving publication quality and readable text.
 
-When direct binary upload is unavailable:
+If the exact final image comfortably fits in one connector call, the direct Git-data path remains valid:
 
 1. compute SHA-256 of the exact final bytes;
 2. base64-encode the bytes locally;
@@ -104,7 +105,18 @@ When direct binary upload is unavailable:
 7. update the range branch once;
 8. only then count those outputs as durable.
 
-Base64 is transport only and must never be stored as repository text.
+For long-strip images that do **not** fit safely in one connector request, do not repeatedly re-render or return another partial generation solely because the full base64 payload is too large. Use the exact-byte chunk bridge in `BINARY_PERSISTENCE.md`:
+
+1. base64-encode the already QA-accepted exact bytes;
+2. split the base64 text into small multiple-of-4 chunks below the bridge limit;
+3. create each chunk as an uncommitted UTF-8 Git blob and record its SHA;
+4. write one small `work/persistence_requests/*.json` request on `main`, fenced to the current range-branch head;
+5. let the `Range binary persistence` workflow reconstruct and verify byte length, SHA-256, dimensions, and target branch head;
+6. read the receipt from the range branch and require its exact SHA-256/Git blob identities to match the local QA-approved bytes before completing the range.
+
+The bridge preserves exact bytes; it does not re-render the page. Its CAS push refuses to overwrite a moved range branch.
+
+Base64 is transport only and must never be committed as repository text. Bridge chunk blobs are transient Git objects, not files or publication assets.
 
 Do not intentionally reduce pages to preview-quality resolution merely to minimize connector payload. Publication quality takes precedence. If a page is too large, optimize compression first; preserve source dimensions or a publication-appropriate resolution unless the source itself is smaller.
 
