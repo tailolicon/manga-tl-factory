@@ -1,0 +1,93 @@
+{
+  "status": "completed",
+  "task_id": "chapter-stupidemic-ch1-r009-014-g1",
+  "task_type": "localize_chapter",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r009-014",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "lease_id": "chapter-lane-stupidemic-ch1-r009-014-g1",
+  "fencing_token": 1,
+  "branch": "chapter/stupidemic-ch1/r009-014/g1",
+  "context_version": "smoke:no-canonical-context",
+  "page_start": 9,
+  "page_end": 14,
+  "phase": "done",
+  "pages": [
+    {
+      "page_index": 9,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-009.webp",
+      "git_blob_sha": "d7f0fc7da7b118d00ec072edd3f8ea422b7324df",
+      "sha256": "e476f250a7d95ebab3f4dcccd70350ce4a168a0383e74b9706f9d1a93c36b207",
+      "bytes": 162466,
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "8e58fb3a80da37163a5501274069ed32a99b8676",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 10,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-010.webp",
+      "git_blob_sha": "55d270113a3fc5ff0b0c64bb9279993783e2de50",
+      "sha256": "7ed91b3ef8e4b4f6ed9f6da4bbb92c5a7a509532f03a522e0e45999aecb1273e",
+      "bytes": 122998,
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "8e58fb3a80da37163a5501274069ed32a99b8676",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 11,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-011.webp",
+      "git_blob_sha": "15ee7e98aaa603945d1f5d7a978c88f934ae45ac",
+      "sha256": "fdb4996394745c06b6ad4cfcc18cc124356cb44b528363ab9fc5d176e077944c",
+      "bytes": 112394,
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "8e58fb3a80da37163a5501274069ed32a99b8676",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 12,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-012.webp",
+      "git_blob_sha": "28cad18e6d4de2cc3cdd64817ec1d53b960675fd",
+      "sha256": "acaa6f714af19ffb3a5d3d451e05f66766f19299e4769d30d7eef0275e7aaf12",
+      "bytes": 101940,
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "8e58fb3a80da37163a5501274069ed32a99b8676",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 13,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-013.webp",
+      "git_blob_sha": "114e3fd4b169175b5d5edb0156e11d9c03953ec7",
+      "sha256": "979a9609bb83c772108b7d5a0b312ae1a7e6e0648992033c06df51d604c42ed9",
+      "bytes": 112466,
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "8e58fb3a80da37163a5501274069ed32a99b8676",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 14,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-014.webp",
+      "git_blob_sha": "c21ee4883ecfd57eec2a1f69f2965f210856dcc1",
+      "sha256": "680291c72319fa1e2cf8a8620ee0144532eeee3f8b319945fce3460121fe6eb3",
+      "bytes": 101550,
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "8e58fb3a80da37163a5501274069ed32a99b8676",
+      "qa_status": "accepted"
+    }
+  ],
+  "qa": {
+    "status": "accepted",
+    "notes": [
+      "Exact rendered assets are 720x5000 WebP and were visually checked before durable replay.",
+      "Page 13 retains the stylized source BEAM artwork with adjacent Vietnamese annotation LƯỜM to avoid destructive redraw."
+    ]
+  },
+  "task_proposals": [],
+  "handoff_path": "work/handoffs/chapter-stupidemic-ch1-r009-014-g1.json"
+}

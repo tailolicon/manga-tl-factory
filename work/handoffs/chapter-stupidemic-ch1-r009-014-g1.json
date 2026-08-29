@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "task_id": "chapter-stupidemic-ch1-r009-014-g1",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r009-014",
+  "lease_id": "chapter-lane-stupidemic-ch1-r009-014-g1",
+  "fencing_token": 1,
+  "branch": "chapter/stupidemic-ch1/r009-014/g1",
+  "phase": "done",
+  "page_start": 9,
+  "page_end": 14,
+  "page_commit": "8e58fb3a80da37163a5501274069ed32a99b8676",
+  "result_path": "work/results/chapter-stupidemic-ch1-r009-014-g1.json",
+  "resume_page": 15,
+  "completed_at": "2026-08-29T01:43:49.888305+00:00"
+}
