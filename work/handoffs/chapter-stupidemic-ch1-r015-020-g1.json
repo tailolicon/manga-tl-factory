@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "status": "partial",
+  "task_id": "chapter-stupidemic-ch1-r015-020-g1",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r015-020",
+  "lease_id": "chapter-lane-stupidemic-ch1-r015-020-g1",
+  "fencing_token": 1,
+  "branch": "chapter/stupidemic-ch1/r015-020/g1",
+  "phase": "redraw_typeset",
+  "resume_page": 15,
+  "page_start": 15,
+  "page_end": 20,
+  "checkpoint_commit": "91a2c173d71f8b320092e7841c17ec2056ec7858",
+  "result_path": "work/results/chapter-stupidemic-ch1-r015-020-g1.json",
+  "recipe_path": "work/handoffs/chapter-stupidemic-ch1-r015-020-g1-recipe.py",
+  "relay": {
+    "artifact_id": 9696850714,
+    "artifact_name": "chapter-relay-stupidemic-ch1-ch-200c8c840df0",
+    "expires_at": "2026-08-30T18:19:09Z"
+  },
+  "resume_instructions": [
+    "Start the next generation branch from this handoff's final checkpoint commit after lane CAS claim succeeds.",
+    "Download relay artifact 9696850714 and extract ch-200c8c840df0 source pages.",
+    "Run the durable recipe, adapting only local SRC/OUT/font paths as required; do not change accepted translations unless QA finds a real defect.",
+    "Visually QA pages 15-20. Pay particular attention to page 18 BỊCH! redraw and page 20's source-cropped final bubble at the bottom edge.",
+    "Persist the final publication-quality binaries using the Git blob bridge, record exact blob SHA/SHA256/dimensions/durable commit for every page, then mark this range done."
+  ],
+  "completed_at": "2026-08-29T08:48:00+07:00"
+}
