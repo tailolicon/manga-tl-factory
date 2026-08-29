@@ -1,0 +1,170 @@
+name: Range render r038-041 g3
+
+on:
+  push:
+    branches:
+      - chapter/stupidemic-ch1/r038-041/g3
+    paths:
+      - .github/workflows/range-render-r038-041-g3.yml
+
+permissions:
+  contents: write
+  actions: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  render-persist-verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout range branch
+        uses: actions/checkout@v4
+        with:
+          ref: chapter/stupidemic-ch1/r038-041/g3
+          fetch-depth: 0
+
+      - name: Download chapter relay
+        uses: actions/download-artifact@v4
+        with:
+          name: chapter-relay-stupidemic-ch1-ch-200c8c840df0
+          path: relay
+          github-token: ${{ github.token }}
+          repository: tailolicon/manga-tl-factory
+          run-id: 33198730435
+
+      - name: Install pinned rendering dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-core fonts-noto-extra
+          test -f /usr/share/fonts/truetype/noto/NotoSans-ExtraCondensedBold.ttf
+          python -m pip install --upgrade pip
+          python -m pip install 'Pillow==12.3.0' 'numpy==2.3.5' 'opencv-python-headless==4.13.0.92'
+
+      - name: Reproduce exact visually accepted pages
+        run: |
+          set -euo pipefail
+          sudo mkdir -p /mnt/data
+          sudo chown "$USER":"$USER" /mnt/data
+          rm -rf /mnt/data/stupidemic_relay /mnt/data/r038_041_g3_v5 /mnt/data/r038_041_g3_v8 /mnt/data/r038_041_g3_v6 generated
+          ln -s "$GITHUB_WORKSPACE/relay" /mnt/data/stupidemic_relay
+          python work/handoffs/chapter-stupidemic-ch1-r038-041-g3-v5.py
+          python work/handoffs/chapter-stupidemic-ch1-r038-041-g3-p39-v8.py
+          python work/handoffs/chapter-stupidemic-ch1-r038-041-g3-p40-v6.py
+          mkdir -p generated
+          cp /mnt/data/r038_041_g3_v5/page-038.webp generated/page-038.webp
+          cp /mnt/data/r038_041_g3_v8/page-039.webp generated/page-039.webp
+          cp /mnt/data/r038_041_g3_v6/page-040.webp generated/page-040.webp
+          cp /mnt/data/r038_041_g3_v5/page-041.webp generated/page-041.webp
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import hashlib
+          expected={
+            38:('78aec50f5fecf2d490e9f4c4686926cd306702e7af841916f6e47559482d9586',(720,5000)),
+            39:('b9d92a1d378b8be337dcab796beb99213663d6162105187b3b4704b5a12a700d',(720,5000)),
+            40:('a98c6ce8ac1e9c89775385223a9e20f0b5362df0df25b76582afb856c9b78387',(720,5000)),
+            41:('67426947c1da00ca43ba3154e6cd0244aab1f8dc6ba46b1a2c1a1fb8f01dc8fe',(720,3999)),
+          }
+          for p,(want_hash,want_size) in expected.items():
+              path=Path('generated')/f'page-{p:03d}.webp'
+              data=path.read_bytes()
+              got=hashlib.sha256(data).hexdigest()
+              with Image.open(path) as im:
+                  size=im.size
+                  im.verify()
+              print(p,len(data),got,size)
+              assert got==want_hash,(p,got,want_hash)
+              assert size==want_size,(p,size,want_size)
+          PY
+          dest=projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered
+          mkdir -p "$dest"
+          cp generated/page-0{38,39,40,41}.webp "$dest"/
+
+      - name: Commit exact binary pages
+        run: |
+          set -euo pipefail
+          git config user.name 'manga-tl-factory worker'
+          git config user.email 'actions@users.noreply.github.com'
+          git add projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-0{38,39,40,41}.webp
+          git commit -m 'render stupidemic ch1 r038-041 g3 [skip ci]'
+          git push origin HEAD:chapter/stupidemic-ch1/r038-041/g3
+          echo "PAGE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Re-fetch remote bytes and verify exact hashes
+        run: |
+          set -euo pipefail
+          git fetch origin chapter/stupidemic-ch1/r038-041/g3 --force
+          remote=$(git rev-parse FETCH_HEAD)
+          test "$remote" = "$PAGE_COMMIT"
+          python - <<'PY'
+          import hashlib,os,subprocess,tempfile
+          from pathlib import Path
+          from PIL import Image
+          expected={
+            38:('78aec50f5fecf2d490e9f4c4686926cd306702e7af841916f6e47559482d9586',(720,5000)),
+            39:('b9d92a1d378b8be337dcab796beb99213663d6162105187b3b4704b5a12a700d',(720,5000)),
+            40:('a98c6ce8ac1e9c89775385223a9e20f0b5362df0df25b76582afb856c9b78387',(720,5000)),
+            41:('67426947c1da00ca43ba3154e6cd0244aab1f8dc6ba46b1a2c1a1fb8f01dc8fe',(720,3999)),
+          }
+          commit=os.environ['PAGE_COMMIT']
+          base='projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered'
+          for p,(want_hash,want_size) in expected.items():
+              rel=f'{base}/page-{p:03d}.webp'
+              data=subprocess.check_output(['git','show',f'{commit}:{rel}'])
+              got=hashlib.sha256(data).hexdigest()
+              fd,name=tempfile.mkstemp(suffix='.webp'); os.close(fd); Path(name).write_bytes(data)
+              try:
+                  with Image.open(name) as im:
+                      size=im.size
+                      im.verify()
+              finally:
+                  Path(name).unlink(missing_ok=True)
+              print('remote',p,len(data),got,size)
+              assert got==want_hash,(p,got,want_hash)
+              assert size==want_size,(p,size,want_size)
+          PY
+
+      - name: Write completed range result and handoff
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          from PIL import Image
+          page_commit=os.environ['PAGE_COMMIT']
+          base=Path('projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered')
+          pages=[]
+          artifacts=[]
+          for p in range(38,42):
+              path=base/f'page-{p:03d}.webp'; rel=path.as_posix()
+              blob=subprocess.check_output(['git','rev-parse',f'{page_commit}:{rel}'],text=True).strip()
+              data=subprocess.check_output(['git','show',f'{page_commit}:{rel}'])
+              temp=Path('/tmp')/f'verify-{p}.webp'; temp.write_bytes(data)
+              with Image.open(temp) as im:
+                  width,height=im.size
+                  im.verify()
+              temp.unlink(missing_ok=True)
+              item={'page_index':p,'path':rel,'blob_sha':blob,'sha256':hashlib.sha256(data).hexdigest(),'width':width,'height':height,'durable_commit':page_commit,'qa_status':'accepted'}
+              pages.append(item)
+              artifacts.append({'page_index':p,'path':rel,'git_blob_sha':blob,'sha256':item['sha256'],'width':width,'height':height,'durable_branch_commit':page_commit,'qa_status':'accepted'})
+          result={
+            'schema':1,'status':'completed','task_id':'chapter-stupidemic-ch1-r038-041-g3','task_type':'localize_chapter',
+            'lane_id':'stupidemic-ch1','range_id':'r038-041','lease_id':'chapter-lane-stupidemic-ch1-r038-041-g3','fencing_token':3,
+            'branch':'chapter/stupidemic-ch1/r038-041/g3','project_id':'mangadistrict-com-title-stupidemic-uncensored','chapter_id':'ch-200c8c840df0',
+            'page_start':38,'page_end':41,'context_version':'smoke:no-canonical-context','translation_source_commit':'289e82cdbff610096209de9b5f56192338f4ee9f',
+            'qa_status':'accepted','page_commit':page_commit,'pages':pages,'artifacts':artifacts,
+            'qa':{'status':'accepted','pages':4,'visual_inspection':'generation-3 publication-size candidates were visually inspected before persistence; workflow reproduced their exact asserted SHA-256 bytes and re-fetched the pushed commit before result creation'}
+          }
+          handoff={'schema':1,'status':'completed','task_id':'chapter-stupidemic-ch1-r038-041-g3','task_type':'localize_chapter','lane_id':'stupidemic-ch1','range_id':'r038-041','lease_id':'chapter-lane-stupidemic-ch1-r038-041-g3','fencing_token':3,'branch':'chapter/stupidemic-ch1/r038-041/g3','phase':'done','resume_page':42,'page_start':38,'page_end':41,'page_commit':page_commit,'result_path':'work/results/chapter-stupidemic-ch1-r038-041-g3.json','context_version':'smoke:no-canonical-context'}
+          rp=Path('work/results/chapter-stupidemic-ch1-r038-041-g3.json'); hp=Path('work/handoffs/chapter-stupidemic-ch1-r038-041-g3.json')
+          rp.parent.mkdir(parents=True,exist_ok=True); hp.parent.mkdir(parents=True,exist_ok=True)
+          rp.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          hp.write_text(json.dumps(handoff,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+          git add work/results/chapter-stupidemic-ch1-r038-041-g3.json work/handoffs/chapter-stupidemic-ch1-r038-041-g3.json
+          git commit -m 'record stupidemic ch1 r038-041 g3 result [skip ci]'
+          git push origin HEAD:chapter/stupidemic-ch1/r038-041/g3
