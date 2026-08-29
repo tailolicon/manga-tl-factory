@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "partial",
+  "task_id": "chapter-stupidemic-ch1-r015-020-g2",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r015-020",
+  "lease_id": "chapter-lane-stupidemic-ch1-r015-020-g2",
+  "fencing_token": 2,
+  "branch": "chapter/stupidemic-ch1/r015-020/g2",
+  "phase": "redraw_typeset",
+  "resume_page": 15,
+  "page_start": 15,
+  "page_end": 20,
+  "result_path": "work/results/chapter-stupidemic-ch1-r015-020-g2.json",
+  "result_commit": "653be0a97d099259d4b5553a2e4925f7786667b7",
+  "recipe_path": "work/handoffs/chapter-stupidemic-ch1-r015-020-g1-recipe.py",
+  "relay": {
+    "artifact_id": 9696850714,
+    "artifact_name": "chapter-relay-stupidemic-ch1-ch-200c8c840df0",
+    "expires_at": "2026-08-30T18:19:09Z"
+  },
+  "candidate_pages": [
+    {"page":15,"sha256":"1dec8ff5d266fcecd615b6624e95bff3085bd28ee3010792e679b262f195f25e","width":720,"height":5000,"bytes":122544},
+    {"page":16,"sha256":"b40cf0240e9762a4ae8bf7a48170f87505b7a737781eb36d7503d874c5ca363f","width":720,"height":5000,"bytes":102082},
+    {"page":17,"sha256":"f96504cd9014e5743e59fcaa5baed3c1da2b442f9e381dc3516d47ae3d0f818f","width":720,"height":5000,"bytes":100040},
+    {"page":18,"sha256":"d1dcf727a48038e5478cae7a0fb9fad390f21c794a2ad610494ac3da7a3063ed","width":720,"height":5000,"bytes":117274},
+    {"page":19,"sha256":"1e686270058b2788189428c06bf9febbb0235a92bc814d92629aee39f38d2514","width":720,"height":5000,"bytes":105318},
+    {"page":20,"sha256":"7efcd32d57f56bffc6edb1f1c4560e008e395388c9a953ca60fed61d565d6a60","width":720,"height":5000,"bytes":137542}
+  ],
+  "resume_instructions": [
+    "Claim r015-020 at the next generation and start from the lane checkpoint commit for this handoff.",
+    "Reuse relay artifact 9696850714 and the existing g1 recipe; no translation rewrite is required unless exact-image QA finds a real defect.",
+    "Regenerate pages 15-20 at 720x5000. Inspect page 18 BỊCH! and page 20's bottom-edge bubble.",
+    "Persist each exact final WebP byte sequence through Git create_blob encoding=base64, then one tree/commit/ref update; record blob SHA, SHA-256, dimensions and durable image commit for all six pages.",
+    "Only after exact durable-image QA succeeds may the range be marked completed and rendered/qa progress be advanced."
+  ],
+  "completed_at": "2026-08-29T08:59:30+07:00"
+}
