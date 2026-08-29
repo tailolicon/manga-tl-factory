@@ -53,7 +53,7 @@ class FactoryTests(unittest.TestCase):
 
 
 class ChapterPipelineTests(unittest.TestCase):
-    def _write_lane(self, root, phase="translate", resume_page=1, last_result=None):
+    def _base_dirs(self, root):
         lane_dir = root / "work" / "chapter_lanes"
         lane_dir.mkdir(parents=True)
         (root / "projects" / "project-x").mkdir(parents=True)
@@ -63,70 +63,101 @@ class ChapterPipelineTests(unittest.TestCase):
             "active_lane": "x-ch1",
             "lane_path": "work/chapter_lanes/x-ch1.json",
         }), encoding="utf-8")
+        return lane_dir
+
+    def _write_parallel_lane(self, root, units=None, final_state="blocked"):
+        lane_dir = self._base_dirs(root)
+        if units is None:
+            units = [
+                {"id":"r001-006","page_start":1,"page_end":6,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":1,"claim":None,"checkpoint_commit":None,"result":None},
+                {"id":"r007-012","page_start":7,"page_end":12,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":7,"claim":None,"checkpoint_commit":None,"result":None},
+            ]
         lane = {
             "schema": 1,
             "lane_id": "x-ch1",
             "mode": "chapter_pipeline",
+            "coordination_mode": "parallel_ranges",
             "project_id": "project-x",
             "series_key": "x",
             "chapter": {"id": "ch-1", "name": "Chapter 1"},
-            "page_count": 41,
+            "page_count": 12,
             "source_handoff": {"path": "work/imports/source-x/source_handoff.json", "blob_sha": "abcdef1234567890"},
             "state": "ready",
-            "generation": 3,
-            "phase": phase,
-            "resume_page": resume_page,
-            "progress": {"translated_pages": 0, "rendered_pages": 0, "qa_pages": 0, "published": False},
-            "next_task": {"task_type": "localize_chapter", "goal": "finish chapter", "scope": {"page_start": 1, "page_end": 41}},
+            "generation": 4,
+            "phase": "redraw_typeset",
+            "resume_page": 1,
+            "progress": {"translated_pages": 12, "rendered_pages": 0, "qa_pages": 0, "published": False},
+            "parallel": {
+                "max_active_claims": 4,
+                "lease_minutes": 35,
+                "base_commit": "deadbeefcafefeed",
+                "units": units,
+                "finalization": {"state": final_state, "generation": 1, "claim": None, "result": None},
+            },
+            "next_task": {"task_type": "localize_chapter", "goal": "finish chapter", "scope": {"page_start": 1, "page_end": 12}},
             "claim": None,
-            "last_result": last_result,
+            "last_result": None,
         }
         (lane_dir / "x-ch1.json").write_text(json.dumps(lane), encoding="utf-8")
 
-    def test_chapter_envelope(self):
+    def test_parallel_envelope_selects_first_free_range(self):
         from manga_factory.standalone import build_chapter_envelope
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            previous = {"status": "partial", "commit": "deadbeefcafefeed", "branch": "chapter/x-ch1/g2"}
-            self._write_lane(root, phase="redraw_typeset", resume_page=7, last_result=previous)
+            self._write_parallel_lane(root)
             env = build_chapter_envelope(root)
             self.assertEqual(env["execution_mode"], "chapter_pipeline")
             self.assertEqual(env["task_type"], "localize_chapter")
-            self.assertEqual(env["phase"], "redraw_typeset")
-            self.assertEqual(env["resume_page"], 7)
-            self.assertEqual(env["fencing_token"], 3)
-            self.assertEqual(env["task_branch"], "chapter/x-ch1/g3")
+            self.assertEqual(env["work_unit"]["id"], "r001-006")
+            self.assertEqual(env["scope"], {"page_start": 1, "page_end": 6})
+            self.assertEqual(env["task_branch"], "chapter/x-ch1/r001-006/g1")
             self.assertEqual(env["checkpoint_base_commit"], "deadbeefcafefeed")
-            self.assertEqual(env["runtime_budget_minutes"], 25)
-            self.assertEqual(env["drain_after_minutes"], 21)
-            self.assertIn("projects/project-x/chapters/ch-1/rendered/**", env["allowed_write_paths"])
-            self.assertIn("projects/project-x/publication/ch-1/**", env["allowed_write_paths"])
-            c = env["chapter_constraints"]
-            self.assertTrue(c["generalist_worker"])
-            self.assertFalse(c["phase_boundaries_are_handoffs"])
-            self.assertTrue(c["worker_may_advance_phase"])
-            self.assertTrue(c["worker_may_translate"])
-            self.assertTrue(c["worker_may_correct_translation"])
-            self.assertTrue(c["worker_may_redraw_and_typeset"])
-            self.assertTrue(c["worker_may_qa"])
-            self.assertTrue(c["worker_may_fix_qa_issues"])
-            self.assertTrue(c["worker_may_publish_after_qa"])
-            self.assertFalse(c["soft_page_target_is_stop_condition"])
-            self.assertEqual(c["remote_checkpoint_strategy"], "adaptive_batched")
-            self.assertEqual(c["default_checkpoint_pages"], 6)
-            self.assertEqual(c["min_checkpoint_pages"], 4)
-            self.assertEqual(c["max_checkpoint_pages"], 10)
-            self.assertEqual(c["max_uncommitted_minutes"], 7)
-            self.assertEqual(c["force_flush_from_minute"], 18)
-            self.assertTrue(c["parallel_blob_creation_when_supported"])
-            self.assertTrue(c["one_tree_commit_ref_update_per_batch"])
-            self.assertFalse(c["main_lane_updates_per_page"])
-            self.assertTrue(c["inherit_previous_checkpoint_commit"])
-            self.assertEqual(c["binary_persistence_strategy"], "github_create_blob_base64_then_tree_commit")
-            self.assertTrue(c["binary_base64_is_transport_only"])
-            self.assertTrue(c["rendered_progress_requires_remote_commit"])
-            self.assertEqual(c["preferred_render_format"], "webp")
-            self.assertEqual(c["target_render_bytes_per_page"], 1048576)
+            self.assertFalse(env["chapter_constraints"]["global_chapter_claim_is_used"])
+            self.assertTrue(env["chapter_constraints"]["worker_owns_only_claimed_page_range"])
+            self.assertTrue(env["chapter_constraints"]["range_completion_requires_qa"])
+            self.assertTrue(env["chapter_constraints"]["worker_may_claim_another_range_if_time_remains"])
+            self.assertTrue(env["chapter_constraints"]["parallel_blob_creation_when_supported"])
+
+    def test_parallel_envelope_skips_active_claim(self):
+        from manga_factory.standalone import build_chapter_envelope
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            units = [
+                {"id":"r001-006","page_start":1,"page_end":6,"state":"claimed","generation":1,"phase":"redraw_typeset","resume_page":1,"claim":{"expires_at":"2999-01-01T00:00:00+00:00"},"checkpoint_commit":None,"result":None},
+                {"id":"r007-012","page_start":7,"page_end":12,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":7,"claim":None,"checkpoint_commit":None,"result":None},
+            ]
+            self._write_parallel_lane(root, units=units)
+            env = build_chapter_envelope(root)
+            self.assertEqual(env["work_unit"]["id"], "r007-012")
+
+    def test_parallel_envelope_reclaims_expired_range(self):
+        from manga_factory.standalone import build_chapter_envelope
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            units = [
+                {"id":"r001-006","page_start":1,"page_end":6,"state":"claimed","generation":2,"phase":"qa","resume_page":3,"claim":{"expires_at":"2000-01-01T00:00:00+00:00"},"checkpoint_commit":"feedface1234567","result":None},
+            ]
+            self._write_parallel_lane(root, units=units)
+            env = build_chapter_envelope(root)
+            self.assertEqual(env["work_unit"]["id"], "r001-006")
+            self.assertTrue(env["work_unit"]["reclaim_expired_claim"])
+            self.assertEqual(env["fencing_token"], 3)
+            self.assertEqual(env["checkpoint_base_commit"], "feedface1234567")
+
+    def test_parallel_envelope_finalizes_after_all_ranges_complete(self):
+        from manga_factory.standalone import build_chapter_envelope
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            units = [
+                {"id":"r001-006","page_start":1,"page_end":6,"state":"completed","generation":1,"phase":"done","resume_page":6,"claim":None,"checkpoint_commit":"a"*40,"result":{"path":"work/results/a.json"}},
+                {"id":"r007-012","page_start":7,"page_end":12,"state":"completed","generation":1,"phase":"done","resume_page":12,"claim":None,"checkpoint_commit":"b"*40,"result":{"path":"work/results/b.json"}},
+            ]
+            self._write_parallel_lane(root, units=units, final_state="ready")
+            env = build_chapter_envelope(root)
+            self.assertEqual(env["work_unit"]["kind"], "finalize")
+            self.assertEqual(env["phase"], "publish")
+            self.assertTrue(env["chapter_constraints"]["all_ranges_must_be_completed_before_publish"])
+            self.assertTrue(env["chapter_constraints"]["finalizer_is_generalist_worker"])
 
 
 if __name__ == "__main__":
