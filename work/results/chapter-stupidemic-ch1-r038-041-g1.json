@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "status": "completed",
+  "task_id": "chapter-stupidemic-ch1-r038-041-g1",
+  "task_type": "localize_chapter",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r038-041",
+  "lease_id": "chapter-lane-stupidemic-ch1-r038-041-g1",
+  "fencing_token": 1,
+  "branch": "chapter/stupidemic-ch1/r038-041/g1",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_start": 38,
+  "page_end": 41,
+  "context_version": "smoke:no-canonical-context",
+  "translation_source_commit": "289e82cdbff610096209de9b5f56192338f4ee9f",
+  "qa_status": "accepted",
+  "page_commit": "9d2d0d7d73a0609f1f61d33bcfb5fc2b110ab3cd",
+  "pages": [
+    {
+      "page_index": 38,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-038.webp",
+      "blob_sha": "5d6a87d8b9efb6b18996cf7a93625c3378196cfd",
+      "sha256": "533c2eebb3f6a5683c74f92fc9c07ba92037e7d8916a56fdd727afefa7b6cb36",
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "9d2d0d7d73a0609f1f61d33bcfb5fc2b110ab3cd",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 39,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-039.webp",
+      "blob_sha": "6e20e834609df3e380f6d8f8ec335b0f5d3e5ee4",
+      "sha256": "dc72e55598865defa8bbb238aaeb4540b3f47b6caca7e233f76b48b2a701494d",
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "9d2d0d7d73a0609f1f61d33bcfb5fc2b110ab3cd",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 40,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-040.webp",
+      "blob_sha": "6dbc212d52168d0bf5ca621473b9b4ff57c09544",
+      "sha256": "6d690d2de906ce50d749a432746fe543149f31eb26cc4f0656d55da5a9895d07",
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "9d2d0d7d73a0609f1f61d33bcfb5fc2b110ab3cd",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 41,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-041.webp",
+      "blob_sha": "2bedd34a203db580cdc78376fd05d654b07f053e",
+      "sha256": "067ee1cc96d33897b11183861f828148910c908962fe6c6e8741270b551823e9",
+      "width": 720,
+      "height": 3999,
+      "durable_commit": "9d2d0d7d73a0609f1f61d33bcfb5fc2b110ab3cd",
+      "qa_status": "accepted"
+    }
+  ],
+  "completed_at": "2026-08-29T09:14:31+07:00"
+}
