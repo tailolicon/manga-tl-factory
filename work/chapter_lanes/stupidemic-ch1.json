@@ -29,7 +29,7 @@
     "lease_minutes": 35,
     "base_commit": "e1111c174ee214d0d2fa0ca6a51ec6194d18b78a",
     "units": [
-      {"id":"q001-008","page_start":1,"page_end":8,"state":"ready","generation":1,"phase":"qa","resume_page":1,"claim":null,"checkpoint_commit":"e1111c174ee214d0d2fa0ca6a51ec6194d18b78a","result":null,"note":"QA exact durable pages 1-8 from g5/g6; replace any preview-resolution or visually insufficient page."},
+      {"id":"q001-008","page_start":1,"page_end":8,"state":"claimed","generation":1,"phase":"qa","resume_page":1,"claim":{"task_id":"chapter-stupidemic-ch1-q001-008-g1","lease_id":"chapter-lane-stupidemic-ch1-q001-008-g1","branch":"chapter/stupidemic-ch1/q001-008/g1","fencing_token":1,"claimed_at":"2026-08-29T08:25:00+07:00","expires_at":"2026-08-29T09:00:00+07:00"},"checkpoint_commit":"e1111c174ee214d0d2fa0ca6a51ec6194d18b78a","result":null,"note":"QA exact durable pages 1-8 from g5/g6; replace any preview-resolution or visually insufficient page."},
       {"id":"r009-014","page_start":9,"page_end":14,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":9,"claim":null,"checkpoint_commit":null,"result":null},
       {"id":"r015-020","page_start":15,"page_end":20,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":15,"claim":null,"checkpoint_commit":null,"result":null},
       {"id":"r021-026","page_start":21,"page_end":26,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":21,"claim":null,"checkpoint_commit":null,"result":null},
