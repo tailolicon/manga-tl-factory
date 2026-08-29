@@ -2,117 +2,120 @@
 
 ## Execution lifecycle
 
-Active chapter work uses a durable lane on `main` plus a short-lived worker branch.
-
-Recommended lifecycle:
+Active chapter work uses a durable chapter lane on `main` plus one short-lived branch per claimed page range.
 
 ```text
 CLAIMED -> RUNNING -> DRAINING -> SUBMITTED
                    -> FAILED
 ```
 
-The worker owns one chapter for the session and may perform every localization function needed to advance it.
+Every worker is a generalist chapter localizer.
 
-## Production chapter ownership
+## Parallel production ownership
 
-For `mode: chapter_pipeline`, the task type is `localize_chapter`.
+For `coordination_mode: parallel_ranges`, no worker exclusively owns the whole chapter. Workers own non-overlapping page ranges.
 
-Translation, translation correction, redraw, typesetting, QA, fixing and publish are not separate mandatory worker roles. They are capabilities of the same generalist chapter worker. Internal phase names are resumable progress markers only.
+The task type remains `localize_chapter`. Translation, correction, redraw, typesetting, QA, fixes, assembly and publish are capabilities of the same worker type, not separate roles.
 
-If a phase finishes and enough safe runtime remains, advance immediately. Never emit a handoff solely because a role or phase boundary was crossed.
+Within a claimed range, continue across all remaining phases whenever runtime allows.
+
+## Range fencing
+
+Each `parallel.units[]` entry has its own `generation`. That range generation is the fencing token for work on that range.
+
+A worker must mutate only its own range entry when claiming/releasing. It must preserve all other range entries from the latest lane read.
+
+Claim and release writes use compare-and-swap against the current lane blob SHA. If another worker updated the lane first, refetch and retry against the new state.
+
+A range claim contains an expiry. A dead worker can block only its range until expiry. Reclaiming an expired range increments that range generation before useful work starts.
+
+The global lane `generation` is a coordination epoch, not the fencing token for every parallel worker.
+
+## Branch policy
+
+Range branches are named:
+
+`chapter/<lane-id>/<range-id>/g<range-generation>`
+
+A fresh range starts from immutable `parallel.base_commit`. A resumed partial range starts from its own `checkpoint_commit`.
+
+Workers may modify only paths for their claimed range plus their own result/handoff files.
+
+Do not merge range branches during normal work. Range result manifests provide the exact blob SHAs for final assembly.
 
 ## Runtime budget
 
-For the 25-minute chapter session:
-
-- minute 0-2: startup/claim/checkpoint inheritance/relay;
-- minute 2-18: continuous chapter work;
-- minute 18-21: continue useful work while keeping pending durable backlog bounded;
+- minute 0-2: derive envelope, claim range, create/reuse branch, get relay;
+- minute 2-18: continuous useful work;
+- minute 18-21: continue while bounding uncommitted backlog;
 - minute 21: drain begins;
-- result/handoff should be recoverable by minute 23;
-- substantive stop at minute 24.
+- by minute 23: result/handoff and release should be durable;
+- minute 24: bookkeeping only.
 
 There is no page-count stop condition.
 
 ## Checkpoint policy
 
-Atomic correctness boundaries and Git persistence cadence are separate.
+Page correctness and Git persistence cadence are separate.
 
-- translation: completed page;
-- redraw/typeset: locally completed + visually accepted page queued for persistence, then durable once remotely committed;
-- QA: checked/fixed page backed by the remotely committed asset;
-- publish: complete manifest + referenced final assets.
+Default batch target: 6 pages, adaptive roughly 4-10. Force checkpoint after roughly 7 minutes without one, at phase/range completion, when payload becomes risky, around minute 18-19 with backlog, or at drain.
 
-### Default persistence cadence
+Normal batch:
 
-Do not commit one page at a time in steady state.
+`N create_blob -> 1 create_tree -> 1 create_commit -> 1 update_ref`
 
-Default batch target: **6 completed pages**.
+Run independent blob creation calls concurrently when supported.
 
-Adaptive range: roughly **4-10 pages**, depending on page size, connector latency and remaining runtime.
+Do not update lane/main per page or per ordinary task-branch checkpoint.
 
-Force a checkpoint after about **7 minutes without a durable checkpoint**, at phase completion, when pending payload becomes risky, around minute 18-19 if completed work is still local, or at drain.
+## Binary assets
 
-A normal N-page checkpoint should use:
+When direct binary upload is unavailable, use the Git data bridge:
 
-`N create_blob operations -> 1 create_tree -> 1 create_commit -> 1 update_ref`
+1. preserve publication-quality resolution and readable text;
+2. optimize WebP/JPEG compression where practical;
+3. compute SHA-256;
+4. base64-encode exact bytes;
+5. create Git blob with `encoding: base64`;
+6. create one batch tree/commit/ref update.
 
-If the tool runner supports safe concurrency for independent `create_blob` calls, issue those calls concurrently/parallel. Do not serialize unnecessary branch/tree/ref round-trips between pages.
+Base64 is transport only.
 
-Do not update `main` lane progress per page or per normal rolling checkpoint. Main coordinator writes are normally claim and final release/handoff or publish completion only.
+Do not intentionally downscale to preview resolution solely to make connector transport easier. QA must replace such artifacts before range completion.
 
-### Binary assets through the GitHub connector
+## Range completion
 
-Do not treat absence of direct local-file upload as a blocker if Git blob/tree/ref writes are available.
+A range is complete only when every page in it has passed QA and the exact final binaries are durable.
 
-For each queued rendered image:
+The range result must enumerate final page index/path/blob SHA/SHA-256/dimensions/QA status and durable commit.
 
-1. optimize final asset when practical (prefer WebP/JPEG; preserve readability/fidelity);
-2. target around <= 1 MiB/page when practical, never at the cost of unreadable text or visibly damaged artwork;
-3. base64-encode raw bytes locally;
-4. create a Git blob with `encoding: base64`;
-5. collect blob SHAs for the batch;
-6. create one tree mapping all batch paths to those blob SHAs;
-7. create one commit parented by current task-branch head;
-8. update task branch ref once;
-9. verify ref advancement before recording durable progress.
+On complete:
 
-Base64 is transport only and must never be stored as repository content.
+- persist result/handoff;
+- refetch lane;
+- patch only your unit to `completed`, `phase: done`, `claim: null`, and record result/checkpoint commit.
 
-## Cross-generation branch continuity
+On partial:
 
-A generation must inherit the previous generation's accumulated durable chapter artifacts.
+- persist checkpoint/result/handoff;
+- refetch lane;
+- patch only your unit to `partial` with exact phase/resume/checkpoint;
+- clear claim and increment that unit generation.
 
-When `last_result.commit` or another explicit durable checkpoint head exists, use it as the new generation branch base. Do not create a clean branch from `main` and reconstruct earlier rendered pages later.
+If at least ~7 useful minutes remain after range completion, claim another ready range. Do not end the session just because one range finished.
 
-## Drain policy
+## Finalization fencing
 
-When entering `DRAINING`:
+`parallel.finalization` has its own generation/claim/expiry. It becomes claimable only when every range is completed.
 
-1. stop starting large new operations;
-2. finish only the smallest safe atomic unit already in progress;
-3. flush every completed local output, including pending binary blobs/tree commit;
-4. record exact phase and first unfinished page;
-5. validate contiguous durable progress against remote task branch;
-6. write result/handoff;
-7. clear claim and increment generation unless chapter reached publish completion.
+Any generalist worker may claim it. The finalizer verifies all range result manifests, checks exact page coverage, assembles final localized page blobs, creates publication manifest, promotes only publication outputs to `main`, and marks the chapter completed.
 
-## Fencing
+## Git safety
 
-Live chapter lane `generation` is the fencing token. A stale worker must not mutate lane state or publish after a newer generation exists.
+Never promote raw source images or whole WIP range branch trees to `main`.
 
-## Git policy
+Final publication must be constructed from current `main` plus the exact QA-approved rendered page blobs and manifest/coordinator state.
 
-Suggested branch naming:
+## Legacy mode
 
-`chapter/<lane-id>/g<fencing-token>`
-
-WIP artifacts live on that branch. Coordinator state under `work/chapter_lanes/*.json` may be updated directly on `main` with compare-and-swap semantics.
-
-Text artifacts may use normal connector writes. Binary rendered pages use `create_blob(base64) -> create_tree -> create_commit -> update_ref` when direct upload is unavailable.
-
-After QA passes, the same worker holding the live fencing token may promote final localized assets and publication manifest to `main`, then mark the lane completed. Raw source images must never be promoted.
-
-## Legacy test mode
-
-Old `standalone_chapter_test` lanes and smoke artifacts are historical compatibility inputs only. Fresh workers must use `work/chapter_lanes/active.json` and `CHAPTER_PIPELINE.md` for active production work.
+Single-claim chapter lanes remain compatibility-only. Fresh production lanes should use `coordination_mode: parallel_ranges`.
