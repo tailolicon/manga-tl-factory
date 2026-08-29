@@ -24,10 +24,10 @@
     .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:20px 0 28px}.fact{background:#ffffff08;border:1px solid var(--border);border-radius:12px;padding:11px}.fact b{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
     .tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.tag{font-size:11px;color:#dce1f7;border:1px solid var(--border);border-radius:999px;padding:5px 8px;background:#ffffff08}
     .chapters{display:grid;gap:10px}.chapter{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 15px}.chapter.readable{cursor:pointer}.chapter.readable:hover{background:var(--surface2);border-color:#766dc0}.chapter .title{flex:1}.chapter .state{font-size:12px;color:var(--muted);text-align:right}
-    .reader{width:min(980px,100%);margin:auto}.readerhead{text-align:center;margin-bottom:22px}.pages{display:grid;gap:6px}.page{width:100%;height:auto;display:block;background:#111727;border-radius:6px}
+    .reader{width:min(720px,100%);margin:auto}.readerhead{text-align:center;margin-bottom:22px}.pages{display:block;font-size:0;line-height:0;background:#05070c}.page{width:100%;height:auto;display:block;margin:0;padding:0;background:#05070c;border-radius:0}
     .empty{padding:42px 20px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:16px}.hidden{display:none!important}
     footer{padding:20px 0 45px;text-align:center;color:var(--muted);font-size:12px}
-    @media(max-width:680px){.shell{width:calc(100% - 18px)}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.serieshead{grid-template-columns:100px 1fr;gap:15px}.serieshead .synopsis,.serieshead .facts,.serieshead .tags{grid-column:1/-1}.search{width:62vw}.chapter{align-items:flex-start}.chapter .state{max-width:120px}}
+    @media(max-width:680px){#readerView{margin-left:-9px;margin-right:-9px}.shell{width:calc(100% - 18px)}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.serieshead{grid-template-columns:100px 1fr;gap:15px}.serieshead .synopsis,.serieshead .facts,.serieshead .tags{grid-column:1/-1}.search{width:62vw}.chapter{align-items:flex-start}.chapter .state{max-width:120px}}
   </style>
 </head>
 <body>
