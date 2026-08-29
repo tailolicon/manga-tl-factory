@@ -39,6 +39,8 @@ jobs:
 
       - name: Reproduce exact visually accepted candidates
         run: |
+          sudo mkdir -p /mnt/data
+          sudo chown "$USER":"$USER" /mnt/data
           rm -rf /mnt/data/stupidemic-relay /mnt/data/rendered-r015-020-v4 generated
           ln -s "$GITHUB_WORKSPACE/relay" /mnt/data/stupidemic-relay
           python work/handoffs/chapter-stupidemic-ch1-r015-020-g1-recipe.py
