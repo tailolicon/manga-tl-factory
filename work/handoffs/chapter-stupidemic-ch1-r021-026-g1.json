@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "status": "completed",
+  "task_id": "chapter-stupidemic-ch1-r021-026-g1",
+  "task_type": "localize_chapter_range",
+  "lease_id": "chapter-lane-stupidemic-ch1-r021-026-g1",
+  "fencing_token": 1,
+  "branch": "chapter/stupidemic-ch1/r021-026/g1",
+  "phase": "done",
+  "resume_page": 27,
+  "page_start": 21,
+  "page_end": 26,
+  "page_commit": "2ebb1073d1d1e3c6de58acfc649c95b3de544290",
+  "result_path": "work/results/chapter-stupidemic-ch1-r021-026-g1.json",
+  "context_version": "smoke:no-canonical-context"
+}
