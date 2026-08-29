@@ -1,0 +1,35 @@
+{
+  "status": "completed",
+  "task_id": "chapter-stupidemic-ch1-r027-032-g1",
+  "task_type": "localize_chapter",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r027-032",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "lease_id": "chapter-lane-stupidemic-ch1-r027-032-g1",
+  "fencing_token": 1,
+  "branch": "chapter/stupidemic-ch1/r027-032/g1",
+  "context_version": "smoke:no-canonical-context",
+  "page_start": 27,
+  "page_end": 32,
+  "phase": "done",
+  "pages": [
+    {"page_index":27,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-027.webp","git_blob_sha":"aa6709438622b8ae86240c51f2e2ab016198abdc","sha256":"490104f47d9728abf44dcde442636ece24b10bba7a47e626ba1fbf92ca5616d6","bytes":213126,"width":720,"height":5000,"durable_commit":"afe9239ecbb17c40f3f159e0ca5c1f7c10d3c24d","qa_status":"accepted"},
+    {"page_index":28,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-028.webp","git_blob_sha":"78d98cefbe9451bea52b02c11498885a12313980","sha256":"b8f80323848b7bdf572225c3c3120528f3ed44af974e77cb78e1d4290764abeb","bytes":254636,"width":720,"height":5000,"durable_commit":"afe9239ecbb17c40f3f159e0ca5c1f7c10d3c24d","qa_status":"accepted"},
+    {"page_index":29,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-029.webp","git_blob_sha":"8c60541d722db16cf72c1cdb82824c56cac62b8d","sha256":"f104782faf4501a46b3ca769f222638a74a014583dcfb3c7f543470f4b98bba6","bytes":209678,"width":720,"height":5000,"durable_commit":"afe9239ecbb17c40f3f159e0ca5c1f7c10d3c24d","qa_status":"accepted"},
+    {"page_index":30,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-030.webp","git_blob_sha":"a6d430f6caab12f09f45d7d568dee7acca85dceb","sha256":"0921c00ace48d0c5132b681f3aee6c790ce5a8a12d42b46b3d6713c724492f57","bytes":169952,"width":720,"height":5000,"durable_commit":"afe9239ecbb17c40f3f159e0ca5c1f7c10d3c24d","qa_status":"accepted"},
+    {"page_index":31,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-031.webp","git_blob_sha":"0c6afb57352dc05b460c38aa5d324b9066974991","sha256":"5d0acd2a7f1d8f01d65ee83573de528d17bbae6381492d79851147a56d202f3b","bytes":212052,"width":720,"height":5000,"durable_commit":"afe9239ecbb17c40f3f159e0ca5c1f7c10d3c24d","qa_status":"accepted"},
+    {"page_index":32,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-032.webp","git_blob_sha":"89e057d1c6bbe87cf155a11e26a37832cd7baefe","sha256":"e6ccba7e92c0bb35d422c8846707c2785e01911107da1e829d5bd14bb50c936f","bytes":391270,"width":720,"height":5000,"durable_commit":"afe9239ecbb17c40f3f159e0ca5c1f7c10d3c24d","qa_status":"accepted"}
+  ],
+  "qa": {
+    "status": "accepted",
+    "notes": [
+      "Exact durable runner SHA-256 values matched the locally visually QA-accepted 720x5000 WebP bytes for all six pages.",
+      "Tiny residual source glyphs found during visual QA were corrected before persistence.",
+      "Stylized source SFX were retained where destructive removal would damage artwork, with adjacent Vietnamese annotations.",
+      "Page 28 reader-facing office-only sign was localized during visual QA although it was omitted from the pinned translation JSON."
+    ]
+  },
+  "task_proposals": [],
+  "handoff_path": "work/handoffs/chapter-stupidemic-ch1-r027-032-g1.json"
+}
