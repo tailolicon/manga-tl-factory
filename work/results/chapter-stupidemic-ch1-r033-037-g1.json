@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "status": "partial",
+  "task_id": "chapter-stupidemic-ch1-r033-037-g1",
+  "task_type": "localize_chapter",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r033-037",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "lease_id": "chapter-lane-stupidemic-ch1-r033-037-g1",
+  "fencing_token": 1,
+  "branch": "chapter/stupidemic-ch1/r033-037/g1",
+  "context_version": "smoke:no-canonical-context",
+  "phase": "redraw_typeset",
+  "resume_page": 33,
+  "page_start": 33,
+  "page_end": 37,
+  "accepted_translation_commit": "289e82cdbff610096209de9b5f56192338f4ee9f",
+  "durable_artifacts": [],
+  "candidate_artifacts": [
+    {"page_index":34,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-034.webp","sha256":"d6af2c743bb340d9c7a158b7cd1e688d79bded2fed5d1db182a5a9a5c2d8a390","bytes":272536,"width":720,"height":5000,"visual_qa":"accepted","durable":false},
+    {"page_index":35,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-035.webp","sha256":"17c7715c13cc03bc3e20f415e6b7036ad57c63a539c8fc57d2d975cb2fb0724c","bytes":332172,"width":720,"height":5000,"visual_qa":"accepted","durable":false},
+    {"page_index":36,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-036.webp","sha256":"32d9ba3e23b1325987af705efefb196a9d4fe61d1def43f03cfafcbe6e5ef992","bytes":461346,"width":720,"height":5000,"visual_qa":"accepted","durable":false},
+    {"page_index":37,"path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-037.webp","sha256":"64ee433329bed5f7a0bda386112629de27e49f4a0bf6aba4c9416cb5865f37b9","bytes":254114,"width":720,"height":5000,"visual_qa":"accepted","durable":false}
+  ],
+  "checkpoint": {
+    "recipe_path": "work/handoffs/chapter-stupidemic-ch1-r033-037-g1-recipe.py",
+    "recipe_commit": "1c5ebbfe3163d80ba2f5f1dd5b9c65f64cd25be0",
+    "relay_artifact_id": 9696850714
+  },
+  "qa": {
+    "page_33": "failed: source SFX JOLT/FLICK/BUBBLE are embedded in complex artwork; attempted masks caused either readable source remnants or visible redraw damage",
+    "pages_34_37": "visual acceptance passed at source dimensions 720x5000; no readable source dialogue/SFX remained in edited reader-facing regions and bubble borders/art were preserved acceptably"
+  },
+  "notes": [
+    "Page 33 is intentionally not claimed complete or durable.",
+    "Pages 34-37 were rendered and visually QA-accepted locally, but their exact image blobs were not persisted before drain; they therefore must not increment rendered/QA durable progress.",
+    "The durable recipe reproduces the accepted page 34-37 candidates from the chapter relay. Regenerate them, verify the recorded SHA-256 values where environment/font versions match, then persist exact final blobs using the Git binary bridge.",
+    "Do not downscale to preview resolution merely to satisfy connector payload limits.",
+    "Raw relay source images were not committed."
+  ],
+  "task_proposals": [],
+  "completed_at": "2026-08-29T09:12:00+07:00"
+}
