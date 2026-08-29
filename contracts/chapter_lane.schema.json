@@ -7,6 +7,7 @@
     "schema": {"const": 1},
     "lane_id": {"type": "string", "minLength": 1},
     "mode": {"const": "chapter_pipeline"},
+    "coordination_mode": {"enum": ["single_claim", "parallel_ranges"]},
     "project_id": {"type": "string", "minLength": 1},
     "series_key": {"type": ["string", "null"]},
     "chapter": {
@@ -33,6 +34,42 @@
         "rendered_pages": {"type": "integer", "minimum": 0},
         "qa_pages": {"type": "integer", "minimum": 0},
         "published": {"type": "boolean"}
+      }
+    },
+    "parallel": {
+      "type": "object",
+      "properties": {
+        "max_active_claims": {"type": "integer", "minimum": 1},
+        "lease_minutes": {"type": "integer", "minimum": 1},
+        "base_commit": {"type": "string", "minLength": 7},
+        "units": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "page_start", "page_end", "state", "generation", "phase", "resume_page"],
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "page_start": {"type": "integer", "minimum": 1},
+              "page_end": {"type": "integer", "minimum": 1},
+              "state": {"enum": ["ready", "claimed", "partial", "completed", "blocked"]},
+              "generation": {"type": "integer", "minimum": 1},
+              "phase": {"enum": ["translate", "redraw_typeset", "qa", "done"]},
+              "resume_page": {"type": "integer", "minimum": 1},
+              "claim": {"type": ["object", "null"]},
+              "checkpoint_commit": {"type": ["string", "null"]},
+              "result": {"type": ["object", "null"]}
+            }
+          }
+        },
+        "finalization": {
+          "type": "object",
+          "properties": {
+            "state": {"enum": ["blocked", "ready", "claimed", "partial", "completed"]},
+            "generation": {"type": "integer", "minimum": 1},
+            "claim": {"type": ["object", "null"]},
+            "result": {"type": ["object", "null"]}
+          }
+        }
       }
     },
     "accepted_inputs": {"type": "object"},
