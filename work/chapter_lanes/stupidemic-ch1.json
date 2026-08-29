@@ -2,6 +2,7 @@
   "schema": 1,
   "lane_id": "stupidemic-ch1",
   "mode": "chapter_pipeline",
+  "coordination_mode": "parallel_ranges",
   "project_id": "mangadistrict-com-title-stupidemic-uncensored",
   "series_key": "stupidemic-uncensored",
   "chapter": {"id": "ch-200c8c840df0", "name": "Chapter 1"},
@@ -9,11 +10,11 @@
   "source_handoff": {"path": "work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/source_handoff.json", "blob_sha": "a026706bfc7ae80ad8f73f1f0856ced83a50d64f"},
   "acquisition_evidence": {"workflow_run_id":33192023708,"workflow_conclusion":"success","artifact_id":9694156152,"artifact_digest":"sha256:845e91241cf60363027a53ef814fcc225f76f852a1efad841949506581aeb37e","fetch_result_sha256":"e3e3e780bc8b727ec793fd8c64ca887128ad717dccb2cad6cd6b24d42911d3e1","page_count":41,"downloaded":41,"failed":0,"fetch_mode":"direct_http","retries":0,"validated_on_branch":"wip/stupidemic-ch1-acquisition-reconciled","validated_commit":"b964baa5ee74b5ca516335675fefd1511b95589f","validation_path":"work/imports/manga18fx-com-manga-stupidemic-uncensored/kotori-3673-mtd6wcme/canonical_acquisition_validation.json"},
   "relay": {"status":"ready","request_path":"work/relay_requests/stupidemic-ch1.json","request_commit":"d2f09f22f24fd9e2c88cf77fe811f510cd5c72d2","run_id":33198730435,"artifact_id":9696850714,"artifact_name":"chapter-relay-stupidemic-ch1-ch-200c8c840df0","artifact_digest":"sha256:0682ce294d5ba541483c3c67d4cb5894edf6390e00277f5a79695fbf014e420d","artifact_size_bytes":13565843,"retention_days":2,"expires_at":"2026-08-30T18:19:09Z","page_count":41},
-  "state": "claimed",
-  "generation": 6,
+  "state": "ready",
+  "generation": 7,
   "phase": "redraw_typeset",
-  "resume_page": 3,
-  "progress": {"translated_pages": 41, "rendered_pages": 2, "qa_pages": 0, "published": false},
+  "resume_page": 1,
+  "progress": {"translated_pages": 41, "rendered_pages": 8, "qa_pages": 0, "published": false},
   "accepted_inputs": {
     "translation": {
       "status": "complete",
@@ -23,30 +24,38 @@
       "page_count": 41
     }
   },
+  "parallel": {
+    "max_active_claims": 7,
+    "lease_minutes": 35,
+    "base_commit": "e1111c174ee214d0d2fa0ca6a51ec6194d18b78a",
+    "units": [
+      {"id":"q001-008","page_start":1,"page_end":8,"state":"ready","generation":1,"phase":"qa","resume_page":1,"claim":null,"checkpoint_commit":"e1111c174ee214d0d2fa0ca6a51ec6194d18b78a","result":null,"note":"QA exact durable pages 1-8 from g5/g6; replace any preview-resolution or visually insufficient page."},
+      {"id":"r009-014","page_start":9,"page_end":14,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":9,"claim":null,"checkpoint_commit":null,"result":null},
+      {"id":"r015-020","page_start":15,"page_end":20,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":15,"claim":null,"checkpoint_commit":null,"result":null},
+      {"id":"r021-026","page_start":21,"page_end":26,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":21,"claim":null,"checkpoint_commit":null,"result":null},
+      {"id":"r027-032","page_start":27,"page_end":32,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":27,"claim":null,"checkpoint_commit":null,"result":null},
+      {"id":"r033-037","page_start":33,"page_end":37,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":33,"claim":null,"checkpoint_commit":null,"result":null},
+      {"id":"r038-041","page_start":38,"page_end":41,"state":"ready","generation":1,"phase":"redraw_typeset","resume_page":38,"claim":null,"checkpoint_commit":null,"result":null}
+    ],
+    "finalization": {"state":"blocked","generation":1,"claim":null,"result":null}
+  },
   "next_task": {
     "task_type": "localize_chapter",
-    "goal": "Finish Chapter 1 for publication. Resume redraw/typeset at page 3 using the accepted 41-page translation input and pinned whole-chapter relay. Durable rendered pages 1-2 already exist on the previous task branch. For every new rendered page, persist the binary through GitHub create_blob with base64, then tree/commit/update the current task branch before advancing rendered_pages. Continue into QA and publish whenever time permits.",
+    "goal": "Finish Chapter 1 through parallel non-overlapping page ranges. Every coworker is a full-stack localizer for its claimed range and must continue through QA. When all ranges are QA-complete, any generalist worker may assemble exact blob results and publish the chapter.",
     "scope": {"page_start": 1, "page_end": 41}
   },
-  "claim": {
+  "claim": null,
+  "last_result": {
+    "status": "partial",
     "task_id": "chapter-stupidemic-ch1-g6",
     "task_type": "localize_chapter",
     "lease_id": "chapter-lane-stupidemic-ch1-g6",
     "fencing_token": 6,
     "branch": "chapter/stupidemic-ch1/g6",
-    "claimed_at": "2026-08-29T02:56:19+07:00"
-  },
-  "last_result": {
-    "status": "partial",
-    "task_id": "chapter-stupidemic-ch1-g5",
-    "task_type": "localize_chapter",
-    "lease_id": "chapter-lane-stupidemic-ch1-g5",
-    "fencing_token": 5,
-    "branch": "chapter/stupidemic-ch1/g5",
-    "commit": "afb3d57686a06c3ee1c0389807dd9675b39b9f5a",
-    "result_path": "work/results/chapter-stupidemic-ch1-g5.json",
-    "handoff_path": "work/handoffs/chapter-stupidemic-ch1-g5.json",
-    "completed_at": "2026-08-29T02:52:17+07:00"
+    "commit": "e1111c174ee214d0d2fa0ca6a51ec6194d18b78a",
+    "result_path": "work/results/chapter-stupidemic-ch1-g6.json",
+    "handoff_path": "work/handoffs/chapter-stupidemic-ch1-g6.json",
+    "completed_at": "2026-08-29T03:20:59+07:00"
   },
   "terminal_reason": null
 }
