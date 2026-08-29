@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "status": "completed",
+  "task_id": "chapter-stupidemic-ch1-r038-041-g3",
+  "task_type": "localize_chapter",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r038-041",
+  "lease_id": "chapter-lane-stupidemic-ch1-r038-041-g3",
+  "fencing_token": 3,
+  "branch": "chapter/stupidemic-ch1/r038-041/g3",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_start": 38,
+  "page_end": 41,
+  "context_version": "smoke:no-canonical-context",
+  "translation_source_commit": "289e82cdbff610096209de9b5f56192338f4ee9f",
+  "qa_status": "accepted",
+  "page_commit": "9e5b26c0feee58e634dbd368e12624f33c90df29",
+  "pages": [
+    {
+      "page_index": 38,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-038.webp",
+      "blob_sha": "0d01b41d8a48924361bb3d873059918262aed8a9",
+      "sha256": "78aec50f5fecf2d490e9f4c4686926cd306702e7af841916f6e47559482d9586",
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "9e5b26c0feee58e634dbd368e12624f33c90df29",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 39,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-039.webp",
+      "blob_sha": "7a57afa249560e62ad757100c2d7ce9d7700ece4",
+      "sha256": "b9d92a1d378b8be337dcab796beb99213663d6162105187b3b4704b5a12a700d",
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "9e5b26c0feee58e634dbd368e12624f33c90df29",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 40,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-040.webp",
+      "blob_sha": "78c02c5eb70f188c56667bd9551d07023a2d529b",
+      "sha256": "a98c6ce8ac1e9c89775385223a9e20f0b5362df0df25b76582afb856c9b78387",
+      "width": 720,
+      "height": 5000,
+      "durable_commit": "9e5b26c0feee58e634dbd368e12624f33c90df29",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 41,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-041.webp",
+      "blob_sha": "ce3c4e4ff4da9ef26f9463cd7c1153e1cf03154f",
+      "sha256": "67426947c1da00ca43ba3154e6cd0244aab1f8dc6ba46b1a2c1a1fb8f01dc8fe",
+      "width": 720,
+      "height": 3999,
+      "durable_commit": "9e5b26c0feee58e634dbd368e12624f33c90df29",
+      "qa_status": "accepted"
+    }
+  ],
+  "artifacts": [
+    {
+      "page_index": 38,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-038.webp",
+      "git_blob_sha": "0d01b41d8a48924361bb3d873059918262aed8a9",
+      "sha256": "78aec50f5fecf2d490e9f4c4686926cd306702e7af841916f6e47559482d9586",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "9e5b26c0feee58e634dbd368e12624f33c90df29",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 39,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-039.webp",
+      "git_blob_sha": "7a57afa249560e62ad757100c2d7ce9d7700ece4",
+      "sha256": "b9d92a1d378b8be337dcab796beb99213663d6162105187b3b4704b5a12a700d",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "9e5b26c0feee58e634dbd368e12624f33c90df29",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 40,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-040.webp",
+      "git_blob_sha": "78c02c5eb70f188c56667bd9551d07023a2d529b",
+      "sha256": "a98c6ce8ac1e9c89775385223a9e20f0b5362df0df25b76582afb856c9b78387",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "9e5b26c0feee58e634dbd368e12624f33c90df29",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 41,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-041.webp",
+      "git_blob_sha": "ce3c4e4ff4da9ef26f9463cd7c1153e1cf03154f",
+      "sha256": "67426947c1da00ca43ba3154e6cd0244aab1f8dc6ba46b1a2c1a1fb8f01dc8fe",
+      "width": 720,
+      "height": 3999,
+      "durable_branch_commit": "9e5b26c0feee58e634dbd368e12624f33c90df29",
+      "qa_status": "accepted"
+    }
+  ],
+  "qa": {
+    "status": "accepted",
+    "pages": 4,
+    "visual_inspection": "generation-3 publication-size candidates were visually inspected before persistence; workflow reproduced their exact asserted SHA-256 bytes and re-fetched the pushed commit before result creation"
+  }
+}
