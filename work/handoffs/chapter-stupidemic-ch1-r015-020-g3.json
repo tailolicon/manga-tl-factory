@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "status": "partial",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r015-020",
+  "task_id": "chapter-stupidemic-ch1-r015-020-g3",
+  "lease_id": "chapter-lane-stupidemic-ch1-r015-020-g3",
+  "fencing_token": 3,
+  "branch": "chapter/stupidemic-ch1/r015-020/g3",
+  "page_start": 15,
+  "page_end": 20,
+  "phase": "redraw_typeset",
+  "resume_page": 15,
+  "result_path": "work/results/chapter-stupidemic-ch1-r015-020-g3.json",
+  "recipe_path": "work/handoffs/chapter-stupidemic-ch1-r015-020-g1-recipe.py",
+  "recipe_commit": "d096680c0ee7e79a339863e126215ae54951df16",
+  "relay_artifact_id": 9696850714,
+  "relay_expires_at": "2026-08-30T18:19:09Z",
+  "next_action": "Regenerate or reproduce the visually accepted 720x5000 candidates, persist each exact final WebP as a real Git blob, batch them into one page tree/commit on the next generation branch, then write completed result/handoff and release the unit as done.",
+  "durability_warning": "Generation 3 produced visually accepted candidates but no page binary is durable. Never reuse the local SHA-256 values as if they were Git blob SHAs and never advance rendered/QA progress until exact bytes are persisted.",
+  "completed_at": "2026-08-29T10:56:52+07:00"
+}
