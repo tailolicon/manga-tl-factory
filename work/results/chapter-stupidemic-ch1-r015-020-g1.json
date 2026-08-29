@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "status": "partial",
+  "task_id": "chapter-stupidemic-ch1-r015-020-g1",
+  "task_type": "localize_chapter",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r015-020",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "lease_id": "chapter-lane-stupidemic-ch1-r015-020-g1",
+  "fencing_token": 1,
+  "branch": "chapter/stupidemic-ch1/r015-020/g1",
+  "context_version": "smoke:no-canonical-context",
+  "phase": "redraw_typeset",
+  "resume_page": 15,
+  "page_start": 15,
+  "page_end": 20,
+  "accepted_translation_commit": "289e82cdbff610096209de9b5f56192338f4ee9f",
+  "durable_artifacts": [],
+  "checkpoint": {
+    "recipe_path": "work/handoffs/chapter-stupidemic-ch1-r015-020-g1-recipe.py",
+    "recipe_commit": "d096680c0ee7e79a339863e126215ae54951df16",
+    "local_render_attempt": {
+      "pages": [15, 16, 17, 18, 19, 20],
+      "dimensions": "720x5000",
+      "visual_qa": "locally inspected; candidate renders had no readable source dialogue remaining in edited regions",
+      "durable": false
+    }
+  },
+  "notes": [
+    "All six claimed pages were source-checked and redraw/typeset coordinates were completed locally before drain.",
+    "Page 18 contains source SFX THUD that is absent from the accepted translation artifact; the checkpoint recipe renders it as BỊCH! so reader-facing source text is not left untranslated.",
+    "No rendered page is claimed durable in this result because the publication-quality binary Git checkpoint was not completed before drain. Resume at page 15, rerun the durable recipe against the lane relay, QA, then persist exact final image blobs.",
+    "Do not count local candidate renders as rendered_pages or qa_pages until their exact final binary blobs are committed."
+  ],
+  "task_proposals": [],
+  "completed_at": "2026-08-29T08:47:36+07:00"
+}
