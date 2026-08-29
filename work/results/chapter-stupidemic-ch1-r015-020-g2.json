@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "status": "partial",
+  "task_id": "chapter-stupidemic-ch1-r015-020-g2",
+  "task_type": "localize_chapter",
+  "lane_id": "stupidemic-ch1",
+  "range_id": "r015-020",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "lease_id": "chapter-lane-stupidemic-ch1-r015-020-g2",
+  "fencing_token": 2,
+  "branch": "chapter/stupidemic-ch1/r015-020/g2",
+  "context_version": "smoke:no-canonical-context",
+  "phase": "redraw_typeset",
+  "resume_page": 15,
+  "page_start": 15,
+  "page_end": 20,
+  "accepted_translation_commit": "289e82cdbff610096209de9b5f56192338f4ee9f",
+  "durable_artifacts": [],
+  "local_candidates": [
+    {"page":15,"repository_path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-015.webp","sha256":"1dec8ff5d266fcecd615b6624e95bff3085bd28ee3010792e679b262f195f25e","width":720,"height":5000,"bytes":122544,"qa":"local_visual_acceptance_only","durable":false},
+    {"page":16,"repository_path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-016.webp","sha256":"b40cf0240e9762a4ae8bf7a48170f87505b7a737781eb36d7503d874c5ca363f","width":720,"height":5000,"bytes":102082,"qa":"local_visual_acceptance_only","durable":false},
+    {"page":17,"repository_path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-017.webp","sha256":"f96504cd9014e5743e59fcaa5baed3c1da2b442f9e381dc3516d47ae3d0f818f","width":720,"height":5000,"bytes":100040,"qa":"local_visual_acceptance_only","durable":false},
+    {"page":18,"repository_path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-018.webp","sha256":"d1dcf727a48038e5478cae7a0fb9fad390f21c794a2ad610494ac3da7a3063ed","width":720,"height":5000,"bytes":117274,"qa":"local_visual_acceptance_only","durable":false},
+    {"page":19,"repository_path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-019.webp","sha256":"1e686270058b2788189428c06bf9febbb0235a92bc814d92629aee39f38d2514","width":720,"height":5000,"bytes":105318,"qa":"local_visual_acceptance_only","durable":false},
+    {"page":20,"repository_path":"projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-020.webp","sha256":"7efcd32d57f56bffc6edb1f1c4560e008e395388c9a953ca60fed61d565d6a60","width":720,"height":5000,"bytes":137542,"qa":"local_visual_acceptance_only","durable":false}
+  ],
+  "checkpoint": {
+    "recipe_path": "work/handoffs/chapter-stupidemic-ch1-r015-020-g1-recipe.py",
+    "recipe_commit": "d096680c0ee7e79a339863e126215ae54951df16",
+    "relay_artifact_id": 9696850714,
+    "relay_artifact_name": "chapter-relay-stupidemic-ch1-ch-200c8c840df0",
+    "relay_expires_at": "2026-08-30T18:19:09Z"
+  },
+  "notes": [
+    "Re-rendered pages 15-20 from the live relay using the durable g1 recipe; all candidates remain publication-size 720x5000 WebP.",
+    "Exact local candidate bytes were visually inspected after compression. Page 18 BỊCH! is readable; page 20's source-cropped final bubble remains readable at the bottom edge.",
+    "The available GitHub create-blob action requires the complete base64 payload in one connector call, while the local-to-connector response surface truncates large binary/base64 output. No Git blob SHA or durable image claim is fabricated.",
+    "Do not increment rendered_pages or qa_pages from these local candidates. Resume at page 15 and persist exact final binaries through a binary-capable Git data bridge before marking this range completed."
+  ],
+  "task_proposals": [],
+  "completed_at": "2026-08-29T08:59:00+07:00"
+}
