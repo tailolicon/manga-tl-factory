@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "status": "completed",
+  "task_id": "chapter-stupidemic-ch1-q001-008-g1",
+  "task_type": "localize_chapter_range",
+  "lease_id": "chapter-lane-stupidemic-ch1-q001-008-g1",
+  "fencing_token": 1,
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_start": 1,
+  "page_end": 8,
+  "branch": "chapter/stupidemic-ch1/q001-008/g1",
+  "context_version": "smoke:no-canonical-context",
+  "completed_unit": "qa-pages-001-008",
+  "binary_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+  "qa": {
+    "status": "accepted",
+    "pages": 8,
+    "visual_inspection": "full-resolution 720x5000; dialogue and SFX localized; no preview-resolution checkpoint retained"
+  },
+  "artifacts": [
+    {
+      "page_index": 1,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-001.webp",
+      "git_blob_sha": "9f91b07d5feb5c3f425e2844ff699c05df3029af",
+      "sha256": "ea94933877d78997994c48e906604f5aaa7a153e96134cea37cdd6b58245e1e8",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 2,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-002.webp",
+      "git_blob_sha": "e45124e562952ae8cab833b6dc29a491df17e3a0",
+      "sha256": "13315950e2f39ed2ffbef66dc755c92e331c10b82158f3d5ec47ea1c0a668b3c",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 3,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-003.webp",
+      "git_blob_sha": "a204c1b2f81390e5e1d661f1ea56ea94b8f853d7",
+      "sha256": "222072779a84ab7c2dc2f2a5b00800db4ee7e1cc77bfdf3fcf2b31718613e3b4",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 4,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-004.webp",
+      "git_blob_sha": "bc9575264f7b2a7ea1cabbb5499f30e3724594fc",
+      "sha256": "7767903d1ab25cc29b6fa118cbfa2c7be57c0b3469bb5fa8d43695f98245160e",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 5,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-005.webp",
+      "git_blob_sha": "cf71f4c1ae2e3d517bbc5c6e98aacdf215cffeb4",
+      "sha256": "83a04d26e37dcabd253ca9198cc681330a0ca20bc200e45d2fe03c4e04bfa7ce",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 6,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-006.webp",
+      "git_blob_sha": "ed392ad72df68497a4f94ceecf29d9c8e7e7e557",
+      "sha256": "a8b822de26f21f25ad7d323caf1d2fb81a1cdc7e53a95207009d78884b12bb4a",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 7,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-007.webp",
+      "git_blob_sha": "9fb5fd0b3d8ba058bf1c22ed3e2fdf600064b82d",
+      "sha256": "0df0e419e57becf8a823857e7eb59f7c79e37f86e5aa76c8200b031351e080ff",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+      "qa_status": "accepted"
+    },
+    {
+      "page_index": 8,
+      "path": "projects/mangadistrict-com-title-stupidemic-uncensored/chapters/ch-200c8c840df0/rendered/page-008.webp",
+      "git_blob_sha": "49242e7e78b5a174f486c4eeb54ac2eda765d045",
+      "sha256": "2d76950dc57f0e450a729af089b2082274cd33e732579ab11cbd2e3e5a513a38",
+      "width": 720,
+      "height": 5000,
+      "durable_branch_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+      "qa_status": "accepted"
+    }
+  ]
+}

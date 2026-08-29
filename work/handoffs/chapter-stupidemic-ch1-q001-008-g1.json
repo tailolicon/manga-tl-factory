@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "status": "completed",
+  "task_id": "chapter-stupidemic-ch1-q001-008-g1",
+  "lease_id": "chapter-lane-stupidemic-ch1-q001-008-g1",
+  "fencing_token": 1,
+  "branch": "chapter/stupidemic-ch1/q001-008/g1",
+  "checkpoint_commit": "36bcffcb7289e09f58f208dd3d7ad6b9634c1f98",
+  "phase": "done",
+  "resume_page": 9,
+  "page_start": 1,
+  "page_end": 8,
+  "result_path": "work/results/chapter-stupidemic-ch1-q001-008-g1.json",
+  "note": "Pages 1-8 regenerated from 720x5000 relay source and accepted translations; prior 300px preview checkpoints are superseded."
+}
