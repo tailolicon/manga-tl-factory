@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "status": "completed",
+  "task_id": "chapter-stupidemic-ch1-finalize-g2",
+  "task_type": "localize_chapter",
+  "lane_id": "stupidemic-ch1",
+  "lease_id": "chapter-finalize-stupidemic-ch1-g2",
+  "fencing_token": 2,
+  "branch": "chapter/stupidemic-ch1/finalize/g2",
+  "project_id": "mangadistrict-com-title-stupidemic-uncensored",
+  "chapter_id": "ch-200c8c840df0",
+  "page_start": 1,
+  "page_end": 41,
+  "page_count": 41,
+  "qa_status": "accepted",
+  "publication_manifest": "projects/mangadistrict-com-title-stupidemic-uncensored/publication/ch-200c8c840df0/manifest.json",
+  "page_set_sha256": "b2a3e2eaf9d04d34c2dfb7f84a9964fc42532728443cb6fd1ef884b33a8a41b6",
+  "source_range_results": [
+    {
+      "range_id": "q001-008",
+      "result_commit": "e4c3395e0bdd9256d29f68d090098db794cfd5fa",
+      "result_path": "work/results/chapter-stupidemic-ch1-q001-008-g1.json"
+    },
+    {
+      "range_id": "r009-014",
+      "result_commit": "09971b2e6c77f84ca926c99b961523fe5f5070c4",
+      "result_path": "work/results/chapter-stupidemic-ch1-r009-014-g1.json"
+    },
+    {
+      "range_id": "r015-020",
+      "result_commit": "c1ed46ebfa67087dae948e7695ec90c51436e671",
+      "result_path": "work/results/chapter-stupidemic-ch1-r015-020-g4.json"
+    },
+    {
+      "range_id": "r021-026",
+      "result_commit": "a93f8544ed3f0ddc79fbbda6c4fe566dd0ecc984",
+      "result_path": "work/results/chapter-stupidemic-ch1-r021-026-g1.json"
+    },
+    {
+      "range_id": "r027-032",
+      "result_commit": "bef6cedce21e37a6d9ca7add06ce2cea76ffbd2d",
+      "result_path": "work/results/chapter-stupidemic-ch1-r027-032-g1.json"
+    },
+    {
+      "range_id": "r033-037",
+      "result_commit": "ee51558fb434545e77637278d0de3f852392cfc1",
+      "result_path": "work/results/chapter-stupidemic-ch1-r033-037-g2.json"
+    },
+    {
+      "range_id": "r038-041",
+      "result_commit": "78a579e0bec6dbb1f6e0592e28fed4e010923089",
+      "result_path": "work/results/chapter-stupidemic-ch1-r038-041-g3.json"
+    }
+  ],
+  "completed_at": "2026-08-29T05:01:33.062295Z",
+  "verification": "all 41 page paths were resolved at each durable page commit; Git blob SHA, SHA-256, WebP decode, dimensions, QA status, coverage and uniqueness were verified before assembly"
+}

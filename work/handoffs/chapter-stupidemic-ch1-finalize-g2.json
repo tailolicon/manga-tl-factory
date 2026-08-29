@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "status": "completed",
+  "task_id": "chapter-stupidemic-ch1-finalize-g2",
+  "task_type": "localize_chapter",
+  "lane_id": "stupidemic-ch1",
+  "lease_id": "chapter-finalize-stupidemic-ch1-g2",
+  "fencing_token": 2,
+  "branch": "chapter/stupidemic-ch1/finalize/g2",
+  "phase": "done",
+  "resume_page": 42,
+  "page_start": 1,
+  "page_end": 41,
+  "result_path": "work/results/chapter-stupidemic-ch1-finalize-g2.json",
+  "publication_manifest": "projects/mangadistrict-com-title-stupidemic-uncensored/publication/ch-200c8c840df0/manifest.json",
+  "page_set_sha256": "b2a3e2eaf9d04d34c2dfb7f84a9964fc42532728443cb6fd1ef884b33a8a41b6",
+  "completed_at": "2026-08-29T05:01:33.062295Z"
+}
